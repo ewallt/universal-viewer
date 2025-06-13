@@ -1,0 +1,633 @@
+ <!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Loading...</title>
+
+    <style>
+
+        /* ---- minimal fallback palette (overridden by data/themes.json) ---- */
+
+        :root { --text-primary:#ffffff; --background-gradient:#000000; }
+
+
+
+        /* ------------------------------------------------------------------ */
+
+        /* Structural + component CSS — keep as-is (unchanged)               */
+
+        /* ------------------------------------------------------------------ */
+
+
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+
+
+        body { font-family: 'Georgia', serif; line-height: 1.6;
+
+               color: var(--text-primary); background: var(--background-gradient);
+
+               min-height: 100vh; transition: background .5s ease, color .5s ease; }
+
+
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+
+
+
+        .header { background: var(--surface-color); backdrop-filter: var(--component-backdrop-filter);
+
+                  border-radius: 20px; padding: 30px; margin-bottom: 30px;
+
+                  box-shadow: var(--component-box-shadow); text-align: center;
+
+                  border: var(--header-border-bottom); }
+
+
+
+        .book-title { font-size: 2.5em; color: var(--text-primary);
+
+                      margin-bottom: 10px; font-weight: bold;
+
+                      text-shadow: var(--book-title-text-shadow); }
+
+
+
+        .chapter-info { font-size: 1.3em; color: var(--accent-primary); margin-bottom: 10px; }
+
+        .page-range   { font-size: 1.1em; color: var(--accent-secondary); font-style: italic; }
+
+
+
+        .nav-tabs { display:flex;justify-content:center;gap:15px;margin-bottom:30px;
+
+                    flex-wrap:wrap;padding:10px 0; }
+
+
+
+        .tab-button { background:var(--surface-color-secondary);border:1px solid var(--border-color);
+
+                      color:var(--text-primary);backdrop-filter:var(--component-backdrop-filter);
+
+                      padding:12px 28px;border-radius:50px;cursor:pointer;font-size:1em;font-weight:500;
+
+                      transition:all .3s ease;box-shadow:0 5px 15px rgba(0,0,0,.2); }
+
+        body.theme-stately .tab-button { box-shadow:0 3px 8px rgba(0,0,0,.08); }
+
+
+
+        .tab-button:hover { transform:translateY(-3px) scale(1.03);
+
+                            box-shadow:0 8px 25px rgba(0,0,0,.3);
+
+                            border-color:var(--accent-primary);background:rgba(0,0,0,.7); }
+
+        body.theme-stately .tab-button:hover { border-color:#D4AF37; background:#f8f9fa; }
+
+
+
+        .tab-button.active { font-weight:bold;border-color:var(--accent-primary);
+
+                             transform:translateY(-2px);
+
+                             box-shadow:0 6px 20px rgba(0,0,0,.35);
+
+                             color:var(--accent-primary);
+
+                             background:linear-gradient(135deg,#1a1a3a 0%,#2e2e5e 100%); }
+
+        body.theme-stately .tab-button.active { background:linear-gradient(45deg,#003366,#004080);
+
+                                                color:white;border-color:var(--accent-primary); }
+
+        body.theme-forest .tab-button:hover  { border-color:var(--accent-primary);
+
+                                              background:rgba(0,0,0,.6); }
+
+        body.theme-forest .tab-button.active { background:linear-gradient(135deg,#182c21,#203f2e);
+
+                                               color:var(--accent-primary);border-color:var(--accent-primary); }
+
+
+
+        .content-panel { position:relative;background:var(--surface-color);
+
+                         backdrop-filter:var(--component-backdrop-filter);
+
+                         border:1px solid var(--border-color);border-radius:20px;
+
+                         padding:30px;box-shadow:var(--component-box-shadow);
+
+                         display:none;animation:fadeIn .5s ease-in; }
+
+        .content-panel.active { display:block; }
+
+
+
+        @keyframes fadeIn { from{opacity:0;transform:translateY(20px);}
+
+                            to  {opacity:1;transform:translateY(0);} }
+
+
+
+        .section-title { font-size:1.8em;color:var(--text-primary);margin-bottom:20px;
+
+                         padding-bottom:10px;border-bottom:3px solid var(--accent-primary); }
+
+
+
+        .central-thesis,.warning-highlight,.conclusion-box,.scripture-ref,
+
+        .quote,.concept-card,.ref-item,.argument-point {
+
+            background:var(--surface-color-secondary);border:1px solid var(--border-color-accent);
+
+            color:var(--text-primary);backdrop-filter:var(--component-backdrop-filter);
+
+            padding:15px;border-radius:10px;margin:15px 0;
+
+            border-left:4px solid var(--accent-primary); }
+
+        body.theme-stately .central-thesis,
+
+        body.theme-stately .warning-highlight,
+
+        body.theme-stately .conclusion-box,
+
+        body.theme-stately .scripture-ref,
+
+        body.theme-stately .argument-point,
+
+        body.theme-stately .concept-card,
+
+        body.theme-stately .quote,
+
+        body.theme-stately .ref-item {
+
+            box-shadow:0 2px 8px rgba(0,0,0,.07); }
+
+
+
+        .central-thesis,.warning-highlight,.conclusion-box { padding:25px;font-size:1.1em; }
+
+        .argument-point,.quote,.ref-item { border-left-color:var(--accent-secondary); }
+
+        .quote { font-style:italic; }
+
+
+
+        .argument-title,.concept-title,.quote-source,.ref-title,
+
+        .ref-detail-header span { font-weight:bold;color:var(--accent-primary);margin-bottom:10px; }
+
+
+
+        .progress-indicator { position:fixed;top:0;left:0;height:3px;
+
+                              background:var(--progress-bar-gradient);z-index:1000;
+
+                              transition:width .3s ease,background .5s ease; }
+
+
+
+        .theme-selector { position:fixed;top:15px;right:20px;z-index:1001;display:flex;gap:10px; }
+
+
+
+        .theme-btn { width:50px;height:50px;border:2px solid rgba(255,255,255,.7);
+
+                     border-radius:50%;cursor:pointer;box-shadow:0 5px 15px rgba(0,0,0,.3);transition:all .3s ease; }
+
+        .theme-btn:hover { transform:scale(1.1);border-color:#fff; }
+
+        .theme-original-btn { background:linear-gradient(135deg,#1a1a3a,#64b5f6); }
+
+        .theme-stately-btn  { background:#ffffff; }
+
+        .theme-forest-btn   { background:linear-gradient(135deg,#2a4c3a,#58cdaa); }
+
+
+
+        @media (max-width:768px){
+
+            .container{padding:10px;}
+
+            .book-title{font-size:2em;}
+
+            .nav-tabs{flex-direction:column;align-items:center;}
+
+            .tab-button{width:100%;max-width:300px;margin:5px 0;}
+
+            .content-panel{padding:20px;}
+
+        }
+
+    </style>
+
+</head>
+
+<body class="theme-original">
+
+
+
+    <div class="theme-selector">
+
+        <button class="theme-btn theme-original-btn" data-theme="original" title="Cosmic Night"></button>
+
+        <button class="theme-btn theme-stately-btn" data-theme="stately" title="Stately Theme"></button>
+
+        <button class="theme-btn theme-forest-btn" data-theme="forest" title="Forest Canopy"></button>
+
+    </div>
+
+
+
+    <div class="container">
+
+        <header class="header">
+
+            <h1 class="book-title">Loading Project...</h1>
+
+            <div class="chapter-info">Loading...</div>
+
+            <div class="page-range"></div>
+
+        </header>
+
+
+
+        <nav class="nav-tabs" id="nav-tabs-container"></nav>
+
+
+
+        <main id="main-content-area">
+
+            <div class="content-panel active" style="text-align: center;">
+
+                <h2>Loading Content...</h2>
+
+            </div>
+
+        </main>
+
+    </div>
+
+    
+
+    <script>
+
+    // --- UI HELPER FUNCTIONS ---
+
+    function showTab(tabName, clickedButton) {
+
+        if (clickedButton) {
+
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+
+            clickedButton.classList.add('active');
+
+        }
+
+        document.querySelectorAll('.content-panel').forEach(panel => {
+
+            panel.classList.toggle('active', panel.id === tabName);
+
+        });
+
+    }
+
+
+
+    function setTheme(themeName) {
+
+        document.body.className = `theme-${themeName}`;
+
+    }
+
+
+
+    // --- DYNAMIC RENDERING ENGINE ---
+
+
+
+    function applyThemeStyles(themeData) {
+
+        const styleSheet = document.createElement('style');
+
+        let cssRules = '';
+
+        for (const themeId in themeData.themes) {
+
+            const themePalette = themeData.themes[themeId];
+
+            cssRules += `body.theme-${themeId} {\n`;
+
+            for (const variableName in themePalette) {
+
+                cssRules += `  ${variableName}: ${themePalette[variableName]};\n`;
+
+            }
+
+            cssRules += `}\n\n`;
+
+        }
+
+        styleSheet.textContent = cssRules;
+
+        document.head.appendChild(styleSheet);
+
+        setTheme(themeData.meta.defaultTheme);
+
+    }
+
+
+
+    function renderTabs(sections, labels) {
+
+        const navContainer = document.getElementById('nav-tabs-container');
+
+        let navHtml = '';
+
+        sections.forEach(sectionId => {
+
+            const label = labels[sectionId] || sectionId;
+
+            navHtml += `<button class="tab-button" data-tab="${sectionId}">${label}</button>`;
+
+        });
+
+        navContainer.innerHTML = navHtml;
+
+    }
+
+
+
+    function renderEntryContent(entryData, schemaData) {
+
+        // --- Header Text ---
+
+        document.querySelector('.book-title').textContent = schemaData.projectName;
+
+        document.querySelector('.chapter-info').textContent = entryData.title;
+
+        document.querySelector('.page-range').textContent = entryData.source;
+
+        document.title = `${schemaData.projectName}: ${entryData.title}`;
+
+
+
+        // --- Tab Bar ---
+
+        const sections = schemaData.defaultSections;
+
+        const labels = schemaData.sectionLabels;
+
+        renderTabs(sections, labels);
+
+
+
+        // --- Content Panels ---
+
+        let html = '';
+
+        sections.forEach(id => {
+
+            const s = entryData[id];
+
+            if (!s) return; 
+
+
+
+            html += `<div class="content-panel" id="${id}">
+
+                         <h2 class="section-title">${s.title}</h2>`;
+
+
+
+            switch (id) {
+
+                case 'thesis':
+
+                    html += `<div class="central-thesis">${s.central_thesis}</div>
+
+                             <div class="warning-highlight">${s.key_statement}</div>
+
+                             <div class="concept-card">
+
+                                 <h3>${s.foundational_principles.title}</h3>
+
+                                 <ul>
+
+                                     ${s.foundational_principles.points.map(p=>`<li>${p}</li>`).join('')}
+
+                                 </ul>
+
+                             </div>`;
+
+                    break;
+
+
+
+                case 'arguments':
+
+                    s.points.forEach(p => {
+
+                        html += `<div class="argument-point">
+
+                                     <h3 class="argument-title">${p.title}</h3>
+
+                                     <p>${p.explanation}</p>
+
+                                     ${p.key_insight ? `<p><em>${p.key_insight}</em></p>` : ''}
+
+                                     ${p.quotes.map(q => {
+
+                                         const cls = q.type === 'scripture' ? 'scripture-ref' : q.type === 'warning' ? 'warning-highlight' : 'quote';
+
+                                         return `<div class="${cls}">
+
+                                                     ${q.text}<br><span class="quote-source">${q.source}</span>
+
+                                                 </div>`;
+
+                                     }).join('')}
+
+                                 </div>`;
+
+                    });
+
+                    break;
+
+
+
+                case 'concepts':
+
+                    s.points.forEach(c => {
+
+                        html += `<div class="concept-card">
+
+                                     <span class="concept-title">${c.title}</span>: ${c.definition}
+
+                                 </div>`;
+
+                    });
+
+                    break;
+
+
+
+                case 'references': // This is our "Examples" section
+
+                    s.points.forEach(p => {
+
+                        html += `<div class="argument-point">
+
+                                     <h3 class="argument-title">${p.title}</h3>
+
+                                     <p>${p.explanation}</p>
+
+                                 </div>`;
+
+                    });
+
+                    break;
+
+
+
+                case 'conclusion':
+
+                    s.points.forEach(p => {
+
+                        const cls = p.type === 'scripture' ? 'scripture-ref' : p.type === 'thesis' ? 'central-thesis' : 'conclusion-box';
+
+                        html += `<div class="${cls}">
+
+                                     <h3>${p.title}</h3><p>${p.content}</p>
+
+                                 </div>`;
+
+                    });
+
+                    break;
+
+            }
+
+            html += `</div>`;
+
+        });
+
+        document.getElementById('main-content-area').innerHTML = html;
+
+        if (sections.length > 0) {
+
+            showTab(sections[0], document.querySelector('.tab-button'));
+
+        }
+
+    }
+
+
+
+    // --- MAIN APP INITIALIZATION ---
+
+    async function initializeApp() {
+
+        const mainContentArea = document.getElementById('main-content-area');
+
+        try {
+
+            const [themeResponse, contentResponse, schemaResponse] = await Promise.all([
+
+                fetch('data/themes.json'),
+
+                fetch('data/content.json'),
+
+                fetch('data/schema.json')
+
+            ]);
+
+
+
+            if (!themeResponse.ok) throw new Error('Could not load themes.json.');
+
+            if (!contentResponse.ok) throw new Error('Could not load content.json.');
+
+            if (!schemaResponse.ok) throw new Error('Could not load schema.json.');
+
+            
+
+            const themeData = await themeResponse.json();
+
+            const entryData = await contentResponse.json();
+
+            const schemaData = await schemaResponse.json();
+
+
+
+            applyThemeStyles(themeData);
+
+            renderEntryContent(entryData, schemaData);
+
+
+
+        } catch (error) {
+
+            mainContentArea.innerHTML = `<div class="content-panel active" style="color: #ff8a80;"><h2>Error Loading Page</h2><p>${error.message}</p></div>`;
+
+            console.error("An error occurred in initializeApp:", error);
+
+        }
+
+    }
+
+
+
+    // --- ENTRY POINT ---
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+        initializeApp();
+
+
+
+        document.body.addEventListener('click', function(event) {
+
+            const tabButton = event.target.closest('.tab-button');
+
+            if (tabButton) {
+
+                showTab(tabButton.dataset.tab, tabButton);
+
+                return;
+
+            }
+
+
+
+            const themeButton = event.target.closest('.theme-btn');
+
+            if (themeButton) {
+
+                setTheme(themeButton.dataset.theme);
+
+                return;
+
+            }
+
+        });
+
+    });
+
+    </script>
+
+</body>
+
+</html>
