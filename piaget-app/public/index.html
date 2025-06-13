@@ -174,7 +174,7 @@
 
             box-shadow:0 2px 8px rgba(0,0,0,.07); }
 
-
+        .concept-card ul { padding-left: 25px; }
 
         .central-thesis,.warning-highlight,.conclusion-box { padding:25px;font-size:1.1em; }
 
@@ -250,17 +250,20 @@
 
 
 
-    <div class="container">
+        <div class="container">
+
+        <section class="hero-banner" style="margin-bottom:30px;border-radius:20px;overflow:hidden;box-shadow:var(--component-box-shadow);">
+            <img id="hero-img" 
+                 src=""
+                 style="width:100%;height:250px;object-fit:cover;">
+        </section>
 
         <header class="header">
-
             <h1 class="book-title">Loading Project...</h1>
-
             <div class="chapter-info">Loading...</div>
-
             <div class="page-range"></div>
-
         </header>
+
 
 
 
@@ -382,7 +385,10 @@
 
         document.title = `${schemaData.projectName}: ${entryData.title}`;
 
-
+        const heroImg = document.getElementById('hero-img');
+        if (heroImg) {
+          heroImg.src = entryData.heroImage;
+        }         
 
         // --- Tab Bar ---
 
