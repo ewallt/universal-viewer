@@ -45,14 +45,17 @@
       padding:15px;border-radius:10px;margin:15px 0;border-left:4px solid var(--accent-primary);}
     .quote{font-style:italic;} .concept-card ul{padding-left:25px;}
 
-    /* pop-up */
-    .reference-detail-card{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
-                           width:min(90%,700px);max-height:80vh;overflow:auto;
-                           background:var(--surface-color);border:1px solid var(--border-color);
-                           border-radius:20px;padding:30px;box-shadow:var(--component-box-shadow);
-                           z-index:1001;}
-    .close-ref-btn{position:absolute;top:12px;right:12px;border:none;background:transparent;
-                   color:var(--accent-primary);font-size:1.6rem;cursor:pointer;}
+    /* reference detail card styling */
+    .reference-detail-card{background:var(--surface-color);border:1px solid var(--border-color);
+                           border-radius:20px;padding:30px;box-shadow:var(--component-box-shadow);}
+    .close-ref-btn{position:absolute;top:30px;right:30px;background:var(--surface-color-secondary);
+                   border:1px solid var(--border-color);color:var(--text-primary);font-size:1.5em;
+                   width:40px;height:40px;border-radius:50%;cursor:pointer;transition:all .3s ease;
+                   display:flex;align-items:center;justify-content:center;z-index:910;}
+    .ref-detail-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;}
+    .ref-detail-content .verse-text{background:var(--surface-color-secondary);border:1px solid var(--border-color-accent);
+                                    border-left:4px solid var(--accent-primary);padding:20px;border-radius:10px;
+                                    margin:15px 0;font-style:italic;}
   </style>
 
   <!-- ---------- theme bootstrap (builds CSS vars from themes.json) ---------- -->
@@ -127,10 +130,20 @@
         <div class="concept-card"><span class="concept-title">${c.title}</span>: ${c.definition}</div>`
       ).join(''),
 
-      /* ---------- generic list-with-detail renderer ---------- */
+      /* ---------- updated list-with-detail renderer ---------- */
       'renderer-list-detail':s=>{
         const row=r=>`<div class="ref-item clickable-ref" data-ref-id="${r.id||''}">${r.text}</div>`;
-        return [].concat(s.items||[],s.scripture||[],s.other||[],s.points||[]).map(row).join('');
+        const list = [].concat(s.items||[],s.scripture||[],s.other||[],s.points||[]).map(row).join('');
+        return `<div id="referenceList">
+                  ${list}
+                </div>
+                <div id="referenceDetailCard" class="reference-detail-card" style="display:none;position:relative;">
+                  <button class="close-ref-btn">&times;</button>
+                  <div class="ref-detail-header">
+                    <span id="refDetailTitle"></span>
+                  </div>
+                  <div id="refDetailContent" class="ref-detail-content"></div>
+                </div>`;
       },
 
       'renderer-conclusion-list':s=>s.points.map(p=>{
@@ -147,13 +160,26 @@
       btn.classList.add('active');document.getElementById(id).classList.add('active');
     };
 
-    const popRef=id=>{
-      const d=referenceData[id];if(!d)return;
-      const card=document.createElement('div');card.className='reference-detail-card';
-      card.innerHTML=`<button class="close-ref-btn" aria-label="Close">&times;</button>
-                      <h3>${d.title}</h3><div>${d.content}</div>`;
-      card.querySelector('.close-ref-btn').onclick=()=>card.remove();
-      document.body.appendChild(card);
+    const showReference=(refId)=>{
+      const detailCard = document.getElementById('referenceDetailCard');
+      if (!detailCard) return;
+      const refTitle = document.querySelector('#refDetailTitle');
+      const refContent = document.querySelector('#refDetailContent');
+      const referenceList = document.getElementById('referenceList');
+      const data = referenceData[refId];
+      if (!data || !refTitle || !refContent) return;
+
+      refTitle.textContent = data.title;
+      refContent.innerHTML = data.content;
+      if (referenceList) referenceList.style.display = 'none';
+      detailCard.style.display = 'block';
+    };
+
+    const hideReference=()=>{
+      const detailCard = document.getElementById('referenceDetailCard');
+      const referenceList = document.getElementById('referenceList');
+      if (detailCard) detailCard.style.display = 'none';
+      if (referenceList) referenceList.style.display = 'block';
     };
 
     /* ------------ render entry ------------ */
@@ -205,7 +231,7 @@
       }catch(e){
         console.error(e);
         main.innerHTML=`<div class="content-panel active" style="color:#ff8a80;">
-                          <h2>Error Loading Page</h2><p>${e.message}</p></div>`;
+                          <h2>Error Loading Page</h2><p>${e.message}</p>`;
       }
     }
 
@@ -214,7 +240,8 @@
       init();
       document.body.addEventListener('click',e=>{
         const t=e.target.closest('.tab-button');    if(t)return showTab(t.dataset.tab,t);
-        const r=e.target.closest('.clickable-ref'); if(r)return popRef(r.dataset.refId);
+        const r=e.target.closest('.clickable-ref'); if(r)return showReference(r.dataset.refId);
+        const c=e.target.closest('.close-ref-btn'); if(c)return hideReference();
         const th=e.target.closest('.theme-btn');    if(th)return document.body.className=`theme-${th.dataset.theme}`;
       });
     });
