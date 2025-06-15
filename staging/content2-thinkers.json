@@ -1,0 +1,187 @@
+ {
+
+  "title": "The Structure of Scientific Revolutions",
+
+  "source": "Thomas Kuhn",
+
+  "heroImage": "https://cdn.midjourney.com/2c44795c-05d6-4af5-9214-e287acd2e6c3/0_1.png",
+
+  "thesis": {
+
+    "title": "Central Thesis",
+
+    "central_thesis": "Kuhn's central thesis is that science does not progress in a linear, cumulative fashion by simply adding new facts to an ever-growing pile of knowledge. Instead, scientific progress is a disruptive and revolutionary process. Mature sciences operate for long periods under a shared framework, or 'paradigm', which guides all research. Progress is punctuated by radical 'paradigm shifts' where the entire scientific worldview is overthrown and replaced by a new, incompatible one.",
+
+    "key_statement": "The progression of science is not a steady march toward Truth, but a series of revolutionary upheavals that replace one way of seeing the world with another, much like a political revolution replaces one set of institutions with another.",
+
+    "foundational_principles": {
+
+      "title": "Foundational Principles",
+
+      "points": [
+
+        "<strong>Progress is Non-Cumulative:</strong> Scientific revolutions are destructive as well as creative. The old paradigm is not just refined; it is discarded and replaced by a new, incommensurable framework.",
+
+        "<strong>Science is a Communal Activity:</strong> Paradigms are not just theories; they are the shared property of a scientific community, encompassing its values, standards, and practices. Science is governed by the consensus of this community.",
+
+        "<strong>Observation is Paradigm-Dependent:</strong> There is no neutral, objective observation. What a scientist sees is shaped and interpreted through the lens of their reigning paradigm. Adherents of different paradigms effectively 'live in different worlds.'"
+
+      ]
+
+    }
+
+  },
+
+  "arguments": {
+
+    "title": "The Cycle of Scientific Change",
+
+    "points": [
+
+      {
+
+        "title": "Argument 1: Normal Science as Puzzle-Solving",
+
+        "explanation": "This is the default state of a mature science. Governed by a dominant paradigm, scientists engage in 'puzzle-solving'—working to articulate the existing theory, improve its precision, and extend its scope. During this phase, the paradigm's fundamental assumptions are accepted without question; they provide the 'rules of the game.'",
+
+        "quotes": []
+
+      },
+
+      {
+
+        "title": "Argument 2: Anomalies and the Onset of Crisis",
+
+        "explanation": "Inevitably, experiments yield <strong>anomalies</strong>—results that violate the expectations of the paradigm. While most anomalies are initially dismissed or resolved, the accumulation of persistent and fundamental anomalies erodes confidence in the paradigm, plunging the scientific community into a state of <strong>crisis</strong>.",
+
+        "quotes": []
+
+      },
+
+      {
+
+        "title": "Argument 3: Revolution and the Paradigm Shift",
+
+        "explanation": "A crisis is resolved only when a new, rival paradigm emerges that can explain the critical anomalies and offer a promising new foundation for research. The transition to this new paradigm is a <strong>scientific revolution</strong>. This shift is a non-logical 'conversion experience' that divides the community, ultimately triumphing as a new generation of scientists adopts the new worldview.",
+
+        "quotes": []
+
+      }
+
+    ]
+
+  },
+
+  "concepts": {
+
+    "title": "Key Concepts",
+
+    "points": [
+
+      {
+
+        "title": "Paradigm",
+
+        "definition": "A scientific community's entire constellation of shared beliefs, values, techniques, and exemplars. It is the framework that defines 'normal science.'"
+
+      },
+
+      {
+
+        "title": "Normal Science",
+
+        "definition": "The puzzle-solving activity conducted under a reigning paradigm with the goal of articulating it, not challenging it."
+
+      },
+
+      {
+
+        "title": "Anomaly",
+
+        "definition": "A result or phenomenon that violates paradigm-induced expectations, acting as the catalyst for potential change."
+
+      },
+
+      {
+
+        "title": "Crisis",
+
+        "definition": "A period of professional insecurity where a paradigm is recognized as failing due to persistent anomalies, opening the door for new theories."
+
+      },
+
+      {
+
+        "title": "Scientific Revolution",
+
+        "definition": "The non-cumulative episode where an older paradigm is replaced in whole or in part by an incompatible new one."
+
+      },
+
+      {
+
+        "title": "Incommensurability",
+
+        "definition": "The idea that two paradigms are untranslatable and cannot be judged by a common standard. They have different concepts, standards, and views of the world."
+
+      }
+
+    ]
+
+  },
+
+  "examples": {
+
+    "title": "Examples of Scientific Revolutions",
+
+    "points": [
+
+      {
+
+        "title": "Example: The Copernican Revolution (Astronomy)",
+
+        "explanation": "The ancient Ptolemaic paradigm, which placed a stationary Earth at the center of the universe, entered a state of crisis as it required increasingly complex 'epicycles' to account for observational anomalies. The revolution came with the Copernican paradigm, which placed the Sun at the center. This was an incommensurable shift: the very definition of 'planet' and 'motion' changed, fundamentally altering the astronomical worldview."
+
+      },
+
+      {
+
+        "title": "Example: The Chemical Revolution (Chemistry)",
+
+        "explanation": "The Phlogiston paradigm explained combustion as the release of a substance called 'phlogiston.' Normal science involved studying this substance. However, the anomaly that metals gained mass when burned created a crisis. The revolution was led by Antoine Lavoisier, whose Oxygen paradigm proposed that combustion was not a release, but a combination with a gas (oxygen). The entire conceptual framework of chemistry was replaced."
+
+      },
+
+      {
+
+        "title": "Example: The Einsteinian Revolution (Physics)",
+
+        "explanation": "For over 200 years, Newtonian Physics was the ultimate paradigm. However, late 19th-century anomalies, such as the constant speed of light and Mercury's orbit, created a crisis. Albert Einstein's theories of Relativity provided a new paradigm that completely redefined the fundamental concepts of space, time, and gravity, making the old and new worldviews incommensurable."
+
+      }
+
+    ]
+
+  },
+
+  "conclusion": {
+
+    "title": "Conclusion",
+
+    "points": [
+
+      {
+
+        "type": "conclusion-box",
+
+        "title": "Synthesis & Impact",
+
+        "content": "Kuhn's theory provided a radical new framework for understanding the history and philosophy of science. It dismantled the traditional image of science as a purely rational, objective, and steady accumulation of truth. By highlighting the role of community, convention, and revolutionary change, he showed that science is a profoundly human endeavor. His core concept of the 'paradigm shift' has become a vital part of the modern lexicon, used to describe fundamental changes in thinking across countless fields beyond science itself."
+
+      }
+
+    ]
+
+  }
+
+}

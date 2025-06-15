@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Table of Contents</title>
+  <style>
+    /* --- minimalist dark‑mode friendly styling that pairs with viewer.html --- */
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --text: #e6edf3;
+      --accent: #58cdaa;
+    }
+    body { margin:0;font-family:Georgia,serif;background:var(--bg);color:var(--text);line-height:1.6; }
+    h1 { text-align:center;padding:2rem 1rem;font-size:2.5rem; }
+    main { max-width: 900px; margin: 0 auto 4rem; padding: 0 1rem; }
+    .toc-panel { background:var(--panel);border-radius:16px;padding:2rem;box-shadow:0 15px 30px rgba(0,0,0,.35); }
+    ul { list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1rem; }
+    a { display:block;padding:1rem 1.25rem;border:2px solid transparent;border-radius:12px;background:rgba(255,255,255,0.04);color:var(--text);text-decoration:none;font-size:1.1rem;transition:all .25s ease; }
+    a:hover { border-color:var(--accent);transform:translateY(-2px) scale(1.02); }
+    .loading, .error { text-align:center;padding:2rem;font-style:italic; }
+  </style>
+</head>
+<body>
+  <h1></h1>
+  <main>
+    <section class="toc-panel" id="toc-panel">
+      <div class="loading" id="status">Loading contents…</div>
+      <ul id="toc-list" style="display:none;"></ul>
+    </section>
+  </main>
+
+    <script>
+    /*
+      Dynamically discover content files in /data/contents/
+      after loading project configuration from /data/schema.json
+    */
+    (async () => {
+      const maxContents = 50; // upper bound — adjust when content grows
+      const listEl   = document.getElementById('toc-list');
+      const statusEl = document.getElementById('status');
+      const h1El     = document.querySelector('h1');
+
+      try {
+        // 1. Fetch the schema to get project-specific info
+        const schemaResponse = await fetch('data/schema.json');
+        if (!schemaResponse.ok) throw new Error('Schema file not found.');
+        const schema = await schemaResponse.json();
+
+        // 2. Update the page titles using the schema
+        document.title = `${schema.projectName} — Table of Contents`;
+        h1El.textContent = schema.projectName;
+        const entryLabel = schema.entryLabel || 'Item'; // Fallback to 'Item'
+
+        // 3. Launch all content fetches in parallel
+        const fetches = Array.from({ length: maxContents }, (_, i) =>
+          fetch(`data/contents/content${i + 1}.json`)
+            .then(r => (r.ok ? r.json() : null))
+            .then(data => data && ({ id: i + 1, data }))
+            .catch(() => null) // ignore network / parse errors
+        );
+
+        const results = (await Promise.all(fetches)).filter(Boolean);
+
+        if (results.length) {
+          statusEl.style.display = 'none';
+          listEl.style.display   = 'block';
+
+          results.forEach(({ id, data }) => {
+            const li = document.createElement('li');
+            
+            // 4. Use the dynamic entryLabel from the schema
+            li.innerHTML =
+              `<a href="viewer.html?id=${id}">
+                  <strong>${entryLabel} ${id}:</strong> ${data.title}
+                  <em style="opacity:.7;font-size:.9rem;display:block;margin-top:0.25em;">${data.pageRange || ''}</em>
+                </a>`;
+            listEl.appendChild(li);
+          });
+        } else {
+          statusEl.textContent = 'No contents found.';
+        }
+      } catch (error) {
+        console.error('Error initializing TOC:', error);
+        h1El.textContent = 'Error';
+        statusEl.textContent = 'Could not load project configuration. Make sure data/schema.json is present.';
+      }
+    })();
+  </script>
+
+</body>
+</html>

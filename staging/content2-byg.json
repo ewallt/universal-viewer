@@ -1,0 +1,100 @@
+{
+  "title": "This is Eternal Life",
+  "pageRange": "pp. 7-15",
+  "heroImage": "https://cdn.midjourney.com/54cea3cc-40af-422d-9368-8f4cdd898d0d/0_3.png",
+  "sections": ["thesis", "arguments", "concepts", "references", "conclusion"],
+  "thesis": {
+    "title": "The Point of the Chapter",
+    "central_thesis": "The author’s central argument is that a true, experiential knowledge of God and of Jesus Christ is eternal life itself; this knowledge alone transforms character, imparts divine power and peace, and secures salvation, while ignorance or distortion of God’s character leads inevitably to spiritual ruin and eternal death.",
+    "key_statement": "The chapter opens by treating John 17:3 as an exact equation: life eternal = knowledge of God and Christ, and the absence of that knowledge = death eternal.",
+    "foundational_principles": {
+      "title": "The Life-Knowledge Equation",
+      "points": [
+        "The indispensable identification of eternal life with knowing God.",
+        "The depth of the word 'know' is clarified by the Amplified Bible as to perceive, recognize, become acquainted with, and understand.",
+        "Key Authorial Statement: “Life eternal is the knowledge of God and Jesus Christ, and a lack of the knowledge of God and Jesus Christ is death eternal.”"
+      ]
+    }
+  },
+  "arguments": {
+    "title": "How the Author Makes His Case",
+    "points": [
+      {
+        "title": "Argument 1: Knowledge Transforms Character and Is Indispensable to Salvation",
+        "explanation": "Salvation demands the restoration of God’s image in the human soul, a re-creation that can only be accomplished by truly knowing Him. This knowledge is not merely informational but is an active, divine power that transforms character.",
+        "key_insight": "“The knowledge of God is life eternal, and life eternal is the knowledge of God.”",
+        "quotes": [
+          { "type": "quote", "source": "Testimonies for the Church, vol. 8, p. 289", "text": "“The knowledge of God as revealed in Christ is the knowledge that all who are saved must have. It is the knowledge that works transformation of character. This knowledge, received, will recreate the soul in the image of God. It will impart to the whole being a spiritual power that is divine.”" }
+        ]
+      },
+      {
+        "title": "Argument 2: Grace and Peace Are Channeled Through Knowledge",
+        "explanation": "The author argues that grace and peace are not abstract concepts but are divine qualities multiplied in a believer's life directly through the channel of knowing God. He uses 2 Peter to show that all things pertaining to life and godliness are given through this knowledge.",
+        "key_insight": "“Grace and peace do not just happen; they flow through the knowledge of God.”",
+        "quotes": [
+          { "type": "scripture", "source": "2 Peter 1:2-4", "text": "Links all gifts “pertaining to life and godliness” to knowledge." },
+          { "type": "quote", "source": "The Great Controversy, p. 394", "text": "Defines grace as active, transforming power—\"the regenerating, enlightening power of the Holy Spirit\"—rather than mere attitude." }
+        ]
+      },
+      {
+        "title": "Argument 3: Rejecting Knowledge Produces Moral Degeneracy",
+        "explanation": "Using Romans 1 as a case study, the author establishes a direct cause-and-effect relationship between humanity's suppression of the knowledge of God and the resulting moral and societal decline. When people choose not to retain God in their knowledge, they are given over to a debased mind.",
+        "key_insight": "“The level of morality is directly determined by the knowledge of God’s character.”",
+        "quotes": [
+          { "type": "scripture", "source": "Romans 1:18-32", "text": "Provides a case study of moral decline following the rejection of divine revelation." }
+        ]
+      },
+      {
+        "title": "Argument 4: Meager or False Concepts Cripple Spiritual Experience",
+        "explanation": "Even believers can stagnate when their concept of God is dim, distorted, or inaccurate. The author posits that Christ's primary mission was to correct Satan's misrepresentations of God's character, and this work is essential in the end times to overcome spiritual weakness.",
+        "key_insight": "“Old concepts will be challenged; many things about God will be exactly opposite from what has been believed.”",
+        "quotes": [
+          { "type": "quote", "source": "Testimonies for the Church, vol. 5, p. 744", "text": "Explains the mechanism of transformation: \"...it is by beholding that we become changed... by contemplating the perfection of the divine character... we are to be transformed into the same image.\"" }
+        ]
+      }
+    ]
+  },
+  "concepts": {
+    "title": "Key Terminology & Concepts",
+    "points": [
+      { "title": "Knowledge of God", "definition": "An accurate, relational, and experiential comprehension of God’s character as revealed in Christ; presented as being identical with eternal life itself." },
+      { "title": "Grace of God", "definition": "Defined not as a passive attitude but as an active, divine force: “The regenerating, enlightening power of the Holy Spirit” (GC 394)." },
+      { "title": "Peace with God", "definition": "The experiential result of justification by faith, where the enmity of the carnal mind is replaced by the indwelling presence of God." },
+      { "title": "Meager / False Views of God", "definition": "Inaccurate or distorted concepts of God's character that stifle spiritual growth, prevent transformation, and foster sin." }
+    ]
+  },
+  "references": {
+    "title": "Complete Reference Lists",
+    "scripture": [
+      {"id": "john173", "text": "John 17:3"},
+      {"id": "2peter1", "text": "2 Peter 1:2-4"},
+      {"id": "rom87", "text": "Romans 8:7"},
+      {"id": "rom51", "text": "Romans 5:1"},
+      {"id": "rom1", "text": "Romans 1:18-32"}
+    ],
+    "other": [
+      {"id": "t8_289", "text": "Testimonies for the Church, vol. 8, p. 289"},
+      {"id": "gc394", "text": "The Great Controversy, p. 394"},
+      {"id": "t5_743", "text": "Testimonies for the Church, vol. 5, pp. 743-744"},
+      {"id": "fce177", "text": "Fundamentals of Christian Education, p. 177"}
+    ]
+  },
+  "conclusion": {
+    "title": "Chapter Conclusion & Synthesis",
+    "points": [
+      { "type": "conclusion", "title": "The Supreme Pursuit", "content": "The chapter concludes that every dimension of Christian life—power, peace, character, and destiny—rises or falls with one’s grasp of God’s true character. Therefore, the supreme pursuit of every believer must be the diligent, prayerful contemplation of God as He is revealed in Jesus Christ." },
+      { "type": "thesis", "title": "The Core Equation", "content": "\"To know God is life eternal, and life eternal is to know God.\"" }
+    ]
+  },
+  "referenceData": {
+    "john173": { "title": "John 17:3 [Amplified Bible]", "content": "<div class=\"verse-text\">“And this is eternal life: [it means] to know (to perceive, recognize, become acquainted with and understand) You, the only true and real God, and [likewise] to know Him, Jesus [as the] Christ, the Anointed One, the Messiah, Whom You have sent.”</div>" },
+    "2peter1": { "title": "2 Peter 1:2-4", "content": "<div class=\"verse-text\">“Grace and peace be multiplied to you in the knowledge of God and of Jesus our Lord, As His divine power has given to us all things that pertain to life and godliness, through the knowledge of Him who called us by glory and virtue, By which have been given to us exceedingly great and precious promises, that through these you may be partakers of the divine nature, having escaped the corruption that is in the world through lust.”</div>" },
+    "rom87": { "title": "Romans 8:7", "content": "<div class=\"verse-text\">“Because the carnal mind is enmity against God: for it is not subject to the law of God, neither indeed can be.”</div>" },
+    "rom51": { "title": "Romans 5:1", "content": "<div class=\"verse-text\">“Therefore being justified by faith, we have peace with God through our Lord Jesus Christ.”</div>" },
+    "rom1": { "title": "Romans 1:18-32", "content": "<div class=\"verse-text\">“For the wrath of God is revealed from heaven against all ungodliness and unrighteousness of men… Because, although they knew God, they did not glorify Him as God, nor were thankful… Professing themselves to be wise, they became fools… And even as they did not like to retain God in their knowledge, God gave them over to a debased mind, to do those things which are not fitting…”</div>" },
+    "t8_289": { "title": "Testimonies for the Church, vol. 8, p. 289", "content": "<div class=\"verse-text\">“The knowledge of God as revealed in Christ is the knowledge that all who are saved must have. It is the knowledge that works transformation of character. This knowledge, received, will recreate the soul in the image of God. It will impart to the whole being a spiritual power that is divine.”</div>" },
+    "gc394": { "title": "The Great Controversy, p. 394", "content": "<div class=\"verse-text\">“…the regenerating, enlightening power of the Holy Spirit.”</div>" },
+    "t5_743": { "title": "Testimonies for the Church, vol. 5, pp. 743-744", "content": "<div class=\"verse-text\">“By sin the image of God in man has been marred and well-nigh obliterated… And how can we come into harmony with God, how shall we receive His likeness, unless we obtain a knowledge of Him? It is this knowledge that Christ came into the world to reveal unto us... Brethren and sisters, it is by beholding that we become changed. By dwelling upon the love of God and our Saviour, by contemplating the perfection of the divine character and claiming the righteousness of Christ as ours by faith, we are to be transformed into the same image.”</div>" },
+    "fce177": { "title": "Fundamentals of Christian Education, p. 177", "content": "<div class=\"verse-text\">“He presented to men that which was exactly contrary to the representations of the enemy in regard to the character of God.”</div>" }
+  }
+}

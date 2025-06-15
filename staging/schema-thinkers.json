@@ -1,0 +1,25 @@
+{
+  "projectName": "Influential Thinkers",
+  "entryLabel": "Thinker",
+  "defaultSections": [
+    "thesis",
+    "arguments",
+    "concepts",
+    "examples",
+    "conclusion"
+  ],
+  "sectionLabels": {
+    "thesis": "Central Thesis",
+    "arguments": "Supporting Arguments",
+    "concepts": "Key Concepts",
+    "examples": "Examples",
+    "conclusion": "Conclusion"
+  },
+  "sectionRenderers": {
+    "thesis": "renderer-thesis",
+    "arguments": "renderer-points-list",
+    "concepts": "renderer-definitions-list",
+    "examples": "renderer-thinker-examples",
+    "conclusion": "renderer-conclusion-list"
+  }
+}

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Behold Your God — Table of Contents</title>
+
+  <!-- minimalist dark-mode styling that matches viewer.html -->
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --text: #e6edf3;
+      --accent: #58cdaa;
+    }
+
+    body {
+      margin: 0;
+      font-family: Georgia, serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    h1 {
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: 2.5rem;
+    }
+
+    main {
+      max-width: 900px;
+      margin: 0 auto 4rem;
+      padding: 0 1rem;
+    }
+
+    .toc-panel {
+      background: var(--panel);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.35);
+    }
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    a {
+      display: block;
+      padding: 1rem 1.25rem;
+      border: 2px solid transparent;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 1.1rem;
+      transition: all 0.25s ease;
+    }
+
+    a:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px) scale(1.02);
+    }
+
+    .loading,
+    .error {
+      text-align: center;
+      padding: 2rem;
+      font-style: italic;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Behold Your God</h1>
+
+  <main>
+    <section class="toc-panel" id="toc-panel">
+      <div class="loading" id="status">Loading contents…</div>
+      <ul id="toc-list" hidden></ul>
+    </section>
+  </main>
+
+  <script>
+    /*
+      Dynamically discover chapter JSON files in /data/contents/
+      – fires off all fetches in parallel for faster start-up.
+    */
+    (async () => {
+      const MAX_CONTENTS = 50;                // upper bound — adjust as book grows
+      const listEl   = document.getElementById('toc-list');
+      const statusEl = document.getElementById('status');
+
+      // launch all fetches at once
+      const fetches = Array.from({ length: MAX_CONTENTS }, (_, i) =>
+        fetch(`data/contents/content${i + 1}.json`)
+          .then(r => (r.ok ? r.json() : null))
+          .then(ch => ch && ({ id: i + 1, ch }))
+          .catch(() => null)                  // ignore missing/parse errors
+      );
+
+      const results = (await Promise.all(fetches)).filter(Boolean);
+
+      if (results.length) {
+        statusEl.hidden = true;
+        listEl.hidden   = false;
+
+        results.forEach(({ id, ch }) => {
+          // unwrap if chapter JSON is nested under its numeric key
+          const obj = ch.title ? ch : Object.values(ch)[0];
+
+          const li = document.createElement('li');
+          li.innerHTML = `
+            <a href="viewer.html?id=content${id}">
+              <strong>Chapter ${id}:</strong> ${obj.title}
+              <em style="opacity:.7;font-size:.9rem;">${obj.pageRange}</em>
+            </a>`;
+          listEl.appendChild(li);
+        });
+      } else {
+        statusEl.textContent = 'No contents found.';
+      }
+    })();
+  </script>
+</body>
+</html>

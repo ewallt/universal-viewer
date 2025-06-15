@@ -1,0 +1,25 @@
+{
+  "projectName": "Behold Your God",
+  "entryLabel": "Chapter",
+  "defaultSections": [
+    "thesis",
+    "arguments",
+    "concepts",
+    "references",
+    "conclusion"
+  ],
+  "sectionLabels": {
+    "thesis": "Central Thesis",
+    "arguments": "Main Arguments",
+    "concepts": "Key Concepts",
+    "references": "References",
+    "conclusion": "Conclusion"
+  },
+  "sectionRenderers": {
+    "thesis": "renderer-thesis",
+    "arguments": "renderer-points-list",
+    "concepts": "renderer-definitions-list",
+    "references": "renderer-byg-references",
+    "conclusion": "renderer-conclusion-list"
+  }
+}

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Behold Your God — Viewer</title>
+
+  <!-- fallback palette = “original” theme -->
+  <style>
+    /* ------------------------------------------------------------------
+       These values come straight from data/themes.json > themes.original 
+       They guarantee a fully-styled first paint.  Switching themes later
+       still works because applyThemeStyles() overwrites variables.
+    ------------------------------------------------------------------ */
+    :root{
+      --text-primary:#ecf0f1;
+      --text-secondary:#90caf9;
+      --accent-primary:#64b5f6;
+      --accent-secondary:#42a5f5;
+      --background-gradient:linear-gradient(135deg,#0a0a23 0%,#1a1a3a 50%,#2e2e5e 100%);
+      --surface-color:rgba(0,0,0,.6);
+      --surface-color-secondary:rgba(0,0,0,.5);
+      --border-color:rgba(255,255,255,.3);
+      --border-color-accent:rgba(100,181,246,.4);
+      --progress-bar-gradient:linear-gradient(90deg,#64b5f6,#42a5f5);
+      --book-title-text-shadow:2px 2px 4px rgba(0,0,0,.5);
+      --header-border-bottom:1px solid var(--border-color);
+      --component-backdrop-filter:blur(15px);
+      --component-box-shadow:0 15px 35px rgba(0,0,0,.3);
+    }
+
+    /* --------- the rest of your original CSS (unchanged) --------- */
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:Georgia,serif;line-height:1.6;
+         color:var(--text-primary);background:var(--background-gradient);
+         min-height:100vh;transition:background .5s ease,color .5s ease;}
+    .container{max-width:1200px;margin:0 auto;padding:20px;}
+    .header{background:var(--surface-color);backdrop-filter:var(--component-backdrop-filter);
+            border-radius:20px;padding:30px;margin-bottom:30px;
+            box-shadow:var(--component-box-shadow);text-align:center;
+            border:var(--header-border-bottom);}
+    .book-title{font-size:2.5em;color:var(--text-primary);
+                margin-bottom:10px;font-weight:bold;
+                text-shadow:var(--book-title-text-shadow);}
+    .chapter-info{font-size:1.3em;color:var(--accent-primary);margin-bottom:10px;}
+    .page-range{font-size:1.1em;color:var(--accent-secondary);font-style:italic;}
+    .back-to-index-link{display:block;text-align:center;margin-top:20px;
+                        color:var(--text-secondary);text-decoration:none;font-size:1.1em;
+                        transition:color .3s ease;}
+    .back-to-index-link:hover{text-decoration:underline;color:var(--text-primary);}
+    .nav-tabs{display:flex;justify-content:center;gap:15px;margin-bottom:30px;
+              flex-wrap:wrap;padding:10px 0;}
+    .tab-button{background:var(--surface-color-secondary);border:1px solid var(--border-color);
+                color:var(--text-primary);backdrop-filter:var(--component-backdrop-filter);
+                padding:12px 28px;border-radius:50px;cursor:pointer;font-size:1em;font-weight:500;
+                transition:all .3s ease;box-shadow:0 5px 15px rgba(0,0,0,.2);}
+    .tab-button:hover{transform:translateY(-3px) scale(1.03);
+                      box-shadow:0 8px 25px rgba(0,0,0,.3);
+                      border-color:var(--accent-primary);background:rgba(0,0,0,.7);}
+    .tab-button.active{font-weight:bold;border-color:var(--accent-primary);
+                       transform:translateY(-2px);
+                       box-shadow:0 6px 20px rgba(0,0,0,.35);color:var(--accent-primary);
+                       background:linear-gradient(135deg,#1a1a3a 0%,#2e2e5e 100%);}
+    .content-panel{position:relative;background:var(--surface-color);
+                   backdrop-filter:var(--component-backdrop-filter);
+                   border:1px solid var(--border-color);border-radius:20px;
+                   padding:30px;box-shadow:var(--component-box-shadow);
+                   display:none;animation:fadeIn .5s ease-in;}
+    .content-panel.active{display:block;}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(20px);}
+                      to{opacity:1;transform:translateY(0);}}
+    .section-title{font-size:1.8em;color:var(--text-primary);margin-bottom:20px;
+                   padding-bottom:10px;border-bottom:3px solid var(--accent-primary);}
+    .central-thesis,.warning-highlight,.conclusion-box,.scripture-ref,
+    .quote,.concept-card,.ref-item,.argument-point{
+      background:var(--surface-color-secondary);border:1px solid var(--border-color-accent);
+      color:var(--text-primary);backdrop-filter:var(--component-backdrop-filter);
+      padding:15px;border-radius:10px;margin:15px 0;border-left:4px solid var(--accent-primary);}
+    .concept-card ul{padding-left:25px;}
+    .central-thesis,.warning-highlight,.conclusion-box{padding:25px;font-size:1.1em;}
+    .argument-point,.quote,.ref-item{border-left-color:var(--accent-secondary);}
+    .quote{font-style:italic;}
+    .argument-title,.concept-title,.quote-source,.ref-title,
+    .ref-detail-header span{font-weight:bold;color:var(--accent-primary);margin-bottom:10px;}
+    .reference-detail-card{background:var(--surface-color);border:1px solid var(--border-color);
+                            color:var(--text-primary);backdrop-filter:var(--component-backdrop-filter);
+                            border-radius:20px;padding:30px;box-shadow:var(--component-box-shadow);}
+    .close-ref-btn{position:absolute;top:30px;right:30px;background:var(--surface-color-secondary);
+                   border:1px solid var(--border-color);color:var(--text-primary);
+                   font-size:1.5em;width:40px;height:40px;border-radius:50%;cursor:pointer;
+                   transition:all .3s ease;display:flex;align-items:center;justify-content:center;
+                   z-index:910;}
+    .close-ref-btn:hover{background:linear-gradient(135deg,#1a1a3a 0%,#2e2e5e 100%);
+                         border-color:var(--accent-primary);}
+    .ref-detail-content .verse-text{background:var(--surface-color-secondary);
+                                    border:1px solid var(--border-color-accent);
+                                    border-left:4px solid var(--accent-primary);
+                                    padding:20px;border-radius:10px;margin:15px 0;font-style:italic;}
+    .theme-selector{position:fixed;top:15px;right:20px;z-index:1001;display:flex;gap:10px;}
+    .theme-btn{width:50px;height:50px;border:2px solid rgba(255,255,255,.7);
+               border-radius:50%;cursor:pointer;box-shadow:0 5px 15px rgba(0,0,0,.3);
+               transition:all .3s ease;}
+  </style>
+</head>
+
+<body class="theme-original">
+  <!-- theme picker -->
+  <div class="theme-selector">
+    <button class="theme-btn" data-theme="original" title="Cosmic Night"></button>
+    <button class="theme-btn" data-theme="stately"  title="Stately Theme"></button>
+    <button class="theme-btn" data-theme="forest"   title="Forest Canopy"></button>
+  </div>
+
+  <!-- layout -->
+  <div class="container">
+    <section class="hero-banner">
+      <img id="hero-img" style="width:100%;height:250px;object-fit:cover;display:none;" />
+    </section>
+
+    <header class="header">
+      <h1 class="book-title">Behold Your God</h1>
+      <div class="chapter-info">Loading…</div>
+      <div class="page-range"></div>
+      <a href="index.html" class="back-to-index-link">&larr; Table of Contents</a>
+    </header>
+
+    <nav id="nav-tabs-container" class="nav-tabs"></nav>
+
+    <main id="main-content-area">
+      <div class="content-panel active" style="text-align:center;"><h2>Loading Content…</h2></div>
+    </main>
+  </div>
+
+  <!-- ---------- JS: unchanged except we no longer need early bootstrap ---------- -->
+  <script>
+    /* ───── global ref data ───── */
+    let referenceData = {};
+
+    /* ───── renderer helpers (same as before) ───── */
+    const RENDER = {
+      thesis:s=>`<div class="central-thesis">${s.central_thesis}</div>
+                 <div class="warning-highlight">${s.key_statement}</div>
+                 <div class="concept-card"><h3>${s.foundational_principles.title}</h3>
+                 <ul>${s.foundational_principles.points.map(p=>`<li>${p}</li>`).join('')}</ul></div>`,
+      arguments:s=>s.points.map(p=>`<div class="argument-point">
+                   <h3 class="argument-title">${p.title}</h3><p>${p.explanation}</p>
+                   ${p.key_insight?`<p><em>${p.key_insight}</em></p>`:''}
+                   ${p.quotes.map(q=>{
+                      const cls=q.type==='scripture'?'scripture-ref':
+                                q.type==='warning'  ?'warning-highlight':'quote';
+                      return `<div class="${cls}">${q.text}<br>
+                              <span class="quote-source">${q.source}</span></div>`;
+                   }).join('')}</div>`).join(''),
+      concepts:s=>s.points.map(c=>`<div class="concept-card">
+                 <span class="concept-title">${c.title}</span>: ${c.definition}</div>`).join(''),
+      references:s=>{
+        const wrap=a=>a.map(r=>`<div class="ref-item clickable-ref" data-ref-id="${r.id}">${r.text}</div>`).join('');
+        return `<div id="referenceList">${wrap(s.scripture)}${wrap(s.other)}</div>
+                <div id="referenceDetailCard" class="reference-detail-card" hidden>
+                  <button class="close-ref-btn">&times;</button>
+                  <div class="ref-detail-header"><span id="refDetailTitle"></span></div>
+                  <div id="refDetailContent" class="ref-detail-content"></div>
+                </div>`;},
+      conclusion:s=>s.points.map(p=>{
+        const cls=p.type==='scripture'?'scripture-ref':
+                  p.type==='thesis'   ?'central-thesis':'conclusion-box';
+        return `<div class="${cls}"><h3>${p.title}</h3><p>${p.content}</p></div>`;
+      }).join('')
+    };
+
+    /* ───── utility ───── */
+    const showTab=(id,btn)=>{
+      if(btn){document.querySelectorAll('.tab-button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
+      document.querySelectorAll('.content-panel').forEach(p=>p.style.display=(p.id===id?'block':'none'));
+    };
+    const setTheme=n=>document.body.className=`theme-${n}`;
+    const showRef=id=>{
+      const d=document.getElementById('referenceDetailCard'),l=document.getElementById('referenceList');
+      if(!d||!l)return; const dat=referenceData[id]; if(!dat)return;
+      d.querySelector('#refDetailTitle').textContent=dat.title;
+      d.querySelector('#refDetailContent').innerHTML=dat.content;
+      l.hidden=true; d.hidden=false;
+    };
+    const hideRef=()=>{const d=document.getElementById('referenceDetailCard'),l=document.getElementById('referenceList');
+                       if(d)d.hidden=true;if(l)l.hidden=false;};
+    const renderTabs=(ids,labels)=>document.getElementById('nav-tabs-container').innerHTML=
+        ids.map(i=>`<button class="tab-button" data-tab="${i}">${labels[i]||i}</button>`).join('');
+
+    /* ───── dynamic chapter render ───── */
+    function renderChapter(data,id,schema){
+      document.title=`Behold Your God — Chapter ${id}`;
+      document.querySelector('.chapter-info').textContent=`Chapter ${id}: ${data.title}`;
+      document.querySelector('.page-range').textContent   =data.pageRange||'';
+      const hero=document.getElementById('hero-img');
+      hero.style.display=data.heroImage?'block':'none';
+      if(data.heroImage)hero.src=data.heroImage;
+      referenceData=data.referenceData||{};
+      renderTabs(schema.defaultSections,schema.sectionLabels);
+      document.getElementById('main-content-area').innerHTML=
+        schema.defaultSections.map(sec=>data[sec]?`<div class="content-panel" id="${sec}">
+            <h2 class="section-title">${data[sec].title}</h2>${RENDER[sec](data[sec])}</div>`:'').join('');
+      const first=document.querySelector('.tab-button'); if(first)showTab(schema.defaultSections[0],first);
+    }
+
+    /* ───── init ───── */
+    async function init(){
+      const id=new URLSearchParams(location.search).get('id')||'1';
+      const main=document.getElementById('main-content-area');
+      try{
+        const [chapter,schema] = await Promise.all([
+          fetch(`data/contents/content${id}.json`).then(r=>r.json()),
+          fetch('data/schema.json').then(r=>r.json())
+        ]);
+        renderChapter(chapter,id,schema);
+      }catch(e){
+        console.error(e);
+        main.innerHTML=`<div class="content-panel active" style="color:#ff8a80;">
+                          <h2>Error Loading Page</h2><p>${e.message}</p></div>`;
+      }
+    }
+    document.addEventListener('DOMContentLoaded',()=>{
+      init();
+      document.body.addEventListener('click',e=>{
+        const t=e.target.closest('.tab-button');      if(t)return showTab(t.dataset.tab,t);
+        const th=e.target.closest('.theme-btn');      if(th)return setTheme(th.dataset.theme);
+        const r=e.target.closest('.clickable-ref');   if(r)return showRef(r.dataset.refId);
+        const c=e.target.closest('.close-ref-btn');   if(c)return hideRef();
+      });
+    });
+  </script>
+</body>
+</html>
