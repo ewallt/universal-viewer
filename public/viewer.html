@@ -33,10 +33,30 @@
                 transition:.3s;box-shadow:0 5px 15px rgba(0,0,0,.2);}
     .tab-button.active{font-weight:bold;border-color:var(--accent-primary);color:var(--accent-primary);
                        background:linear-gradient(135deg,#1a1a3a,#2e2e5e);}
+    body.theme-stately .tab-button.active { 
+      background:linear-gradient(45deg,#003366,#004080);
+      color:white;border-color:var(--accent-primary); 
+    }
     .content-panel{background:var(--surface-color);border:1px solid var(--border-color);
                    border-radius:20px;padding:30px;box-shadow:var(--component-box-shadow);
                    display:none;}
     .content-panel.active{display:block;}
+
+    /* back to index link styling */
+    .back-to-index-link { 
+      display:block;text-align:center;margin-top:20px;
+      color:var(--text-secondary);text-decoration:none;font-size:1.1em;
+      transition:color .3s ease; 
+    }
+    .back-to-index-link:hover { 
+      text-decoration:underline;color:var(--text-primary); 
+    }
+    .theme-stately .back-to-index-link { 
+      color:#465A70; 
+    }
+    .theme-stately .back-to-index-link:hover { 
+      color:var(--accent-primary); 
+    }
 
     /* reusable chips */
     .central-thesis,.warning-highlight,.conclusion-box,.scripture-ref,
