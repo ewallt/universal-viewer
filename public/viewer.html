@@ -242,25 +242,38 @@
     }
 
     /* ---------- INITIALIZE ---------- */
-    async function init(){
-      const id=new URLSearchParams(location.search).get('id')||'1';
-      const main=document.getElementById('main-content-area');
-      try{
-        const [contentR,schemaR]=await Promise.all([
-          fetch(`data/contents/${id.startsWith('content') ? id : 'content'+id}.json`),
-          fetch('data/schema.json')
-        ]);
-        if(!contentR.ok)throw new Error(`content${id}.json not found`);
-        if(!schemaR.ok) throw new Error('schema.json missing');
-        const data  =await contentR.json();
-        const schema=await schemaR.json();
-        renderChapter(data,id,schema);
-      }catch(err){
-        console.error(err);
-        main.innerHTML=`<div class="content-panel active" style="color:#ff8a80;">
-                          <h2>Error Loading Page</h2><p>${err.message}</p></div>`;
-      }
-    }
+    async function init() {
+  /* we expect URLs like viewer.html?id=content1 (fallback → content1) */
+  const rawId = new URLSearchParams(location.search).get('id') || 'content1';  // e.g. "content3"
+  const chapterNum = rawId.replace(/^content/, '');                            // "3" for headers
+
+  const main = document.getElementById('main-content-area');
+
+  try {
+    /* fetch the chapter JSON and the schema in parallel */
+    const [contentRes, schemaRes] = await Promise.all([
+      fetch(`data/contents/${rawId}.json`),          // → data/contents/content3.json
+      fetch('data/schema.json')
+    ]);
+
+    if (!contentRes.ok) throw new Error(`${rawId}.json not found`);
+    if (!schemaRes.ok)  throw new Error('schema.json missing');
+
+    const chapterData = await contentRes.json();
+    const schemaData  = await schemaRes.json();
+
+    /* render the page */
+    renderChapter(chapterData, chapterNum, schemaData);
+
+  } catch (err) {
+    console.error(err);
+    main.innerHTML = `
+      <div class="content-panel active" style="color:#ff8a80;">
+        <h2>Error Loading Page</h2><p>${err.message}</p>
+      </div>`;
+  }
+}
+
 
     document.addEventListener('DOMContentLoaded',()=>{
       init();
