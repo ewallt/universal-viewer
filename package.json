@@ -1,0 +1,10 @@
+{
+  "name": "one-big-beautiful-app",
+  "version": "1.0.0",
+  "description": "A dynamic web app that switches between projects.",
+  "scripts": {
+    "build": "node build.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
