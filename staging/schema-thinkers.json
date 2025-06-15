@@ -19,7 +19,7 @@
     "thesis": "renderer-thesis",
     "arguments": "renderer-points-list",
     "concepts": "renderer-definitions-list",
-    "examples": "renderer-thinker-examples",
+    "examples": "renderer-points-list",
     "conclusion": "renderer-conclusion-list"
   }
 }

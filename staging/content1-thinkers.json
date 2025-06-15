@@ -8,22 +8,6 @@
 
   "heroImage": "https://cdn.midjourney.com/b1a6fab6-4aa8-4ad1-99a4-8587022f36e3/0_1.png",
 
-  "sections": [
-
-    "thesis",
-
-    "arguments",
-
-    "concepts",
-
-    "references",
-
-    "conclusion"
-
-  ],
-
-  "referenceData": {},
-
   "thesis": {
 
     "title": "Central Thesis",
@@ -156,7 +140,7 @@
 
   },
 
-  "references": {
+  "examples": {
 
     "title": "Examples of Stages & Tasks",
 
