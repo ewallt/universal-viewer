@@ -108,6 +108,12 @@
   </div>
 
   <div class="container">
+    <section class="hero-banner" style="margin-bottom:30px;border-radius:20px;overflow:hidden;box-shadow:var(--component-box-shadow);background:#333;min-height:250px;display:flex;align-items:center;justify-content:center;">
+        <img id="hero-img" 
+             src=""
+             style="width:100%;height:250px;object-fit:cover;display:block;">
+    </section>
+
     <header class="header">
       <h1 class="book-title">Loading…</h1>
       <div class="chapter-info"></div>
@@ -230,6 +236,12 @@
                     ${fn ? fn(entry[sec]) : `<p>No renderer for ${sec}</p>`}
                   </div>`;
         }).join('');
+
+      // Set hero image AFTER HTML is rendered
+      const heroImg = document.getElementById('hero-img');
+      if (heroImg && entry.heroImage) {
+        heroImg.src = entry.heroImage;
+      }
 
       const first=document.querySelector('.tab-button');
       if(first)showTab(first.dataset.tab,first);
