@@ -1,0 +1,33 @@
+{
+  "pageStructure": {
+    "headerElements": [
+      {"id": "main-title", "class": "primary-title"},
+      {"id": "entry-info", "class": "secondary-info"}, 
+      {"id": "meta-info", "class": "tertiary-info"},
+      {"id": "nav-link", "class": "navigation-link"}
+    ]
+  },
+  "cssClassMap": {
+    "central-thesis": "content-card",
+    "warning-highlight": "highlight-card",
+    "conclusion-box": "content-card", 
+    "scripture-ref": "highlight-card",
+    "quote": "text-card italic",
+    "concept-card": "list-card",
+    "argument-point": "content-card",
+    "ref-item": "text-card"
+  },
+  "defaultSections": ["thesis", "arguments", "concepts", "conclusion"],
+  "sectionLabels": {
+    "thesis": "Central Thesis",
+    "arguments": "Main Arguments", 
+    "concepts": "Key Concepts",
+    "conclusion": "Conclusion"
+  },
+  "sectionRenderers": {
+    "thesis": "renderer-thesis",
+    "arguments": "renderer-points-list",
+    "concepts": "renderer-definitions-list", 
+    "conclusion": "renderer-conclusion-list"
+  }
+}

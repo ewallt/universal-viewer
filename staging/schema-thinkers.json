@@ -1,43 +1,12 @@
 {
-  "projectName": "Influential Thinkers",
+  "projectName": "Influential Thinkers", 
   "entryLabel": "Thinker",
-  "cssClassMap": {
-    "central-thesis": "content-card",
-    "warning-highlight": "highlight-card",
-    "conclusion-box": "content-card", 
-    "scripture-ref": "highlight-card",
-    "quote": "text-card italic",
-    "concept-card": "list-card",
-    "argument-point": "content-card",
-    "ref-item": "text-card"
-  },
-  "defaultSections": [
-    "thesis",
-    "arguments",
-    "concepts",
-    "examples",
-    "conclusion"
-  ],
+  "defaultSections": ["thesis", "arguments", "concepts", "examples", "conclusion"],
   "sectionLabels": {
-    "thesis": "Central Thesis",
     "arguments": "Supporting Arguments",
-    "concepts": "Key Concepts",
-    "examples": "Examples",
-    "conclusion": "Conclusion"
+    "examples": "Examples"
   },
   "sectionRenderers": {
-    "thesis": "renderer-thesis",
-    "arguments": "renderer-points-list",
-    "concepts": "renderer-definitions-list",
-    "examples": "renderer-points-list",
-    "conclusion": "renderer-conclusion-list"
-  },
-"pageStructure": {
-  "headerElements": [
-    {"id": "main-title", "class": "primary-title"},
-    {"id": "entry-info", "class": "secondary-info"}, 
-    {"id": "meta-info", "class": "tertiary-info"},
-    {"id": "nav-link", "class": "navigation-link"}
-  ]
+    "examples": "renderer-points-list"
   }
 }
