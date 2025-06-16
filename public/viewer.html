@@ -1,9 +1,10 @@
+<!--  viewer.html  (complete file)  -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Viewer</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Behold Your God — Viewer</title>
 
   <!-- ---------- minimal fallback palette (overridden by themes.json) ---------- -->
   <style>
@@ -22,7 +23,7 @@
          transition:background .5s,color .5s;}
     .container{max-width:1200px;margin:0 auto;padding:20px;}
 
-    /* header / nav / panel style (unchanged) */
+    /* header / nav / panel style */
     .header{background:var(--surface-color);border-radius:20px;padding:30px;margin-bottom:30px;
             backdrop-filter:var(--component-backdrop-filter);box-shadow:var(--component-box-shadow);
             border:var(--header-border-bottom);text-align:center;}
@@ -31,65 +32,60 @@
     .tab-button{background:var(--surface-color-secondary);border:1px solid var(--border-color);
                 color:var(--text-primary);padding:12px 28px;border-radius:50px;cursor:pointer;
                 transition:.3s;box-shadow:0 5px 15px rgba(0,0,0,.2);}
-    .tab-button.active{font-weight:bold;border-color:var(--accent-primary);color:var(--accent-primary);
-                       background:linear-gradient(135deg,#1a1a3a,#2e2e5e);}
-    body.theme-stately .tab-button.active { 
-      background:linear-gradient(45deg,#003366,#004080);
-      color:white;border-color:var(--accent-primary); 
+    .tab-button.active{
+      font-weight:bold;border-color:var(--accent-primary);color:var(--accent-primary);
+      background:var(--tab-active-bg,linear-gradient(135deg,#1a1a3a,#2e2e5e));
     }
     .content-panel{background:var(--surface-color);border:1px solid var(--border-color);
                    border-radius:20px;padding:30px;box-shadow:var(--component-box-shadow);
                    display:none;}
     .content-panel.active{display:block;}
 
-    /* back to index link styling */
-    .back-to-index-link { 
-      display:block;text-align:center;margin-top:20px;
-      color:var(--text-secondary);text-decoration:none;font-size:1.1em;
-      transition:color .3s ease; 
-    }
-    .back-to-index-link:hover { 
-      text-decoration:underline;color:var(--text-primary); 
-    }
-    .theme-stately .back-to-index-link { 
-      color:#465A70; 
-    }
-    .theme-stately .back-to-index-link:hover { 
-      color:var(--accent-primary); 
-    }
-
     /* reusable chips */
     .central-thesis,.warning-highlight,.conclusion-box,.scripture-ref,
     .quote,.concept-card,.argument-point,.ref-item{
       background:var(--surface-color-secondary);border:1px solid var(--border-color-accent);
       padding:15px;border-radius:10px;margin:15px 0;border-left:4px solid var(--accent-primary);}
-    .quote{font-style:italic;} .concept-card ul{padding-left:25px;}
+    .quote{font-style:italic;} .concept-card ul{padding-left:25px}
 
-    /* reference detail card styling */
-    .reference-detail-card{background:var(--surface-color);border:1px solid var(--border-color);
-                           border-radius:20px;padding:30px;box-shadow:var(--component-box-shadow);}
-    .close-ref-btn{position:absolute;top:30px;right:30px;background:var(--surface-color-secondary);
-                   border:1px solid var(--border-color);color:var(--text-primary);font-size:1.5em;
-                   width:40px;height:40px;border-radius:50%;cursor:pointer;transition:all .3s ease;
-                   display:flex;align-items:center;justify-content:center;z-index:910;}
-    .ref-detail-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;}
-    .ref-detail-content .verse-text{background:var(--surface-color-secondary);border:1px solid var(--border-color-accent);
-                                    border-left:4px solid var(--accent-primary);padding:20px;border-radius:10px;
-                                    margin:15px 0;font-style:italic;}
+    /* reference pop-up */
+    .reference-detail-card{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+                           width:min(90%,700px);max-height:80vh;overflow:auto;
+                           background:var(--surface-color);border:1px solid var(--border-color);
+                           border-radius:20px;padding:30px;box-shadow:var(--component-box-shadow);
+                           z-index:1001;}
+    .close-ref-btn{position:absolute;top:12px;right:12px;border:none;background:transparent;
+                   color:var(--accent-primary);font-size:1.6rem;cursor:pointer;}
   </style>
 
-  <!-- ---------- theme bootstrap (builds CSS vars from themes.json) ---------- -->
+  <!-- ---------- theme bootstrap (creates CSS vars & buttons) ---------- -->
   <script type="module">
     (async()=>{
       try{
-        const r=await fetch('data/themes.json');if(!r.ok)throw new Error;
-        const j=await r.json();let css='';
+        const r=await fetch('data/themes.json');if(!r.ok)throw new Error('themes.json missing');
+        const j=await r.json();
+
+        /* build CSS variables for every theme */
+        let css='';
         for(const id in j.themes){
           css+=`body.theme-${id}{`;
           for(const[k,v]of Object.entries(j.themes[id]))css+=`${k}:${v};`;
           css+='}';
         }
-        const st=document.createElement('style');st.textContent=css;document.head.appendChild(st);
+        document.head.appendChild(Object.assign(document.createElement('style'),{textContent:css}));
+
+        /* build theme-picker buttons */
+        const host=document.getElementById('theme-buttons');
+        host.innerHTML=(j.meta?.themeList||Object.keys(j.themes)).map(t=>{
+          const id  =typeof t==='string'?t:t.id;
+          const name=typeof t==='string'?id:t.name||id;
+          const bg  =j.themes[id]['--background-gradient']||'#444';
+          return `<button class="theme-btn" data-theme="${id}" title="${name}"
+                    style="width:40px;height:40px;background:${bg};border:2px solid rgba(255,255,255,.7);
+                           border-radius:50%;cursor:pointer;box-shadow:0 5px 15px rgba(0,0,0,.3);"></button>`;
+        }).join('');
+
+        /* apply default theme */
         document.body.className=`theme-${j.meta?.defaultTheme||'original'}`;
       }catch(e){console.error('theme bootstrap failed',e);}
     })();
@@ -98,22 +94,10 @@
 
 <body>
   <!-- theme picker -->
-  <div style="position:fixed;top:15px;right:20px;display:flex;gap:10px;z-index:1002;">
-    <button class="theme-btn" data-theme="original" title="Cosmic Night"
-            style="width:40px;height:40px;background:linear-gradient(135deg,#1a1a3a,#64b5f6);"></button>
-    <button class="theme-btn" data-theme="stately"  title="Stately"
-            style="width:40px;height:40px;background:#ffffff;"></button>
-    <button class="theme-btn" data-theme="forest"   title="Forest"
-            style="width:40px;height:40px;background:linear-gradient(135deg,#2a4c3a,#58cdaa);"></button>
-  </div>
+  <div id="theme-buttons"
+       style="position:fixed;top:15px;right:20px;display:flex;gap:10px;z-index:1002;"></div>
 
   <div class="container">
-    <section class="hero-banner" style="margin-bottom:30px;border-radius:20px;overflow:hidden;box-shadow:var(--component-box-shadow);background:#333;min-height:250px;display:flex;align-items:center;justify-content:center;">
-        <img id="hero-img" 
-             src=""
-             style="width:100%;height:250px;object-fit:cover;display:block;">
-    </section>
-
     <header class="header">
       <h1 class="book-title">Loading…</h1>
       <div class="chapter-info"></div>
@@ -129,10 +113,9 @@
   </div>
 
   <script>
-    /* ------------ global ------------ */
+    /* ------------ globals & renderers (unchanged) ------------ */
     let referenceData={};
 
-    /* ------------ renderer library ------------ */
     const RENDERER_LIBRARY={
       'renderer-thesis':s=>`
         <div class="central-thesis">${s.central_thesis}</div>
@@ -156,19 +139,14 @@
         <div class="concept-card"><span class="concept-title">${c.title}</span>: ${c.definition}</div>`
       ).join(''),
 
-      /* ---------- updated list-with-detail renderer ---------- */
       'renderer-list-detail':s=>{
         const row=r=>`<div class="ref-item clickable-ref" data-ref-id="${r.id||''}">${r.text}</div>`;
-        const list = [].concat(s.items||[],s.scripture||[],s.other||[],s.points||[]).map(row).join('');
-        return `<div id="referenceList">
-                  ${list}
-                </div>
-                <div id="referenceDetailCard" class="reference-detail-card" style="display:none;position:relative;">
-                  <button class="close-ref-btn">&times;</button>
-                  <div class="ref-detail-header">
-                    <span id="refDetailTitle"></span>
-                  </div>
-                  <div id="refDetailContent" class="ref-detail-content"></div>
+        const list=[].concat(s.items||[],s.scripture||[],s.other||[],s.points||[]).map(row).join('');
+        return `<div id="referenceList">${list}</div>
+                <div id="referenceDetailCard" class="reference-detail-card" style="display:none;">
+                  <button class="close-ref-btn" aria-label="Close">&times;</button>
+                  <h3 id="refDetailTitle"></h3>
+                  <div id="refDetailContent"></div>
                 </div>`;
       },
 
@@ -186,26 +164,16 @@
       btn.classList.add('active');document.getElementById(id).classList.add('active');
     };
 
-    const showReference=(refId)=>{
-      const detailCard = document.getElementById('referenceDetailCard');
-      if (!detailCard) return;
-      const refTitle = document.querySelector('#refDetailTitle');
-      const refContent = document.querySelector('#refDetailContent');
-      const referenceList = document.getElementById('referenceList');
-      const data = referenceData[refId];
-      if (!data || !refTitle || !refContent) return;
-
-      refTitle.textContent = data.title;
-      refContent.innerHTML = data.content;
-      if (referenceList) referenceList.style.display = 'none';
-      detailCard.style.display = 'block';
+    const showRef=id=>{
+      const d=referenceData[id];if(!d)return;
+      document.getElementById('refDetailTitle').textContent=d.title;
+      document.getElementById('refDetailContent').innerHTML=d.content||'';
+      document.getElementById('referenceList').style.display='none';
+      document.getElementById('referenceDetailCard').style.display='block';
     };
-
-    const hideReference=()=>{
-      const detailCard = document.getElementById('referenceDetailCard');
-      const referenceList = document.getElementById('referenceList');
-      if (detailCard) detailCard.style.display = 'none';
-      if (referenceList) referenceList.style.display = 'block';
+    const hideRef=()=>{
+      document.getElementById('referenceDetailCard').style.display='none';
+      document.getElementById('referenceList').style.display='block';
     };
 
     /* ------------ render entry ------------ */
@@ -237,11 +205,13 @@
                   </div>`;
         }).join('');
 
-      // Set hero image AFTER HTML is rendered
-      const heroImg = document.getElementById('hero-img');
-      if (heroImg && entry.heroImage) {
-        heroImg.src = entry.heroImage;
-      }
+      /* hero image */
+      const hero=document.createElement('img');
+      hero.id='hero-img';
+      hero.style.cssText='width:100%;height:250px;object-fit:cover;border-radius:20px;display:block;';
+      hero.src=entry.heroImage||'';
+      const head=document.querySelector('.header');
+      head.parentNode.insertBefore(hero,head);
 
       const first=document.querySelector('.tab-button');
       if(first)showTab(first.dataset.tab,first);
@@ -251,19 +221,19 @@
     async function init(){
       const rawId=new URLSearchParams(location.search).get('id')||'content1';
       const num  =rawId.replace(/^content/,'');
-      const main =document.getElementById('main-content-area');
       try{
-        const [eRes,sRes]=await Promise.all([
+        const [entryRes,schemaRes]=await Promise.all([
           fetch(`data/contents/${rawId}.json`),
           fetch('data/schema.json')
         ]);
-        if(!eRes.ok)throw new Error(`${rawId}.json missing`);
-        if(!sRes.ok)throw new Error('schema.json missing');
-        renderEntry(await eRes.json(),await sRes.json(),num);
+        if(!entryRes.ok)throw new Error(`${rawId}.json missing`);
+        if(!schemaRes.ok)throw new Error('schema.json missing');
+        renderEntry(await entryRes.json(),await schemaRes.json(),num);
       }catch(e){
         console.error(e);
-        main.innerHTML=`<div class="content-panel active" style="color:#ff8a80;">
-                          <h2>Error Loading Page</h2><p>${e.message}</p>`;
+        document.getElementById('main-content-area').innerHTML=
+          `<div class="content-panel active" style="color:#ff8a80;">
+             <h2>Error Loading Page</h2><p>${e.message}</p></div>`;
       }
     }
 
@@ -271,10 +241,10 @@
     document.addEventListener('DOMContentLoaded',()=>{
       init();
       document.body.addEventListener('click',e=>{
-        const t=e.target.closest('.tab-button');    if(t)return showTab(t.dataset.tab,t);
-        const r=e.target.closest('.clickable-ref'); if(r)return showReference(r.dataset.refId);
-        const c=e.target.closest('.close-ref-btn'); if(c)return hideReference();
-        const th=e.target.closest('.theme-btn');    if(th)return document.body.className=`theme-${th.dataset.theme}`;
+        if(e.target.closest('.tab-button'))    return showTab(e.target.closest('.tab-button').dataset.tab,e.target.closest('.tab-button'));
+        if(e.target.closest('.clickable-ref')) return showRef(e.target.closest('.clickable-ref').dataset.refId);
+        if(e.target.closest('.close-ref-btn')) return hideRef();
+        if(e.target.closest('.theme-btn'))     return document.body.className=`theme-${e.target.closest('.theme-btn').dataset.theme}`;
       });
     });
   </script>
