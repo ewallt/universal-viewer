@@ -1,6 +1,16 @@
 {
   "projectName": "Influential Thinkers",
   "entryLabel": "Thinker",
+  "cssClassMap": {
+    "central-thesis": "content-card",
+    "warning-highlight": "highlight-card",
+    "conclusion-box": "content-card", 
+    "scripture-ref": "highlight-card",
+    "quote": "text-card italic",
+    "concept-card": "list-card",
+    "argument-point": "content-card",
+    "ref-item": "text-card"
+  },
   "defaultSections": [
     "thesis",
     "arguments",

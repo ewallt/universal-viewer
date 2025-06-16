@@ -1,7 +1,16 @@
 {
   "projectName": "Behold Your God",
   "entryLabel": "Chapter",
-
+  "cssClassMap": {
+    "central-thesis": "content-card",
+    "warning-highlight": "highlight-card",
+    "conclusion-box": "content-card", 
+    "scripture-ref": "highlight-card",
+    "quote": "text-card italic",
+    "concept-card": "list-card",
+    "argument-point": "content-card",
+    "ref-item": "text-card"
+  },
   "defaultSections": [
     "thesis",
     "arguments",
@@ -9,7 +18,6 @@
     "references",
     "conclusion"
   ],
-
   "sectionLabels": {
     "thesis":     "Central Thesis",
     "arguments":  "Main Arguments",
@@ -17,7 +25,6 @@
     "references": "References",
     "conclusion": "Conclusion"
   },
-
   "sectionRenderers": {
     "thesis":     "renderer-thesis",
     "arguments":  "renderer-points-list",
