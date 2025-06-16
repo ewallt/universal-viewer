@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Behold Your God — Viewer</title>
+  <title>Viewer</title>
 
   <!-- ---------- minimal fallback palette (overridden by themes.json) ---------- -->
   <style>
@@ -216,6 +216,7 @@
       });
 
       document.title=`${schema.projectName} — ${schema.entryLabel} ${num}`;
+      document.querySelector('title').textContent = `${schema.projectName} — Viewer`;
       document.querySelector('.book-title').textContent=schema.projectName;
       document.querySelector('.chapter-info').textContent=
         `${schema.entryLabel} ${num}: ${entry.title}`;
