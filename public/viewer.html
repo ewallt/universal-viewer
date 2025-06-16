@@ -90,7 +90,7 @@
           css+='}';
         }
         const st=document.createElement('style');st.textContent=css;document.head.appendChild(st);
-        document.body.className=`theme-${j.meta?.defaultTheme||'original'}`;
+        document.body.className=`theme-${j.meta?.defaultTheme||'cosmic'}`;
       }catch(e){console.error('theme bootstrap failed',e);}
     })();
   </script>
@@ -99,7 +99,7 @@
 <body>
   <!-- theme picker -->
   <div style="position:fixed;top:15px;right:20px;display:flex;gap:10px;z-index:1002;">
-    <button class="theme-btn" data-theme="original" title="Cosmic Night"
+    <button class="theme-btn" data-theme="cosmic" title="Cosmic Night"
             style="width:40px;height:40px;background:linear-gradient(135deg,#1a1a3a,#64b5f6);"></button>
     <button class="theme-btn" data-theme="stately"  title="Stately"
             style="width:40px;height:40px;background:#ffffff;"></button>
