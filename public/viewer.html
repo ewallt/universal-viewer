@@ -217,10 +217,16 @@
 
       document.title=`${schema.projectName} — ${schema.entryLabel} ${num}`;
       document.querySelector('title').textContent = `${schema.projectName} — Viewer`;
-      document.querySelector('.book-title').textContent=schema.projectName;
-      document.querySelector('.chapter-info').textContent=
-        `${schema.entryLabel} ${num}: ${entry.title}`;
-      document.querySelector('.page-range').textContent=entry.pageRange||'';
+      
+      // Use schema to find elements
+      const headerElements = schema.pageStructure.headerElements;
+      const mainTitle = document.querySelector(`.${headerElements[0].class}`);
+      const entryInfo = document.querySelector(`.${headerElements[1].class}`);
+      const metaInfo = document.querySelector(`.${headerElements[2].class}`);
+      
+      if (mainTitle) mainTitle.textContent = schema.projectName;
+      if (entryInfo) entryInfo.textContent = `${schema.entryLabel} ${num}: ${entry.title}`;
+      if (metaInfo) metaInfo.textContent = entry.pageRange || '';
       referenceData=entry.referenceData||{};
 
       document.getElementById('nav-tabs-container').innerHTML=

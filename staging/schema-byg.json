@@ -31,5 +31,13 @@
     "concepts":   "renderer-definitions-list",
     "references": "renderer-list-detail",   
     "conclusion": "renderer-conclusion-list"
+  },
+"pageStructure": {
+  "headerElements": [
+    {"id": "main-title", "class": "primary-title"},
+    {"id": "entry-info", "class": "secondary-info"}, 
+    {"id": "meta-info", "class": "tertiary-info"},
+    {"id": "nav-link", "class": "navigation-link"}
+  ]
   }
 }
