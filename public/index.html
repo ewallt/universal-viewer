@@ -4,37 +4,52 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Table of Contents</title>
-
   <style>
     :root {
-      --bg: #0d1117;
-      --panel: #161b22;
-      --text: #e6edf3;
-      --accent: #58cdaa;
+      /* Fallback theme variables */
+      --text-primary: #e6edf3;
+      --text-secondary: #90caf9;
+      --accent-primary: #58cdaa;
+      --accent-secondary: #42a5f5;
+      --background-gradient: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+      --surface-color: #161b22;
+      --surface-color-secondary: rgba(255, 255, 255, 0.04);
+      --border-color: rgba(255, 255, 255, 0.1);
+      --border-color-accent: rgba(88, 205, 170, 0.4);
+      --component-box-shadow: 0 15px 30px rgba(0, 0, 0, 0.35);
     }
+    
     body {
       margin: 0;
       font-family: Georgia, serif;
-      background: var(--bg);
-      color: var(--text);
+      background: var(--background-gradient);
+      color: var(--text-primary);
       line-height: 1.6;
+      min-height: 100vh;
+      transition: background 0.5s, color 0.5s;
     }
+    
     h1 {
       text-align: center;
       padding: 2rem 1rem;
       font-size: 2.5rem;
+      color: var(--text-primary);
     }
+    
     main {
       max-width: 900px;
       margin: 0 auto 4rem;
       padding: 0 1rem;
     }
+    
     .toc-panel {
-      background: var(--panel);
+      background: var(--surface-color);
       border-radius: 16px;
       padding: 2rem;
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.35);
+      box-shadow: var(--component-box-shadow);
+      border: 1px solid var(--border-color);
     }
+    
     ul {
       list-style: none;
       margin: 0;
@@ -43,47 +58,104 @@
       flex-direction: column;
       gap: 1rem;
     }
+    
     a {
       display: block;
       padding: 1rem 1.25rem;
       border: 2px solid transparent;
       border-radius: 12px;
-      background: rgba(255, 255, 255, 0.04);
-      color: var(--text);
+      background: var(--surface-color-secondary);
+      color: var(--text-primary);
       text-decoration: none;
       font-size: 1.1rem;
       transition: all 0.25s ease;
     }
+    
     a:hover {
-      border-color: var(--accent);
+      border-color: var(--accent-primary);
       transform: translateY(-2px) scale(1.02);
+      background: var(--surface-color);
     }
+    
     .loading,
     .error {
       text-align: center;
       padding: 2rem;
       font-style: italic;
+      color: var(--text-secondary);
+    }
+
+    /* Theme button styles */
+    .theme-btn {
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      border: 2px solid transparent;
+    }
+    
+    .theme-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
     }
   </style>
+
+  <!-- Theme bootstrap script -->
+  <script type="module">
+    (async()=>{
+      try{
+        const r=await fetch('data/themes.json');if(!r.ok)throw new Error;
+        const j=await r.json();let css='';
+        for(const id in j.themes){
+          css+=`body.theme-${id}{`;
+          for(const[k,v]of Object.entries(j.themes[id]))css+=`${k}:${v};`;
+          css+='}';
+        }
+        const st=document.createElement('style');st.textContent=css;document.head.appendChild(st);
+        document.body.className=`theme-${j.meta?.defaultTheme||'cosmic'}`;
+
+        // Populate theme picker dynamically
+        const picker=document.getElementById('theme-picker');
+        if(picker && j.meta.themeList){
+          const themeStyles = {
+            cosmic: 'linear-gradient(135deg,#1a1a3a,#64b5f6)',
+            stately: '#ffffff',
+            forest: 'linear-gradient(135deg,#2a4c3a,#58cdaa)'
+          };
+          
+          j.meta.themeList.forEach(theme => {
+            const btn = document.createElement('button');
+            btn.className = 'theme-btn';
+            btn.dataset.theme = theme.id;
+            btn.title = theme.name;
+            btn.style.cssText = `width:40px;height:40px;background:${themeStyles[theme.id] || '#ccc'};`;
+            picker.appendChild(btn);
+          });
+        }
+      }catch(e){console.error('theme bootstrap failed',e);}
+    })();
+  </script>
 </head>
-
 <body>
-  <h1></h1>
+  <!-- Theme picker -->
+  <div id="theme-picker" style="position:fixed;top:15px;right:20px;display:flex;gap:10px;z-index:1002;">
+  </div>
 
+  <h1></h1>
   <main>
     <section class="toc-panel" id="toc-panel">
       <div class="loading" id="status">Loading contents…</div>
       <ul id="toc-list" hidden></ul>
     </section>
   </main>
-
+  
   <script>
     (async () => {
       const MAX_CONTENTS = 5;
       const listEl = document.getElementById('toc-list');
       const statusEl = document.getElementById('status');
       const h1El = document.querySelector('h1');
-
       try {
         // --- NEW: Fetch the schema first ---
         const schemaRes = await fetch('data/schema.json');
@@ -94,7 +166,7 @@
         h1El.textContent = schema.projectName;
         document.title = `${schema.projectName} — Table of Contents`;
         const entryLabel = schema.entryLabel || 'Item';
-
+        
         // Fetch all content files in parallel
         const fetches = Array.from({ length: MAX_CONTENTS }, (_, i) =>
           fetch(`data/contents/content${i + 1}.json`)
@@ -102,13 +174,10 @@
             .then(ch => ch && ({ id: i + 1, ch }))
             .catch(() => null)
         );
-
         const results = (await Promise.all(fetches)).filter(Boolean);
-
         if (results.length) {
           statusEl.hidden = true;
           listEl.hidden = false;
-
           results.forEach(({ id, ch }) => {
             const obj = ch.title ? ch : Object.values(ch)[0];
             const li = document.createElement('li');
@@ -131,6 +200,12 @@
         statusEl.hidden = false;
       }
     })();
+
+    // Theme switching click handler
+    document.addEventListener('click', e => {
+      const th = e.target.closest('.theme-btn');
+      if (th) document.body.className = `theme-${th.dataset.theme}`;
+    });
   </script>
 </body>
 </html>
