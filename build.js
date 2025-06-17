@@ -5,11 +5,10 @@ const path = require('path');
 const STAGING_DIR = 'staging';
 const PUBLIC_DIR = 'public';
 const BASE_SCHEMA = path.join(STAGING_DIR, 'base-schema.json');
-const THEMES_SOURCE = path.join(PUBLIC_DIR, 'data', 'themes.json'); // Read from existing location
+const THEMES_SOURCE = path.join(PUBLIC_DIR, 'data', 'themes.json');
 const DEST_SCHEMA = path.join(PUBLIC_DIR, 'data', 'schema.json');
-const DEST_THEMES = path.join(PUBLIC_DIR, 'data', 'themes.json'); // Write back to same location
-const DEST_CONTENT1 = path.join(PUBLIC_DIR, 'data', 'contents', 'content1.json');
-const DEST_CONTENT2 = path.join(PUBLIC_DIR, 'data', 'contents', 'content2.json');
+const DEST_THEMES = path.join(PUBLIC_DIR, 'data', 'themes.json');
+const DEST_CONTENTS_DIR = path.join(PUBLIC_DIR, 'data', 'contents');
 
 // --- Helper Function ---
 function mergeSchemas(baseSchema, projectSchema) {
@@ -29,6 +28,35 @@ function mergeSchemas(baseSchema, projectSchema) {
     return merged;
 }
 
+// --- Find and copy content files ---
+function copyContentFiles(project) {
+    const contentFiles = [];
+    
+    // Find all content files for this project
+    const stagingFiles = fs.readdirSync(STAGING_DIR);
+    const projectContentFiles = stagingFiles.filter(file => 
+        file.startsWith(`content`) && file.endsWith(`-${project}.json`)
+    );
+    
+    console.log(`Found ${projectContentFiles.length} content files for project: ${project}`);
+    
+    projectContentFiles.forEach(sourceFile => {
+        // Extract content number from filename (e.g., content1-byg.json -> content1.json)
+        const contentMatch = sourceFile.match(/^(content\d+)-.*\.json$/);
+        if (contentMatch) {
+            const destFileName = `${contentMatch[1]}.json`;
+            const sourcePath = path.join(STAGING_DIR, sourceFile);
+            const destPath = path.join(DEST_CONTENTS_DIR, destFileName);
+            
+            console.log(`Copying ${sourcePath} -> ${destPath}`);
+            fs.copyFileSync(sourcePath, destPath);
+            contentFiles.push(destFileName);
+        }
+    });
+    
+    return contentFiles;
+}
+
 // --- Main Logic ---
 function main() {
     // 1. Read the environment variable
@@ -45,8 +73,6 @@ function main() {
     try {
         // 3. Define source paths based on the project
         const projectSchema = path.join(STAGING_DIR, `schema-${project}.json`);
-        const sourceContent1 = path.join(STAGING_DIR, `content1-${project}.json`);
-        const sourceContent2 = path.join(STAGING_DIR, `content2-${project}.json`);
         
         // 4. Load and merge schemas
         console.log(`Loading base schema from ${BASE_SCHEMA}`);
@@ -69,20 +95,17 @@ function main() {
         }
         
         // 6. Ensure destination directories exist
-        fs.mkdirSync(path.join(PUBLIC_DIR, 'data', 'contents'), { recursive: true });
+        fs.mkdirSync(DEST_CONTENTS_DIR, { recursive: true });
         
-        // 7. Write all files
+        // 7. Write schema and themes
         console.log(`Writing merged schema to ${DEST_SCHEMA}`);
         fs.writeFileSync(DEST_SCHEMA, JSON.stringify(mergedSchema, null, 2));
         
         console.log(`Writing themes with project default to ${DEST_THEMES}`);
         fs.writeFileSync(DEST_THEMES, JSON.stringify(themesData, null, 2));
         
-        console.log(`Copying ${sourceContent1} -> ${DEST_CONTENT1}`);
-        fs.copyFileSync(sourceContent1, DEST_CONTENT1);
-        
-        console.log(`Copying ${sourceContent2} -> ${DEST_CONTENT2}`);
-        fs.copyFileSync(sourceContent2, DEST_CONTENT2);
+        // 8. Copy all content files dynamically
+        const copiedFiles = copyContentFiles(project);
         
         console.log('\n--- Build successful! ---');
         console.log(`Project '${project}' is now active in the 'public' directory.`);
@@ -90,6 +113,7 @@ function main() {
         console.log(`- Project: ${mergedSchema.projectName}`);
         console.log(`- Default theme: ${themesData.meta.defaultTheme}`);
         console.log(`- Sections: ${mergedSchema.defaultSections.join(', ')}`);
+        console.log(`- Content files: ${copiedFiles.join(', ')}`);
         
     } catch (error) {
         console.error('\n--- BUILD FAILED ---');

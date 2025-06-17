@@ -22,11 +22,19 @@
          transition:background .5s,color .5s;}
     .container{max-width:1200px;margin:0 auto;padding:20px;}
 
-    /* header / nav / panel style (unchanged) */
+    /* header / nav / panel style */
     .header{background:var(--surface-color);border-radius:20px;padding:30px;margin-bottom:30px;
             backdrop-filter:var(--component-backdrop-filter);box-shadow:var(--component-box-shadow);
             border:var(--header-border-bottom);text-align:center;}
-    .book-title{font-size:2.5em;font-weight:bold;}
+    .primary-title{font-size:2.5em;font-weight:bold;}
+    .secondary-info{font-size:1.3em;color:var(--accent-primary);margin-bottom:10px;}
+    .tertiary-info{font-size:1.1em;color:var(--accent-secondary);font-style:italic;}
+    .navigation-link{display:block;text-align:center;margin-top:20px;
+                     color:var(--text-secondary);text-decoration:none;font-size:1.1em;
+                     transition:color .3s ease;}
+    .navigation-link:hover{text-decoration:underline;color:var(--text-primary);}
+    .theme-stately .navigation-link{color:#465A70;}
+    .theme-stately .navigation-link:hover{color:var(--accent-primary);}
     .nav-tabs{display:flex;justify-content:center;gap:15px;margin-bottom:30px;flex-wrap:wrap;}
     .tab-button{background:var(--surface-color-secondary);border:1px solid var(--border-color);
                 color:var(--text-primary);padding:12px 28px;border-radius:50px;cursor:pointer;
@@ -42,32 +50,17 @@
                    display:none;}
     .content-panel.active{display:block;}
 
-    /* back to index link styling */
-    .back-to-index-link { 
-      display:block;text-align:center;margin-top:20px;
-      color:var(--text-secondary);text-decoration:none;font-size:1.1em;
-      transition:color .3s ease; 
-    }
-    .back-to-index-link:hover { 
-      text-decoration:underline;color:var(--text-primary); 
-    }
-    .theme-stately .back-to-index-link { 
-      color:#465A70; 
-    }
-    .theme-stately .back-to-index-link:hover { 
-      color:var(--accent-primary); 
-    }
-
     /* reusable chips */
-    .central-thesis,.warning-highlight,.conclusion-box,.scripture-ref,
-    .quote,.concept-card,.argument-point,.ref-item{
+    .content-card,.highlight-card,.text-card,.list-card{
       background:var(--surface-color-secondary);border:1px solid var(--border-color-accent);
       padding:15px;border-radius:10px;margin:15px 0;border-left:4px solid var(--accent-primary);}
-    .quote{font-style:italic;} .concept-card ul{padding-left:25px;}
+    .text-card.italic{font-style:italic;} 
+    .list-card ul{padding-left:25px}
 
     /* reference detail card styling */
     .reference-detail-card{background:var(--surface-color);border:1px solid var(--border-color);
-                           border-radius:20px;padding:30px;box-shadow:var(--component-box-shadow);}
+                           border-radius:20px;padding:30px;box-shadow:var(--component-box-shadow);
+                           position:relative;}
     .close-ref-btn{position:absolute;top:30px;right:30px;background:var(--surface-color-secondary);
                    border:1px solid var(--border-color);color:var(--text-primary);font-size:1.5em;
                    width:40px;height:40px;border-radius:50%;cursor:pointer;transition:all .3s ease;
@@ -115,10 +108,10 @@
     </section>
 
     <header class="header">
-      <h1 class="book-title">Loading…</h1>
-      <div class="chapter-info"></div>
-      <div class="page-range"></div>
-      <a href="index.html" class="back-to-index-link">&larr; Table of Contents</a>
+      <h1 class="primary-title">Loading…</h1>
+      <div class="secondary-info"></div>
+      <div class="tertiary-info"></div>
+      <a href="index.html" class="navigation-link">← Table of Contents</a>
     </header>
 
     <nav id="nav-tabs-container" class="nav-tabs"></nav>
@@ -131,53 +124,6 @@
   <script>
     /* ------------ global ------------ */
     let referenceData={};
-
-    /* ------------ renderer library ------------ */
-    const RENDERER_LIBRARY={
-      'renderer-thesis':s=>`
-        <div class="central-thesis">${s.central_thesis}</div>
-        <div class="warning-highlight">${s.key_statement}</div>
-        <div class="concept-card"><h3>${s.foundational_principles.title}</h3>
-          <ul>${s.foundational_principles.points.map(p=>`<li>${p}</li>`).join('')}</ul>
-        </div>`,
-
-      'renderer-points-list':s=>s.points.map(p=>`
-        <div class="argument-point">
-          <h3 class="argument-title">${p.title}</h3><p>${p.explanation}</p>
-          ${p.key_insight?`<p><em>${p.key_insight}</em></p>`:''}
-          ${(p.quotes||[]).map(q=>{
-            const cls=q.type==='scripture'?'scripture-ref':
-                      q.type==='warning'  ?'warning-highlight':'quote';
-            return `<div class="${cls}">${q.text}<br><span class="quote-source">${q.source}</span></div>`;
-          }).join('')}
-        </div>`).join(''),
-
-      'renderer-definitions-list':s=>s.points.map(c=>`
-        <div class="concept-card"><span class="concept-title">${c.title}</span>: ${c.definition}</div>`
-      ).join(''),
-
-      /* ---------- updated list-with-detail renderer ---------- */
-      'renderer-list-detail':s=>{
-        const row=r=>`<div class="ref-item clickable-ref" data-ref-id="${r.id||''}">${r.text}</div>`;
-        const list = [].concat(s.items||[],s.scripture||[],s.other||[],s.points||[]).map(row).join('');
-        return `<div id="referenceList">
-                  ${list}
-                </div>
-                <div id="referenceDetailCard" class="reference-detail-card" style="display:none;position:relative;">
-                  <button class="close-ref-btn">&times;</button>
-                  <div class="ref-detail-header">
-                    <span id="refDetailTitle"></span>
-                  </div>
-                  <div id="refDetailContent" class="ref-detail-content"></div>
-                </div>`;
-      },
-
-      'renderer-conclusion-list':s=>s.points.map(p=>{
-        const cls=p.type==='scripture'?'scripture-ref':
-                  p.type==='thesis'   ?'central-thesis':'conclusion-box';
-        return `<div class="${cls}"><h3>${p.title}</h3><p>${p.content}</p></div>`;
-      }).join('')
-    };
 
     /* ------------ helpers ------------ */
     const showTab=(id,btn)=>{
@@ -228,6 +174,48 @@
       if (entryInfo) entryInfo.textContent = `${schema.entryLabel} ${num}: ${entry.title}`;
       if (metaInfo) metaInfo.textContent = entry.pageRange || '';
       referenceData=entry.referenceData||{};
+
+      // Build renderers with schema context
+      const RENDERER_LIBRARY={
+        'renderer-thesis':s=>`
+          <div class="${schema.cssClassMap['central-thesis']}">${s.central_thesis}</div>
+          <div class="${schema.cssClassMap['warning-highlight']}">${s.key_statement}</div>
+          <div class="${schema.cssClassMap['concept-card']}"><h3>${s.foundational_principles.title}</h3>
+            <ul>${s.foundational_principles.points.map(p=>`<li>${p}</li>`).join('')}</ul>
+          </div>`,
+
+        'renderer-points-list':s=>s.points.map(p=>`
+          <div class="${schema.cssClassMap['argument-point']}">
+            <h3 class="argument-title">${p.title}</h3><p>${p.explanation}</p>
+            ${p.key_insight?`<p><em>${p.key_insight}</em></p>`:''}
+            ${(p.quotes||[]).map(q=>{
+              const cls=q.type==='scripture'?schema.cssClassMap['scripture-ref']:
+                        q.type==='warning'  ?schema.cssClassMap['warning-highlight']:schema.cssClassMap['quote'];
+              return `<div class="${cls}">${q.text}<br><span class="quote-source">${q.source}</span></div>`;
+            }).join('')}
+          </div>`).join(''),
+
+        'renderer-definitions-list':s=>s.points.map(c=>`
+          <div class="${schema.cssClassMap['concept-card']}"><span class="concept-title">${c.title}</span>: ${c.definition}</div>`
+        ).join(''),
+
+        'renderer-list-detail':s=>{
+          const row=r=>`<div class="${schema.cssClassMap['ref-item']} clickable-ref" data-ref-id="${r.id||''}">${r.text}</div>`;
+          const list=[].concat(s.items||[],s.scripture||[],s.other||[],s.points||[]).map(row).join('');
+          return `<div id="referenceList">${list}</div>
+                  <div id="referenceDetailCard" class="reference-detail-card" style="display:none;">
+                    <button class="close-ref-btn" aria-label="Close">&times;</button>
+                    <h3 id="refDetailTitle"></h3>
+                    <div id="refDetailContent"></div>
+                  </div>`;
+        },
+
+        'renderer-conclusion-list':s=>s.points.map(p=>{
+          const cls=p.type==='scripture'?schema.cssClassMap['scripture-ref']:
+                    p.type==='thesis'   ?schema.cssClassMap['central-thesis']:schema.cssClassMap['conclusion-box'];
+          return `<div class="${cls}"><h3>${p.title}</h3><p>${p.content}</p></div>`;
+        }).join('')
+      };
 
       document.getElementById('nav-tabs-container').innerHTML=
         sections.filter(sec=>entry[sec]).map(sec=>
