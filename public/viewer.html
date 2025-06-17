@@ -69,6 +69,11 @@
     .ref-detail-content .verse-text{background:var(--surface-color-secondary);border:1px solid var(--border-color-accent);
                                     border-left:4px solid var(--accent-primary);padding:20px;border-radius:10px;
                                     margin:15px 0;font-style:italic;}
+
+    /* theme button styles */
+    .theme-btn{border:none;border-radius:50%;cursor:pointer;transition:all .3s ease;
+               box-shadow:0 4px 8px rgba(0,0,0,.3);border:2px solid transparent;}
+    .theme-btn:hover{transform:scale(1.1);box-shadow:0 6px 12px rgba(0,0,0,.4);}
   </style>
 
   <!-- ---------- theme bootstrap (builds CSS vars from themes.json) ---------- -->
@@ -84,20 +89,33 @@
         }
         const st=document.createElement('style');st.textContent=css;document.head.appendChild(st);
         document.body.className=`theme-${j.meta?.defaultTheme||'cosmic'}`;
+
+        // Populate theme picker dynamically
+        const picker=document.getElementById('theme-picker');
+        if(picker && j.meta.themeList){
+          const themeStyles = {
+            cosmic: 'linear-gradient(135deg,#1a1a3a,#64b5f6)',
+            stately: '#ffffff',
+            forest: 'linear-gradient(135deg,#2a4c3a,#58cdaa)'
+          };
+          
+          j.meta.themeList.forEach(theme => {
+            const btn = document.createElement('button');
+            btn.className = 'theme-btn';
+            btn.dataset.theme = theme.id;
+            btn.title = theme.name;
+            btn.style.cssText = `width:40px;height:40px;background:${themeStyles[theme.id] || '#ccc'};`;
+            picker.appendChild(btn);
+          });
+        }
       }catch(e){console.error('theme bootstrap failed',e);}
     })();
   </script>
 </head>
 
 <body>
-  <!-- theme picker -->
-  <div style="position:fixed;top:15px;right:20px;display:flex;gap:10px;z-index:1002;">
-    <button class="theme-btn" data-theme="cosmic" title="Cosmic Night"
-            style="width:40px;height:40px;background:linear-gradient(135deg,#1a1a3a,#64b5f6);"></button>
-    <button class="theme-btn" data-theme="stately"  title="Stately"
-            style="width:40px;height:40px;background:#ffffff;"></button>
-    <button class="theme-btn" data-theme="forest"   title="Forest"
-            style="width:40px;height:40px;background:linear-gradient(135deg,#2a4c3a,#58cdaa);"></button>
+  <!-- theme picker (dynamically populated) -->
+  <div id="theme-picker" style="position:fixed;top:15px;right:20px;display:flex;gap:10px;z-index:1002;">
   </div>
 
   <div class="container">

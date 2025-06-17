@@ -2,6 +2,7 @@
   "projectName": "Influential Thinkers", 
   "entryLabel": "Thinker",
   "defaultTheme": "stately",
+  "themes": ["cosmic", "stately", "forest"],
   "defaultSections": ["thesis", "arguments", "concepts", "examples", "conclusion"],
   "sectionLabels": {
     "arguments": "Supporting Arguments",

@@ -52,5 +52,10 @@
   },
   "projectName": "Behold Your God",
   "entryLabel": "Chapter",
-  "defaultTheme": "cosmic"
+  "defaultTheme": "cosmic",
+  "themes": [
+    "cosmic",
+    "stately",
+    "forest"
+  ]
 }

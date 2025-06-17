@@ -2,6 +2,7 @@
   "projectName": "Behold Your God",
   "entryLabel": "Chapter",
   "defaultTheme": "cosmic",
+  "themes": ["cosmic", "stately", "forest"],
   "defaultSections": ["thesis", "arguments", "concepts", "references", "conclusion"],
   "sectionLabels": {
     "arguments": "Main Arguments",
