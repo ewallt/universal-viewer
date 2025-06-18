@@ -1,0 +1,20 @@
+/* ========================================
+   COSMIC THEME (themes/cosmic.css)
+   ======================================== */
+
+:root {
+  --text-primary: #ecf0f1;
+  --text-secondary: #90caf9;
+  --accent-primary: #64b5f6;
+  --accent-secondary: #42a5f5;
+  --background-gradient: linear-gradient(135deg, #0a0a23 0%, #1a1a3a 50%, #2e2e5e 100%);
+  --surface-color: rgba(0, 0, 0, 0.6);
+  --surface-color-secondary: rgba(0, 0, 0, 0.5);
+  --border-color: rgba(255, 255, 255, 0.3);
+  --border-color-accent: rgba(100, 181, 246, 0.4);
+  --progress-bar-gradient: linear-gradient(90deg, #64b5f6, #42a5f5);
+  --book-title-text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  --header-border-bottom: 1px solid var(--border-color);
+  --component-backdrop-filter: blur(15px);
+  --component-box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}

@@ -1,0 +1,20 @@
+/* ========================================
+   FOREST THEME (themes/forest.css)
+   ======================================== */
+
+:root {
+  --text-primary: #e0e0e0;
+  --text-secondary: #a3b1a9;
+  --accent-primary: #58cdaa;
+  --accent-secondary: #a3b1a9;
+  --background-gradient: linear-gradient(135deg, #0f1a14 0%, #182c21 50%, #203f2e 100%);
+  --surface-color: rgba(0, 0, 0, 0.5);
+  --surface-color-secondary: rgba(0, 0, 0, 0.3);
+  --border-color: rgba(170, 194, 178, 0.3);
+  --border-color-accent: rgba(170, 194, 178, 0.2);
+  --progress-bar-gradient: linear-gradient(90deg, #58cdaa, #4ab798);
+  --book-title-text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  --header-border-bottom: 2px solid var(--accent-primary);
+  --component-backdrop-filter: blur(15px);
+  --component-box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
