@@ -100,5 +100,26 @@
         "content": "Weber's thesis challenged both Marxist materialism and liberal assumptions about capitalism's natural development by demonstrating how religious ideas could drive major economic transformations. His methodology of interpretive sociology influenced how scholars study the relationship between culture and economics. However, the thesis remains controversial: critics argue Weber overstated Protestantism's role, ignored similar developments in non-Protestant contexts, and cherry-picked evidence. Some scholars point to capitalist-like behavior in Catholic Italy or argue that economic conditions shaped religious beliefs rather than vice versa. Despite these debates, Weber's core insight—that cultural attitudes toward work and success matter for economic development—continues to influence studies of entrepreneurship, economic growth, and the relationship between religion and capitalism worldwide."
       }
     ]
-  }
+  },
+"qa": {
+  "title": "Question & Answer",
+  "points": [
+    {
+      "question": "Didn't the simple desire for money's benefits explain the rise of capitalism?",
+      "answer": "Weber argued that it did not. He made a crucial distinction between the traditional desire for wealth (to buy comfort and leisure) and the unique 'spirit of capitalism,' where the systematic pursuit of profit becomes an ethical duty and an end in itself."
+    },
+    {
+      "question": "What exactly did Weber mean by the 'spirit of capitalism'?",
+      "answer": "Weber defined it as an attitude where an individual, in the pursuit of a 'calling,' strives systematically for profit for its own sake. The key is that work is not just a means to get money for what it can buy, but is treated as a paramount moral and ethical obligation."
+    },
+    {
+      "question": "Why was the traditional desire for wealth insufficient to create capitalism?",
+      "answer": "Because the traditional attitude encourages working only as much as is necessary for a comfortable life. It leads to enjoying wealth through consumption and leisure, rather than the disciplined, systematic reinvestment of capital that is essential for a capitalist system to function and grow."
+    },
+    {
+      "question": "How did the Protestant ethic provide the necessary motivation that was lacking?",
+      "answer": "It transformed the perception of work from a simple means of survival into a moral obligation tied directly to one's spiritual standing. By framing disciplined work and the accumulation of wealth as a potential sign of God's grace, it supplied the intense psychological drive for relentless work and systematic reinvestment over personal enjoyment."
+    }
+  ]
+}
 }

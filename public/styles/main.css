@@ -210,9 +210,11 @@ a:hover {
   position: relative;
 }
 
-.close-ref-btn {
+/* Close buttons for both reference and Q&A detail cards */
+.close-ref-btn,
+.close-qa-btn {
   position: absolute;
-  top: 30px;
+  top: 15px;
   right: 30px;
   background: var(--surface-color-secondary);
   border: 1px solid var(--border-color);

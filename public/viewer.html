@@ -96,6 +96,7 @@
   <script>
     /* ------------ global ------------ */
     let referenceData={};
+    let qaData={};
 
     /* ------------ helpers ------------ */
     const showTab=(id,btn)=>{
@@ -126,6 +127,28 @@
       if (referenceList) referenceList.style.display = 'block';
     };
 
+    const showQA=(qaId)=>{
+      const detailCard = document.getElementById('qaDetailCard');
+      if (!detailCard) return;
+      const qaTitle = document.querySelector('#qaDetailTitle');
+      const qaContent = document.querySelector('#qaDetailContent');
+      const qaList = document.getElementById('qaList');
+      const data = qaData[qaId];
+      if (!data || !qaTitle || !qaContent) return;
+
+      qaTitle.textContent = "Answer";
+      qaContent.innerHTML = data.answer;
+      if (qaList) qaList.style.display = 'none';
+      detailCard.style.display = 'block';
+    };
+
+    const hideQA=()=>{
+      const detailCard = document.getElementById('qaDetailCard');
+      const qaList = document.getElementById('qaList');
+      if (detailCard) detailCard.style.display = 'none';
+      if (qaList) qaList.style.display = 'block';
+    };
+
     /* ------------ render entry ------------ */
     function renderEntry(entry,schema,num){
       const sections=[...schema.defaultSections];
@@ -145,6 +168,20 @@
       if (entryInfo) entryInfo.textContent = `${schema.entryLabel} ${num}: ${entry.title}`;
       if (metaInfo) metaInfo.textContent = entry.pageRange || '';
       referenceData=entry.referenceData||{};
+      
+      // Build qaData from qa.points if qaData doesn't exist
+      if (entry.qaData) {
+        qaData = entry.qaData;
+      } else if (entry.qa && entry.qa.points) {
+        qaData = {};
+        entry.qa.points.forEach((item, index) => {
+          const id = item.id || `q${index + 1}`;
+          qaData[id] = {
+            question: item.question,
+            answer: item.answer
+          };
+        });
+      }
 
       // Build renderers with schema context
       const RENDERER_LIBRARY={
@@ -178,6 +215,28 @@
                     <button class="close-ref-btn" aria-label="Close">&times;</button>
                     <h3 id="refDetailTitle"></h3>
                     <div id="refDetailContent"></div>
+                  </div>`;
+        },
+
+        'renderer-qa':s=>{
+          // Schema-driven Q&A renderer
+          const config = schema.rendererConfig?.qa || {};
+          const itemClass = schema.cssClassMap[config.itemClass || 'qa-item'] || schema.cssClassMap['content-card'];
+          
+          // Handle both 'questions' and 'points' arrays
+          const qaItems = s.questions || s.points || [];
+          const qaRows = qaItems.map((qa, index) => {
+            const id = qa.id || `q${index + 1}`;
+            return `<div class="${itemClass} clickable-qa" data-qa-id="${id}">
+                     <h3>${qa.question}</h3>
+                   </div>`;
+          }).join('');
+          
+          return `<div id="qaList">${qaRows}</div>
+                  <div id="qaDetailCard" class="reference-detail-card" style="display:none;">
+                    <button class="close-qa-btn" aria-label="Close">&times;</button>
+                    <h3 id="qaDetailTitle"></h3>
+                    <div id="qaDetailContent"></div>
                   </div>`;
         },
 
@@ -240,6 +299,8 @@
         const t=e.target.closest('.tab-button');    if(t)return showTab(t.dataset.tab,t);
         const r=e.target.closest('.clickable-ref'); if(r)return showReference(r.dataset.refId);
         const c=e.target.closest('.close-ref-btn'); if(c)return hideReference();
+        const qa=e.target.closest('.clickable-qa'); if(qa)return showQA(qa.dataset.qaId);
+        const cqa=e.target.closest('.close-qa-btn'); if(cqa)return hideQA();
         const th=e.target.closest('.theme-btn');    
         if(th){
           const selectedTheme = th.dataset.theme;

@@ -182,6 +182,27 @@
 
     ]
 
-  }
+  },
+"qa": {
+  "title": "Question & Answer",
+  "points": [
+    {
+      "question": "If paradigms are incommensurable, how can we say that science progresses?",
+      "answer": "Kuhn distinguishes between progress within a paradigm (solving more puzzles) and progress through revolutions. When a paradigm shifts, it's not that the new one is objectively 'better,' but that the community adopts new standards and redefines concepts. Progress through revolution is real, but it's a change in direction, not a linear accumulation of knowledge."
+    },
+    {
+      "question": "Doesn't science build on previous knowledge, like Einstein incorporating Newton?",
+      "answer": "Kuhn argues this is an illusion created by rewriting history after a revolution. We reconstruct past theories (like Newton's) to appear as 'special cases' of the current paradigm (Einstein's). However, the scientists themselves worked in fundamentally different conceptual worlds. The apparent continuity is created retrospectively."
+    },
+    {
+      "question": "If paradigm choice isn't purely logical, isn't science just subjective?",
+      "answer": "Kuhn argues it's not arbitrary. Scientists are guided by shared values like accuracy, scope, and simplicity, but they may weigh these differently. The choice involves persuasion, judgment, and community consensus based on how well a paradigm solves key problems and promises future research. It's a human enterprise, not a mechanical process."
+    },
+    {
+      "question": "If normal science is just 'puzzle-solving,' how can it be creative?",
+      "answer": "Kuhn argues that 'puzzle-solving' within a paradigm requires enormous ingenuity, skill, and sophistication. Scientists must extend theories and increase precision, which is highly creative work. This detailed work of normal science is what lays the foundation for recognizing the fundamental anomalies that eventually lead to a scientific revolution."
+    }
+  ]
+}
 
 }
