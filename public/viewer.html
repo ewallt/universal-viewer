@@ -150,12 +150,12 @@
       if (qaList) qaList.style.display = 'block';
     };
 
-    const showHierarchical=(itemId)=>{
-      const detailCard = document.getElementById('hierarchicalDetailCard');
+    const showHierarchical=(itemId, sectionName)=>{
+      const detailCard = document.getElementById(`hierarchicalDetailCard-${sectionName}`);
       if (!detailCard) return;
-      const itemTitle = document.querySelector('#hierarchicalDetailTitle');
-      const itemContent = document.querySelector('#hierarchicalDetailContent');
-      const hierarchicalList = document.getElementById('hierarchicalList');
+      const itemTitle = document.querySelector(`#hierarchicalDetailTitle-${sectionName}`);
+      const itemContent = document.querySelector(`#hierarchicalDetailContent-${sectionName}`);
+      const hierarchicalList = document.getElementById(`hierarchicalList-${sectionName}`);
       const data = hierarchicalData[itemId];
       if (!data || !itemTitle || !itemContent) return;
 
@@ -165,9 +165,9 @@
       detailCard.style.display = 'block';
     };
 
-    const hideHierarchical=()=>{
-      const detailCard = document.getElementById('hierarchicalDetailCard');
-      const hierarchicalList = document.getElementById('hierarchicalList');
+    const hideHierarchical=(sectionName)=>{
+      const detailCard = document.getElementById(`hierarchicalDetailCard-${sectionName}`);
+      const hierarchicalList = document.getElementById(`hierarchicalList-${sectionName}`);
       if (detailCard) detailCard.style.display = 'none';
       if (hierarchicalList) hierarchicalList.style.display = 'block';
     };
@@ -276,20 +276,20 @@
                   </div>`;
         },
 
-        'renderer-hierarchical':s=>{
-          // New hierarchical drill-down renderer
+        'renderer-hierarchical':(s, sectionName)=>{
+          // New hierarchical drill-down renderer with unique IDs per section
           const itemClass = schema.cssClassMap['content-card'];
           const hierarchicalRows = s.items.map(item => {
-            return `<div class="${itemClass} clickable-hierarchical" data-hierarchical-id="${item.id}">
+            return `<div class="${itemClass} clickable-hierarchical" data-hierarchical-id="${item.id}" data-section="${sectionName}">
                      <h3>${item.title}</h3>
                    </div>`;
           }).join('');
           
-          return `<div id="hierarchicalList">${hierarchicalRows}</div>
-                  <div id="hierarchicalDetailCard" class="reference-detail-card" style="display:none;">
-                    <button class="close-hierarchical-btn" aria-label="Close">&times;</button>
-                    <h3 id="hierarchicalDetailTitle"></h3>
-                    <div id="hierarchicalDetailContent"></div>
+          return `<div id="hierarchicalList-${sectionName}">${hierarchicalRows}</div>
+                  <div id="hierarchicalDetailCard-${sectionName}" class="reference-detail-card" style="display:none;">
+                    <button class="close-hierarchical-btn" data-section="${sectionName}" aria-label="Close">&times;</button>
+                    <h3 id="hierarchicalDetailTitle-${sectionName}"></h3>
+                    <div id="hierarchicalDetailContent-${sectionName}"></div>
                   </div>`;
         },
 
@@ -311,7 +311,7 @@
           const fn=RENDERER_LIBRARY[schema.sectionRenderers[sec]];
           return `<div class="content-panel" id="${sec}">
                     <h2 class="section-title">${entry[sec].title}</h2>
-                    ${fn ? fn(entry[sec]) : `<p>No renderer for ${sec}</p>`}
+                    ${fn ? fn(entry[sec], sec) : `<p>No renderer for ${sec}</p>`}
                   </div>`;
         }).join('');
 
@@ -354,8 +354,8 @@
         const c=e.target.closest('.close-ref-btn'); if(c)return hideReference();
         const qa=e.target.closest('.clickable-qa'); if(qa)return showQA(qa.dataset.qaId);
         const cqa=e.target.closest('.close-qa-btn'); if(cqa)return hideQA();
-        const h=e.target.closest('.clickable-hierarchical'); if(h)return showHierarchical(h.dataset.hierarchicalId);
-        const ch=e.target.closest('.close-hierarchical-btn'); if(ch)return hideHierarchical();
+        const h=e.target.closest('.clickable-hierarchical'); if(h)return showHierarchical(h.dataset.hierarchicalId, h.dataset.section);
+        const ch=e.target.closest('.close-hierarchical-btn'); if(ch)return hideHierarchical(ch.dataset.section);
         const th=e.target.closest('.theme-btn');    
         if(th){
           const selectedTheme = th.dataset.theme;

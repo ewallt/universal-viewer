@@ -1,124 +1,124 @@
 {
-  "title": "Collective Unconscious (CU)",
-  "heroImage": "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=1200",
-  "definition": {
-    "title": "A. Definition",
-    "items": [
-      {
-        "id": "deeper_layer",
-        "title": "A deeper layer of the psyche",
-        "detail": "Jung conceived of the collective unconscious as existing beneath the personal unconscious - a foundational stratum of the human psyche that transcends individual experience. While our personal unconscious contains our own forgotten memories, repressed thoughts, and individual complexes, the collective unconscious represents a deeper, more primordial layer that connects us to the entirety of human experience. This layer contains the accumulated wisdom, fears, and fundamental patterns that have emerged over millennia of human evolution. It is not a product of personal development or learning, but rather represents the inherited psychological foundation upon which all individual consciousness is built. Jung described it as the 'psychic life of our ancestors right back to the earliest beginnings' - a vast repository of latent images and potential experiences that shape how we perceive and respond to the world, often without our conscious awareness."
-      },
-      {
-        "id": "inherited_universal",
-        "title": "Inherited and universal",
-        "detail": "To be defined."
-      },
-      {
-        "id": "shared_experiences",
-        "title": "Contains shared human experiences",
-        "detail": "To be defined."
-      },
-      {
-        "id": "not_personal",
-        "title": "Not derived from personal experience",
-        "detail": "To be defined."
-      },
-      {
-        "id": "psychic_substrate",
-        "title": "A common psychic substrate",
-        "detail": "To be defined."
-      }
-    ]
-  },
-  "characteristics": {
-    "title": "B. Characteristics",
-    "items": [
-      {
-        "id": "timeless_universal",
-        "title": "Timeless and universal",
-        "detail": "To be defined."
-      },
-      {
-        "id": "foundation_psyche",
-        "title": "Foundation of the psyche",
-        "detail": "To be defined."
-      },
-      {
-        "id": "impersonal_nature",
-        "title": "Impersonal nature",
-        "detail": "To be defined."
-      },
-      {
-        "id": "source_energy",
-        "title": "Source of psychic energy",
-        "detail": "To be defined."
-      },
-      {
-        "id": "manifests_dreams",
-        "title": "Manifests in dreams and myths",
-        "detail": "To be defined."
-      },
-      {
-        "id": "historical_layer",
-        "title": "A historical layer of the psyche",
-        "detail": "To be defined."
-      }
-    ]
-  },
-  "relationship_consciousness": {
-    "title": "C. Relationship with Consciousness",
-    "items": [
-      {
-        "id": "compensatory_function",
-        "title": "Compensatory function",
-        "detail": "To be defined."
-      },
-      {
-        "id": "dialogue_conscious_unconscious",
-        "title": "Dialogue between conscious and unconscious",
-        "detail": "To be defined."
-      },
-      {
-        "id": "potential_integration",
-        "title": "Potential for integration",
-        "detail": "To be defined."
-      },
-      {
-        "id": "source_creativity",
-        "title": "Source of creativity and neurosis",
-        "detail": "To be defined."
-      }
-    ]
-  },
-  "evidence": {
-    "title": "D. Evidence",
-    "items": [
-      {
-        "id": "cross_cultural_myths",
-        "title": "Cross-cultural myths",
-        "detail": "To be defined."
-      },
-      {
-        "id": "universal_symbols",
-        "title": "Universal symbols in dreams",
-        "detail": "To be defined."
-      },
-      {
-        "id": "religious_beliefs",
-        "title": "Religious and spiritual beliefs",
-        "detail": "To be defined."
-      },
-      {
-        "id": "spontaneous_emergence",
-        "title": "Spontaneous emergence in individuals",
-        "detail": "To be defined."
-      },
-      {
-        "id": "autochthonous_revival",
-        "title": "Autochthonous revival of myths",
-        "detail": "To be defined."
-      }
-    ]
-  }
+    "title": "Collective Unconscious (CU)",
+    "heroImage": "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=1200",
+    "definition": {
+        "title": "A. Definition",
+        "items": [
+            {
+                "id": "deeper_layer",
+                "title": "A deeper layer of the psyche",
+                "detail": "Jung conceived of the collective unconscious as existing beneath the personal unconscious - a foundational stratum of the human psyche that transcends individual experience. While our personal unconscious contains our own forgotten memories, repressed thoughts, and individual complexes, the collective unconscious represents a deeper, more primordial layer that connects us to the entirety of human experience. This layer contains the accumulated wisdom, fears, and fundamental patterns that have emerged over millennia of human evolution. It is not a product of personal development or learning, but rather represents the inherited psychological foundation upon which all individual consciousness is built. Jung described it as the 'psychic life of our ancestors right back to the earliest beginnings' - a vast repository of latent images and potential experiences that shape how we perceive and respond to the world, often without our conscious awareness."
+            },
+            {
+                "id": "inherited_universal",
+                "title": "Inherited and universal",
+                "detail": "The collective unconscious is not learned but inherited, representing a universal psychic substrate that all humans share regardless of culture, race, or historical period. Jung argued that just as we inherit physical characteristics and biological instincts, we also inherit psychological structures that predispose us to organize experience in certain ways. This inheritance is not genetic in the simple sense, but represents the psychological equivalent of instincts - patterns that have been so fundamental to human survival and adaptation that they have become embedded in the very structure of the psyche. These inherited patterns manifest as a readiness to perceive, feel, and act in ways that have proven essential throughout human history, appearing spontaneously in individuals who have never been exposed to them through learning or cultural transmission."
+            },
+            {
+                "id": "shared_experiences",
+                "title": "Contains shared human experiences",
+                "detail": "The collective unconscious houses the accumulated experiences that are common to all humanity - the fundamental situations and challenges that every human culture has faced throughout history. These include the experience of birth and death, the relationship with parents and authority figures, the encounter with the opposite sex, the struggle for survival, the search for meaning, and the confrontation with the unknown. Jung observed that certain experiences are so universal and so repeatedly encountered across human history that they have created deep grooves in the collective psyche. These shared experiences form the basis for the archetypal patterns that emerge in myths, dreams, and fantasies across all cultures, suggesting that beneath our individual differences lies a common human heritage of psychological experience."
+            },
+            {
+                "id": "not_personal",
+                "title": "Not derived from personal experience",
+                "detail": "Unlike the personal unconscious, which is formed through individual life experiences, forgotten memories, and repressed content, the collective unconscious exists prior to and independent of personal experience. Jung emphasized that the collective unconscious cannot be explained by personal history or individual development - it represents inherited psychic material that is present from birth. This distinction is crucial because it means that certain psychological contents and patterns cannot be understood simply by examining an individual's personal biography or early childhood experiences. The collective unconscious operates according to its own laws and contains material that has never been conscious in the individual's lifetime, yet powerfully influences thoughts, feelings, and behaviors through archetypal activation."
+            },
+            {
+                "id": "psychic_substrate",
+                "title": "A common psychic substrate",
+                "detail": "Jung conceptualized the collective unconscious as the deepest foundation of the psyche - a common substrate underlying all individual psychological variations. Like geological bedrock that supports various surface formations, the collective unconscious provides the fundamental structure upon which personal consciousness and the personal unconscious are built. This substrate is 'common' in that it is shared by all humanity, creating a deep psychological unity beneath surface differences of culture, language, and individual experience. It represents the most archaic and universal level of the psyche, containing the basic psychological equipment that makes human consciousness possible. This common substrate explains why similar symbolic patterns, mythological themes, and psychological motifs appear across widely separated cultures and historical periods."
+            }
+        ]
+    },
+    "characteristics": {
+        "title": "B. Characteristics",
+        "items": [
+            {
+                "id": "timeless_universal",
+                "title": "Timeless and universal",
+                "detail": "The collective unconscious transcends the limitations of historical time and cultural boundaries, representing psychological patterns that have remained constant throughout human history. Jung observed that the same archetypal motifs appear in ancient myths, medieval alchemy, modern dreams, and contemporary art, suggesting that these patterns operate outside of temporal constraints. This timeless quality means that the collective unconscious connects us not only to all contemporary humans but also to our ancestors and, potentially, to future generations. The universality of these patterns is evidenced by their spontaneous appearance in individuals who have had no exposure to particular cultural traditions, yet produce symbols and themes that are remarkably similar to those found in distant cultures and historical periods."
+            },
+            {
+                "id": "foundation_psyche",
+                "title": "Foundation of the psyche",
+                "detail": "The collective unconscious serves as the bedrock upon which all other psychological structures are built. It provides the fundamental organizing principles that make consciousness possible, functioning as the deep structure that supports both the personal unconscious and conscious awareness. Without this foundation, Jung argued, the psyche would lack the basic patterns necessary for organizing experience and creating meaning. The collective unconscious supplies the archetypal templates that allow us to recognize and respond to fundamental life situations - the mother-child bond, the hero's journey, the encounter with death, the search for the divine. These foundational patterns provide the psychological infrastructure that enables human consciousness to develop and function coherently."
+            },
+            {
+                "id": "impersonal_nature",
+                "title": "Impersonal nature",
+                "detail": "The collective unconscious operates according to its own autonomous laws, independent of personal will or conscious intention. Jung emphasized that these contents are not 'mine' or 'yours' in any personal sense - they belong to humanity as a whole and manifest through individuals rather than being created by them. This impersonal quality means that archetypal contents often appear with a sense of otherness or foreignness, even when they emerge from within our own psyche. The impersonal nature of the collective unconscious explains why archetypal experiences often feel numinous, overwhelming, or larger than life - they carry the weight of collective rather than merely personal significance. This characteristic also means that individuals cannot control or manipulate archetypal contents through willpower alone."
+            },
+            {
+                "id": "source_energy",
+                "title": "Source of psychic energy",
+                "detail": "The collective unconscious serves as a vast reservoir of psychic energy that can be activated and channeled into conscious life. Jung viewed this energy as libido in its broadest sense - not merely sexual energy, but the fundamental life force that powers all psychological activity. When archetypal contents are activated, they release tremendous amounts of energy that can either energize and transform consciousness or, if mishandled, overwhelm and destabilize it. This energy has a quality of urgency and compulsion that distinguishes it from ordinary conscious motivation. Creative individuals often tap into this archetypal energy, which explains the powerful and universal appeal of great art, literature, and religious movements that successfully give form to archetypal contents."
+            },
+            {
+                "id": "manifests_dreams",
+                "title": "Manifests in dreams and myths",
+                "detail": "The collective unconscious reveals itself most clearly through dreams and mythological narratives, where archetypal patterns emerge in symbolic form. Dreams often contain images and themes that cannot be traced to personal experience, yet resonate with mythological motifs found across cultures. Jung observed that certain dream symbols - such as the wise old man, the great mother, the hero's journey, or the descent into the underworld - appear spontaneously in individuals who have no conscious knowledge of these mythological patterns. Similarly, myths from different cultures show remarkable similarities in their basic structures and symbols, suggesting that they arise from the same archetypal source. Both dreams and myths serve as bridges between the collective unconscious and conscious awareness, translating archetypal contents into forms that can be experienced and understood."
+            },
+            {
+                "id": "historical_layer",
+                "title": "A historical layer of the psyche",
+                "detail": "The collective unconscious represents the historical dimension of the psyche, containing the accumulated psychological residue of human evolutionary development. Jung conceptualized this as layers of increasingly ancient material, with the most recent contents closer to consciousness and the most archaic contents residing in the deepest levels. This historical stratification means that the collective unconscious contains not only contemporary archetypal patterns but also more primitive psychological contents that reflect earlier stages of human development. Sometimes these archaic contents can be activated, bringing ancient ways of experiencing and responding into modern consciousness. This historical dimension explains why psychological analysis sometimes uncovers material that seems to belong to earlier historical periods or even pre-human evolutionary stages."
+            }
+        ]
+    },
+    "relationship_consciousness": {
+        "title": "C. Relationship with Consciousness",
+        "items": [
+            {
+                "id": "compensatory_function",
+                "title": "Compensatory function",
+                "detail": "The collective unconscious serves as a compensatory force that balances and corrects the one-sided attitudes of consciousness. When conscious orientation becomes too narrow, rigid, or extreme, the collective unconscious activates archetypal contents that provide the missing perspective or overlooked dimension. This compensation occurs automatically and spontaneously, often through dreams, fantasies, or symptoms that force attention to neglected aspects of life. For example, an overly rational and materialistic culture might experience an upsurge of interest in spirituality and mysticism as the collective unconscious compensates for the loss of meaning and transcendence. This compensatory function serves to maintain psychological balance and prevent consciousness from becoming dangerously one-sided."
+            },
+            {
+                "id": "dialogue_conscious_unconscious",
+                "title": "Dialogue between conscious and unconscious",
+                "detail": "Healthy psychological development requires an ongoing dialogue between conscious awareness and the collective unconscious, rather than dominance by either side. Jung emphasized that consciousness and the unconscious are not enemies but complementary aspects of the total psyche that need to work together. This dialogue involves conscious attention to unconscious contents - through dream analysis, active imagination, and reflection on spontaneous imagery - while maintaining conscious discrimination and critical thinking. The goal is not to be overwhelmed by unconscious contents but to establish a creative tension between conscious and unconscious that enriches both. This dialogue allows consciousness to be informed and energized by archetypal wisdom while preventing inflation or possession by unconscious contents."
+            },
+            {
+                "id": "potential_integration",
+                "title": "Potential for integration",
+                "detail": "The collective unconscious contains not only primitive and potentially destructive contents but also the highest possibilities for human development and creativity. Jung believed that the archetypal contents of the collective unconscious represent the raw material for psychological growth and self-realization. Through the process of individuation, these contents can be gradually integrated into consciousness, leading to greater wholeness and authenticity. This integration does not mean making the unconscious conscious in a literal sense, but rather developing a conscious relationship with archetypal patterns that allows their creative potential to be realized. The integration of collective unconscious contents can lead to enhanced creativity, deeper meaning, expanded consciousness, and a more complete realization of human potential."
+            },
+            {
+                "id": "source_creativity",
+                "title": "Source of creativity and neurosis",
+                "detail": "The collective unconscious represents both the source of humanity's greatest creative achievements and the root of psychological disturbance and neurosis. When archetypal contents are successfully integrated and given appropriate expression, they become the wellspring of art, literature, religion, and scientific discovery. Great creative works often draw their power from their ability to give form to archetypal patterns that resonate with universal human experience. However, when archetypal contents are repressed, ignored, or handled inappropriately, they can manifest as neurotic symptoms, compulsions, or psychological inflation. The same archetypal energy that can inspire great creativity can also overwhelm consciousness and lead to mental disturbance if not properly channeled and contained."
+            }
+        ]
+    },
+    "evidence": {
+        "title": "D. Evidence",
+        "items": [
+            {
+                "id": "cross_cultural_myths",
+                "title": "Cross-cultural myths",
+                "detail": "One of the most compelling pieces of evidence for the collective unconscious is the remarkable similarity of mythological themes across cultures that have had no historical contact. Jung documented numerous examples of nearly identical myths appearing independently in widely separated geographical locations and historical periods. The hero's journey, the great flood, the dying and resurrecting god, the world tree, and the battle between good and evil are just a few of the universal mythological motifs that appear across cultures. These similarities cannot be explained by cultural diffusion or historical contact alone - they suggest a deeper source in the collective unconscious that generates similar symbolic patterns across all human societies. The universality of these mythological themes provides strong evidence for inherited psychological structures that transcend cultural boundaries."
+            },
+            {
+                "id": "universal_symbols",
+                "title": "Universal symbols in dreams",
+                "detail": "Jung's extensive analysis of dreams revealed that certain symbols appear with remarkable consistency across different individuals, cultures, and historical periods, regardless of personal background or cultural exposure. Symbols such as the mandala, the wise old man, the shadow figure, water as rebirth, the tree of life, and various animal figures emerge spontaneously in dreams with similar meanings and emotional resonance. These universal dream symbols often correspond closely to mythological and religious imagery found in cultures completely unknown to the dreamer. The fact that individuals can produce in their dreams symbols that match ancient mythological patterns they have never encountered provides compelling evidence for an inherited symbolic language residing in the collective unconscious."
+            },
+            {
+                "id": "religious_beliefs",
+                "title": "Religious and spiritual beliefs",
+                "detail": "The universal presence of religious and spiritual beliefs across all human cultures, despite their diverse forms, suggests archetypal roots in the collective unconscious. Jung observed that while the specific content of religious beliefs varies dramatically between cultures, the underlying patterns and psychological functions remain remarkably constant. The experience of the sacred, the quest for transcendence, the notion of divine judgment, the concept of redemption, and the search for ultimate meaning appear in some form in virtually every human society. Even in cultures that officially reject religion, these archetypal patterns often reemerge in secular forms such as political ideologies, scientific materialism, or popular mythology. This universality of religious impulse points to archetypal structures that predispose humans toward spiritual experience and meaning-making."
+            },
+            {
+                "id": "spontaneous_emergence",
+                "title": "Spontaneous emergence in individuals",
+                "detail": "Jung documented numerous cases where archetypal images and themes emerged spontaneously in individuals who had no conscious knowledge of their historical or cultural significance. Patients would produce in their fantasies, drawings, or dreams symbols and motifs that closely matched ancient alchemical, gnostic, or mythological materials they had never studied or encountered. Children, in particular, often spontaneously create imagery that corresponds to archetypal patterns found in world mythology and religion. This spontaneous emergence of archetypal content in naive individuals provides strong evidence that these patterns are not learned or culturally transmitted but arise from inherited psychological structures within the collective unconscious."
+            },
+            {
+                "id": "autochthonous_revival",
+                "title": "Autochthonous revival of myths",
+                "detail": "Jung used the term 'autochthonous revival' to describe the spontaneous reappearance of ancient mythological themes in modern contexts without conscious cultural transmission. He observed how certain archetypal patterns that had been dormant or forgotten could suddenly reemerge in contemporary movements, art forms, or social phenomena. For example, ancient shamanic practices might spontaneously reappear in modern psychological healing methods, or mythological themes might surface in popular culture without conscious reference to their ancient origins. This autochthonous revival demonstrates that archetypal patterns have an autonomous existence that allows them to regenerate themselves across time and cultural barriers, supporting the theory that they originate in the collective unconscious rather than being merely cultural artifacts."
+            }
+        ]
+    }
 }

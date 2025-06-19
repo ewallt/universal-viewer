@@ -1,0 +1,174 @@
+{
+  "title": "Archetypes",
+  "heroImage": "https://images.unsplash.com/photo-1509909756405-be0199881695?w=1200",
+  "definition": {
+    "title": "A. Definition",
+    "items": [
+      {
+        "id": "primordial_images",
+        "title": "Primordial images/patterns",
+        "detail": "Archetypes are the fundamental, original patterns or images that exist as inherited psychic structures within the collective unconscious. Jung described them as 'primordial' because they represent the most ancient and universal forms of human experience - patterns that have emerged from countless generations of human encounters with life's essential situations. These are not learned or acquired through personal experience, but rather represent the basic templates through which we unconsciously organize and interpret our experiences. They are like psychological blueprints that shape how we perceive and respond to archetypal situations such as the relationship with parents (Great Mother archetype), the encounter with our hidden aspects (Shadow archetype), or the journey toward wholeness (Hero's journey). These primordial images emerge spontaneously in dreams, myths, and fantasies across all cultures, suggesting their universal and inherited nature."
+      },
+      {
+        "id": "forms_without_content",
+        "title": "Forms without specific content",
+        "detail": "To be defined."
+      },
+      {
+        "id": "inherited_structures",
+        "title": "Inherited psychic structures",
+        "detail": "To be defined."
+      },
+      {
+        "id": "psychic_equivalent_instinct",
+        "title": "Psychic equivalent of instinct",
+        "detail": "To be defined."
+      },
+      {
+        "id": "connect_individual_collective",
+        "title": "Connect individual to collective",
+        "detail": "To be defined."
+      },
+      {
+        "id": "universal_not_cultural",
+        "title": "Universal, not culturally specific",
+        "detail": "To be defined."
+      },
+      {
+        "id": "organize_experiences",
+        "title": "Organize psychic experiences",
+        "detail": "To be defined."
+      }
+    ]
+  },
+  "characteristics": {
+    "title": "B. Characteristics",
+    "items": [
+      {
+        "id": "autonomous_dynamic",
+        "title": "Autonomous and dynamic",
+        "detail": "To be defined."
+      },
+      {
+        "id": "emotionally_charged",
+        "title": "Emotionally charged (numinous)",
+        "detail": "To be defined."
+      },
+      {
+        "id": "can_be_projected",
+        "title": "Can be projected onto others",
+        "detail": "To be defined."
+      },
+      {
+        "id": "positive_negative_aspects",
+        "title": "Both positive and negative aspects",
+        "detail": "To be defined."
+      },
+      {
+        "id": "manifest_through_symbols",
+        "title": "Manifest through symbols",
+        "detail": "To be defined."
+      }
+    ]
+  },
+  "key_examples": {
+    "title": "C. Key Archetype Examples",
+    "items": [
+      {
+        "id": "the_self",
+        "title": "The Self",
+        "detail": "To be defined."
+      },
+      {
+        "id": "the_shadow",
+        "title": "The Shadow",
+        "detail": "To be defined."
+      },
+      {
+        "id": "anima_animus",
+        "title": "Anima / Animus",
+        "detail": "To be defined."
+      },
+      {
+        "id": "the_persona",
+        "title": "The Persona",
+        "detail": "To be defined."
+      },
+      {
+        "id": "wise_old_man",
+        "title": "The Wise Old Man",
+        "detail": "To be defined."
+      },
+      {
+        "id": "great_mother",
+        "title": "The Great Mother",
+        "detail": "To be defined."
+      },
+      {
+        "id": "the_hero",
+        "title": "The Hero",
+        "detail": "To be defined."
+      },
+      {
+        "id": "the_trickster",
+        "title": "The Trickster",
+        "detail": "To be defined."
+      }
+    ]
+  },
+  "function": {
+    "title": "D. Function",
+    "items": [
+      {
+        "id": "express_metaphors",
+        "title": "Express itself in metaphors",
+        "detail": "To be defined."
+      },
+      {
+        "id": "compensate_one_sidedness",
+        "title": "Compensate one-sidedness of conscious mind",
+        "detail": "To be defined."
+      },
+      {
+        "id": "connect_past_present",
+        "title": "Connect life of past with present",
+        "detail": "To be defined."
+      },
+      {
+        "id": "provide_connection_roots",
+        "title": "Provide connection with roots",
+        "detail": "To be defined."
+      },
+      {
+        "id": "bridge_unconscious_conscious",
+        "title": "Bridge between unconscious substrate and conscious mind",
+        "detail": "To be defined."
+      },
+      {
+        "id": "mediate_opposites",
+        "title": "Mediate between opposites",
+        "detail": "To be defined."
+      }
+    ]
+  },
+  "identification": {
+    "title": "E. Identification with Archetypes",
+    "items": [
+      {
+        "id": "should_be_avoided",
+        "title": "Should be avoided",
+        "detail": "To be defined."
+      },
+      {
+        "id": "terrifying_consequences",
+        "title": "Consequences are terrifying (psychopathology)",
+        "detail": "To be defined."
+      },
+      {
+        "id": "danger_inflation",
+        "title": "Danger of inflation (ego-consciousness and self)",
+        "detail": "To be defined."
+      }
+    ]
+  }
+}

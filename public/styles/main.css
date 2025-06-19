@@ -200,6 +200,21 @@ a:hover {
   padding-left: 25px;
 }
 
+/* Clickable Items - Consistent Cursor and No Text Selection */
+.clickable-hierarchical,
+.clickable-ref,
+.clickable-qa {
+  cursor: pointer !important;
+  user-select: none;
+}
+
+.clickable-hierarchical *,
+.clickable-ref *,
+.clickable-qa * {
+  cursor: pointer !important;
+  user-select: none;
+}
+
 /* Reference Detail Cards */
 .reference-detail-card {
   background: var(--surface-color);
@@ -210,10 +225,10 @@ a:hover {
   position: relative;
 }
 
-/* Close buttons for both reference and Q&A detail cards */
+/* Close buttons for reference, Q&A, and hierarchical detail cards */
 .close-ref-btn,
 .close-qa-btn,
-.close-hierarchical-btn  {
+.close-hierarchical-btn {
   position: absolute;
   top: 15px;
   right: 30px;
