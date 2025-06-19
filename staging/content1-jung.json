@@ -1,0 +1,124 @@
+{
+  "title": "Collective Unconscious (CU)",
+  "heroImage": "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=1200",
+  "definition": {
+    "title": "A. Definition",
+    "items": [
+      {
+        "id": "deeper_layer",
+        "title": "A deeper layer of the psyche",
+        "detail": "Jung conceived of the collective unconscious as existing beneath the personal unconscious - a foundational stratum of the human psyche that transcends individual experience. While our personal unconscious contains our own forgotten memories, repressed thoughts, and individual complexes, the collective unconscious represents a deeper, more primordial layer that connects us to the entirety of human experience. This layer contains the accumulated wisdom, fears, and fundamental patterns that have emerged over millennia of human evolution. It is not a product of personal development or learning, but rather represents the inherited psychological foundation upon which all individual consciousness is built. Jung described it as the 'psychic life of our ancestors right back to the earliest beginnings' - a vast repository of latent images and potential experiences that shape how we perceive and respond to the world, often without our conscious awareness."
+      },
+      {
+        "id": "inherited_universal",
+        "title": "Inherited and universal",
+        "detail": "To be defined."
+      },
+      {
+        "id": "shared_experiences",
+        "title": "Contains shared human experiences",
+        "detail": "To be defined."
+      },
+      {
+        "id": "not_personal",
+        "title": "Not derived from personal experience",
+        "detail": "To be defined."
+      },
+      {
+        "id": "psychic_substrate",
+        "title": "A common psychic substrate",
+        "detail": "To be defined."
+      }
+    ]
+  },
+  "characteristics": {
+    "title": "B. Characteristics",
+    "items": [
+      {
+        "id": "timeless_universal",
+        "title": "Timeless and universal",
+        "detail": "To be defined."
+      },
+      {
+        "id": "foundation_psyche",
+        "title": "Foundation of the psyche",
+        "detail": "To be defined."
+      },
+      {
+        "id": "impersonal_nature",
+        "title": "Impersonal nature",
+        "detail": "To be defined."
+      },
+      {
+        "id": "source_energy",
+        "title": "Source of psychic energy",
+        "detail": "To be defined."
+      },
+      {
+        "id": "manifests_dreams",
+        "title": "Manifests in dreams and myths",
+        "detail": "To be defined."
+      },
+      {
+        "id": "historical_layer",
+        "title": "A historical layer of the psyche",
+        "detail": "To be defined."
+      }
+    ]
+  },
+  "relationship_consciousness": {
+    "title": "C. Relationship with Consciousness",
+    "items": [
+      {
+        "id": "compensatory_function",
+        "title": "Compensatory function",
+        "detail": "To be defined."
+      },
+      {
+        "id": "dialogue_conscious_unconscious",
+        "title": "Dialogue between conscious and unconscious",
+        "detail": "To be defined."
+      },
+      {
+        "id": "potential_integration",
+        "title": "Potential for integration",
+        "detail": "To be defined."
+      },
+      {
+        "id": "source_creativity",
+        "title": "Source of creativity and neurosis",
+        "detail": "To be defined."
+      }
+    ]
+  },
+  "evidence": {
+    "title": "D. Evidence",
+    "items": [
+      {
+        "id": "cross_cultural_myths",
+        "title": "Cross-cultural myths",
+        "detail": "To be defined."
+      },
+      {
+        "id": "universal_symbols",
+        "title": "Universal symbols in dreams",
+        "detail": "To be defined."
+      },
+      {
+        "id": "religious_beliefs",
+        "title": "Religious and spiritual beliefs",
+        "detail": "To be defined."
+      },
+      {
+        "id": "spontaneous_emergence",
+        "title": "Spontaneous emergence in individuals",
+        "detail": "To be defined."
+      },
+      {
+        "id": "autochthonous_revival",
+        "title": "Autochthonous revival of myths",
+        "detail": "To be defined."
+      }
+    ]
+  }
+}

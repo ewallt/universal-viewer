@@ -212,7 +212,8 @@ a:hover {
 
 /* Close buttons for both reference and Q&A detail cards */
 .close-ref-btn,
-.close-qa-btn {
+.close-qa-btn,
+.close-hierarchical-btn  {
   position: absolute;
   top: 15px;
   right: 30px;

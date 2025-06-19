@@ -97,6 +97,7 @@
     /* ------------ global ------------ */
     let referenceData={};
     let qaData={};
+    let hierarchicalData={};
 
     /* ------------ helpers ------------ */
     const showTab=(id,btn)=>{
@@ -149,6 +150,28 @@
       if (qaList) qaList.style.display = 'block';
     };
 
+    const showHierarchical=(itemId)=>{
+      const detailCard = document.getElementById('hierarchicalDetailCard');
+      if (!detailCard) return;
+      const itemTitle = document.querySelector('#hierarchicalDetailTitle');
+      const itemContent = document.querySelector('#hierarchicalDetailContent');
+      const hierarchicalList = document.getElementById('hierarchicalList');
+      const data = hierarchicalData[itemId];
+      if (!data || !itemTitle || !itemContent) return;
+
+      itemTitle.textContent = data.title;
+      itemContent.innerHTML = data.detail;
+      if (hierarchicalList) hierarchicalList.style.display = 'none';
+      detailCard.style.display = 'block';
+    };
+
+    const hideHierarchical=()=>{
+      const detailCard = document.getElementById('hierarchicalDetailCard');
+      const hierarchicalList = document.getElementById('hierarchicalList');
+      if (detailCard) detailCard.style.display = 'none';
+      if (hierarchicalList) hierarchicalList.style.display = 'block';
+    };
+
     /* ------------ render entry ------------ */
     function renderEntry(entry,schema,num){
       const sections=[...schema.defaultSections];
@@ -182,6 +205,19 @@
           };
         });
       }
+
+      // Build hierarchical data for drill-down interface
+      hierarchicalData = {};
+      Object.keys(entry).forEach(sectionKey => {
+        if (entry[sectionKey] && entry[sectionKey].items) {
+          entry[sectionKey].items.forEach(item => {
+            hierarchicalData[item.id] = {
+              title: item.title,
+              detail: item.detail
+            };
+          });
+        }
+      });
 
       // Build renderers with schema context
       const RENDERER_LIBRARY={
@@ -237,6 +273,23 @@
                     <button class="close-qa-btn" aria-label="Close">&times;</button>
                     <h3 id="qaDetailTitle"></h3>
                     <div id="qaDetailContent"></div>
+                  </div>`;
+        },
+
+        'renderer-hierarchical':s=>{
+          // New hierarchical drill-down renderer
+          const itemClass = schema.cssClassMap['content-card'];
+          const hierarchicalRows = s.items.map(item => {
+            return `<div class="${itemClass} clickable-hierarchical" data-hierarchical-id="${item.id}">
+                     <h3>${item.title}</h3>
+                   </div>`;
+          }).join('');
+          
+          return `<div id="hierarchicalList">${hierarchicalRows}</div>
+                  <div id="hierarchicalDetailCard" class="reference-detail-card" style="display:none;">
+                    <button class="close-hierarchical-btn" aria-label="Close">&times;</button>
+                    <h3 id="hierarchicalDetailTitle"></h3>
+                    <div id="hierarchicalDetailContent"></div>
                   </div>`;
         },
 
@@ -301,6 +354,8 @@
         const c=e.target.closest('.close-ref-btn'); if(c)return hideReference();
         const qa=e.target.closest('.clickable-qa'); if(qa)return showQA(qa.dataset.qaId);
         const cqa=e.target.closest('.close-qa-btn'); if(cqa)return hideQA();
+        const h=e.target.closest('.clickable-hierarchical'); if(h)return showHierarchical(h.dataset.hierarchicalId);
+        const ch=e.target.closest('.close-hierarchical-btn'); if(ch)return hideHierarchical();
         const th=e.target.closest('.theme-btn');    
         if(th){
           const selectedTheme = th.dataset.theme;
