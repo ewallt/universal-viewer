@@ -95,11 +95,10 @@ function main() {
     const project = process.env.APP_CONFIG;
     console.log(`--- Starting build for project: ${project} ---`);
     
-    // 2. Validate the input
-    // Line 67 - Update validation
-    if (!project || !['thinkers', 'byg', 'jung'].includes(project)) {
+    // 2. Validate the input - FIXED: Added quotes around 'thinkers-test'
+    if (!project || !['thinkers', 'byg', 'jung', 'thinkers-test'].includes(project)) {
         console.error('ERROR: APP_CONFIG environment variable not set or invalid.');
-        console.error('Set it to "thinkers" or "byg".');
+        console.error('Set it to "thinkers", "byg", "jung", or "thinkers-test".');
         process.exit(1);
     }
     

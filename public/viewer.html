@@ -219,6 +219,122 @@
         }
       });
 
+      // Universal renderer helper functions (defined outside RENDERER_LIBRARY to avoid circular reference)
+      function renderUniversalNormal(s, sectionName, schema) {
+        console.log(`[UNIVERSAL] Rendering normal card for section: ${sectionName}`);
+        
+        // Handle thesis-style content
+        if (s.central_thesis && s.key_statement) {
+          return `
+            <div class="${schema.cssClassMap['central-thesis']}">${s.central_thesis}</div>
+            <div class="${schema.cssClassMap['warning-highlight']}">${s.key_statement}</div>
+            ${s.foundational_principles ? `
+              <div class="${schema.cssClassMap['concept-card']}">
+                <h3>${s.foundational_principles.title}</h3>
+                <ul>${s.foundational_principles.points.map(p => `<li>${p}</li>`).join('')}</ul>
+              </div>` : ''}`;
+        }
+        
+        // Handle points-based content
+        if (s.points && Array.isArray(s.points)) {
+          return s.points.map(point => {
+            if (point.definition) {
+              return `<div class="${schema.cssClassMap['concept-card']}">
+                <span class="concept-title">${point.title}</span>: ${point.definition}
+              </div>`;
+            } else if (point.explanation) {
+              return `<div class="${schema.cssClassMap['argument-point']}">
+                <h3 class="argument-title">${point.title}</h3>
+                <p>${point.explanation}</p>
+                ${point.key_insight ? `<p><em>${point.key_insight}</em></p>` : ''}
+                ${(point.quotes || []).map(q => {
+                  const cls = q.type === 'scripture' ? schema.cssClassMap['scripture-ref'] :
+                             q.type === 'warning' ? schema.cssClassMap['warning-highlight'] : 
+                             schema.cssClassMap['quote'];
+                  return `<div class="${cls}">${q.text}<br><span class="quote-source">${q.source}</span></div>`;
+                }).join('')}
+              </div>`;
+            } else if (point.content) {
+              const cls = point.type === 'scripture' ? schema.cssClassMap['scripture-ref'] :
+                         point.type === 'thesis' ? schema.cssClassMap['central-thesis'] :
+                         schema.cssClassMap['conclusion-box'];
+              return `<div class="${cls}"><h3>${point.title}</h3><p>${point.content}</p></div>`;
+            }
+            return `<div class="${schema.cssClassMap['content-card']}"><h3>${point.title}</h3></div>`;
+          }).join('');
+        }
+        
+        return `<div class="${schema.cssClassMap['content-card']}">
+          <p><strong>[UNIVERSAL NORMAL]</strong> Content structure not yet supported for section: ${sectionName}</p>
+          <details><summary>Show raw data</summary><pre>${JSON.stringify(s, null, 2)}</pre></details>
+        </div>`;
+      }
+
+      function renderUniversalFlippable(s, sectionName, schema) {
+        console.log(`[UNIVERSAL] Rendering flippable card for section: ${sectionName}`);
+        console.log(`[UNIVERSAL] Section data structure:`, s);
+        
+        // Handle Q&A structure
+        if (s.questions || (s.points && s.points[0]?.question)) {
+          const qaItems = s.questions || s.points || [];
+          console.log(`[UNIVERSAL] Found Q&A items:`, qaItems);
+          
+          // Use the same class structure as the legacy renderer
+          const itemClass = schema.cssClassMap['content-card'] || 'content-card';
+          
+          const qaRows = qaItems.map((qa, index) => {
+            const id = qa.id || `q${index + 1}`;
+            return `<div class="${itemClass} clickable-qa" data-qa-id="${id}" style="margin: 15px 0; padding: 15px; border: 1px solid var(--border-color-accent); border-radius: 10px; border-left: 4px solid var(--accent-primary); background: var(--surface-color-secondary); cursor: pointer;">
+                     <h3 style="margin: 0;">${qa.question}</h3>
+                   </div>`;
+          }).join('');
+          
+          console.log(`[UNIVERSAL] Generated Q&A HTML:`, qaRows);
+          
+          return `<div id="qaList">${qaRows}</div>
+                  <div id="qaDetailCard" class="reference-detail-card" style="display:none;">
+                    <button class="close-qa-btn" aria-label="Close">&times;</button>
+                    <h3 id="qaDetailTitle"></h3>
+                    <div id="qaDetailContent"></div>
+                  </div>`;
+        }
+        
+        // Handle hierarchical structure
+        if (s.items && Array.isArray(s.items) && s.items[0]?.detail) {
+          const itemClass = schema.cssClassMap['content-card'];
+          const hierarchicalRows = s.items.map(item => {
+            return `<div class="${itemClass} clickable-hierarchical" data-hierarchical-id="${item.id}" data-section="${sectionName}">
+                     <h3>${item.title}</h3>
+                   </div>`;
+          }).join('');
+          
+          return `<div id="hierarchicalList-${sectionName}">${hierarchicalRows}</div>
+                  <div id="hierarchicalDetailCard-${sectionName}" class="reference-detail-card" style="display:none;">
+                    <button class="close-hierarchical-btn" data-section="${sectionName}" aria-label="Close">&times;</button>
+                    <h3 id="hierarchicalDetailTitle-${sectionName}"></h3>
+                    <div id="hierarchicalDetailContent-${sectionName}"></div>
+                  </div>`;
+        }
+        
+        // Handle reference-style structure  
+        if (s.scripture || s.other || (s.items && !s.items[0]?.detail)) {
+          const row = r => `<div class="${schema.cssClassMap['ref-item']} clickable-ref" data-ref-id="${r.id || ''}">${r.text || r.title}</div>`;
+          const list = [].concat(s.items || [], s.scripture || [], s.other || [], s.points || []).map(row).join('');
+          
+          return `<div id="referenceList">${list}</div>
+                  <div id="referenceDetailCard" class="reference-detail-card" style="display:none;">
+                    <button class="close-ref-btn" aria-label="Close">&times;</button>
+                    <h3 id="refDetailTitle"></h3>
+                    <div id="refDetailContent"></div>
+                  </div>`;
+        }
+        
+        return `<div class="${schema.cssClassMap['content-card']}">
+          <p><strong>[UNIVERSAL FLIPPABLE]</strong> Content structure not yet supported for section: ${sectionName}</p>
+          <details><summary>Show raw data</summary><pre>${JSON.stringify(s, null, 2)}</pre></details>
+        </div>`;
+      }
+
       // Build renderers with schema context
       const RENDERER_LIBRARY={
         'renderer-thesis':s=>`
@@ -297,7 +413,159 @@
           const cls=p.type==='scripture'?schema.cssClassMap['scripture-ref']:
                     p.type==='thesis'   ?schema.cssClassMap['central-thesis']:schema.cssClassMap['conclusion-box'];
           return `<div class="${cls}"><h3>${p.title}</h3><p>${p.content}</p></div>`;
-        }).join('')
+        }).join(''),
+
+        // PHASE 1: ADD UNIVERSAL RENDERERS
+        'renderer-universal-normal': (s, sectionName, schema) => {
+          console.log(`[UNIVERSAL] Rendering normal card for section: ${sectionName}`);
+          
+          // Handle thesis-style content (central_thesis + key_statement + foundational_principles)
+          if (s.central_thesis && s.key_statement) {
+            return `
+              <div class="${schema.cssClassMap['central-thesis']}">${s.central_thesis}</div>
+              <div class="${schema.cssClassMap['warning-highlight']}">${s.key_statement}</div>
+              ${s.foundational_principles ? `
+                <div class="${schema.cssClassMap['concept-card']}">
+                  <h3>${s.foundational_principles.title}</h3>
+                  <ul>${s.foundational_principles.points.map(p => `<li>${p}</li>`).join('')}</ul>
+                </div>` : ''}`;
+          }
+          
+          // Handle points-based content (arguments, concepts, examples, etc.)
+          if (s.points && Array.isArray(s.points)) {
+            return s.points.map(point => {
+              if (point.definition) {
+                // Concepts/definitions style
+                return `<div class="${schema.cssClassMap['concept-card']}">
+                  <span class="concept-title">${point.title}</span>: ${point.definition}
+                </div>`;
+              } else if (point.explanation) {
+                // Arguments/examples style
+                return `<div class="${schema.cssClassMap['argument-point']}">
+                  <h3 class="argument-title">${point.title}</h3>
+                  <p>${point.explanation}</p>
+                  ${point.key_insight ? `<p><em>${point.key_insight}</em></p>` : ''}
+                  ${(point.quotes || []).map(q => {
+                    const cls = q.type === 'scripture' ? schema.cssClassMap['scripture-ref'] :
+                               q.type === 'warning' ? schema.cssClassMap['warning-highlight'] : 
+                               schema.cssClassMap['quote'];
+                    return `<div class="${cls}">${q.text}<br><span class="quote-source">${q.source}</span></div>`;
+                  }).join('')}
+                </div>`;
+              } else if (point.content) {
+                // Conclusion-style
+                const cls = point.type === 'scripture' ? schema.cssClassMap['scripture-ref'] :
+                           point.type === 'thesis' ? schema.cssClassMap['central-thesis'] :
+                           schema.cssClassMap['conclusion-box'];
+                return `<div class="${cls}"><h3>${point.title}</h3><p>${point.content}</p></div>`;
+              }
+              return `<div class="${schema.cssClassMap['content-card']}"><h3>${point.title}</h3></div>`;
+            }).join('');
+          }
+          
+          // Fallback for unrecognized content structure
+          return `<div class="${schema.cssClassMap['content-card']}">
+            <p><strong>[UNIVERSAL NORMAL]</strong> Content structure not yet supported for section: ${sectionName}</p>
+            <details><summary>Show raw data</summary><pre>${JSON.stringify(s, null, 2)}</pre></details>
+          </div>`;
+        },
+
+        'renderer-universal-flippable': (s, sectionName, schema) => {
+          console.log(`[UNIVERSAL] Rendering flippable card for section: ${sectionName}`);
+          
+          // Handle Q&A structure
+          if (s.questions || (s.points && s.points[0]?.question)) {
+            const qaItems = s.questions || s.points || [];
+            const itemClass = schema.cssClassMap['content-card'];
+            
+            const qaRows = qaItems.map((qa, index) => {
+              const id = qa.id || `q${index + 1}`;
+              return `<div class="${itemClass} clickable-qa" data-qa-id="${id}">
+                       <h3>${qa.question}</h3>
+                     </div>`;
+            }).join('');
+            
+            return `<div id="qaList">${qaRows}</div>
+                    <div id="qaDetailCard" class="reference-detail-card" style="display:none;">
+                      <button class="close-qa-btn" aria-label="Close">&times;</button>
+                      <h3 id="qaDetailTitle"></h3>
+                      <div id="qaDetailContent"></div>
+                    </div>`;
+          }
+          
+          // Handle hierarchical structure (items with details)
+          if (s.items && Array.isArray(s.items) && s.items[0]?.detail) {
+            const itemClass = schema.cssClassMap['content-card'];
+            const hierarchicalRows = s.items.map(item => {
+              return `<div class="${itemClass} clickable-hierarchical" data-hierarchical-id="${item.id}" data-section="${sectionName}">
+                       <h3>${item.title}</h3>
+                     </div>`;
+            }).join('');
+            
+            return `<div id="hierarchicalList-${sectionName}">${hierarchicalRows}</div>
+                    <div id="hierarchicalDetailCard-${sectionName}" class="reference-detail-card" style="display:none;">
+                      <button class="close-hierarchical-btn" data-section="${sectionName}" aria-label="Close">&times;</button>
+                      <h3 id="hierarchicalDetailTitle-${sectionName}"></h3>
+                      <div id="hierarchicalDetailContent-${sectionName}"></div>
+                    </div>`;
+          }
+          
+          // Handle reference-style structure  
+          if (s.scripture || s.other || (s.items && !s.items[0]?.detail)) {
+            const row = r => `<div class="${schema.cssClassMap['ref-item']} clickable-ref" data-ref-id="${r.id || ''}">${r.text || r.title}</div>`;
+            const list = [].concat(s.items || [], s.scripture || [], s.other || [], s.points || []).map(row).join('');
+            
+            return `<div id="referenceList">${list}</div>
+                    <div id="referenceDetailCard" class="reference-detail-card" style="display:none;">
+                      <button class="close-ref-btn" aria-label="Close">&times;</button>
+                      <h3 id="refDetailTitle"></h3>
+                      <div id="refDetailContent"></div>
+                    </div>`;
+          }
+          
+          // Fallback for unrecognized content structure
+          return `<div class="${schema.cssClassMap['content-card']}">
+            <p><strong>[UNIVERSAL FLIPPABLE]</strong> Content structure not yet supported for section: ${sectionName}</p>
+            <details><summary>Show raw data</summary><pre>${JSON.stringify(s, null, 2)}</pre></details>
+          </div>`;
+        },
+
+        'renderer-universal': (s, sectionName, schema) => {
+          console.log(`[UNIVERSAL] Orchestrating render for section: ${sectionName}`);
+          console.log(`[UNIVERSAL] Schema has cardConfiguration:`, !!schema.cardConfiguration);
+          console.log(`[UNIVERSAL] Full schema keys:`, Object.keys(schema));
+          
+          // Look up card configuration for this section
+          const cardConfig = schema.cardConfiguration?.find(config => config.section === sectionName);
+          
+          if (!cardConfig) {
+            console.log(`[UNIVERSAL] No card configuration found for ${sectionName}, showing fallback`);
+            return `<div class="${schema.cssClassMap['content-card']}">
+              <h3>⚙️ Universal Renderer Test</h3>
+              <p><strong>Section:</strong> ${sectionName}</p>
+              <p><strong>Status:</strong> No card configuration found</p>
+              <p><strong>Action needed:</strong> Add to schema.cardConfiguration</p>
+              <details><summary>Show section data</summary><pre>${JSON.stringify(s, null, 2)}</pre></details>
+            </div>`;
+          }
+          
+          console.log(`[UNIVERSAL] Found card config: ${cardConfig.type} for ${sectionName}`);
+          
+          // Route to appropriate card renderer
+          switch (cardConfig.type) {
+            case 'normal':
+              return renderUniversalNormal(s, sectionName, schema);
+            case 'flippable':
+              return renderUniversalFlippable(s, sectionName, schema);
+            default:
+              return `<div class="${schema.cssClassMap['content-card']}">
+                <h3>⚠️ Unknown Card Type</h3>
+                <p><strong>Section:</strong> ${sectionName}</p>
+                <p><strong>Card type:</strong> ${cardConfig.type}</p>
+                <p><strong>Valid types:</strong> normal, flippable</p>
+              </div>`;
+          }
+        }
       };
 
       document.getElementById('nav-tabs-container').innerHTML=
@@ -311,7 +579,7 @@
           const fn=RENDERER_LIBRARY[schema.sectionRenderers[sec]];
           return `<div class="content-panel" id="${sec}">
                     <h2 class="section-title">${entry[sec].title}</h2>
-                    ${fn ? fn(entry[sec], sec) : `<p>No renderer for ${sec}</p>`}
+                    ${fn ? fn(entry[sec], sec, schema) : `<p>No renderer for ${sec}</p>`}
                   </div>`;
         }).join('');
 

@@ -19,13 +19,6 @@
     "references": "References"
   },
   "sectionRenderers": {
-    "references": "renderer-universal"
-  },
-  "cardConfiguration": [
-    {
-      "type": "flippable",
-      "section": "references",
-      "label": "References"
-    }
-  ]
+    "references": "renderer-list-detail"
+  }
 }

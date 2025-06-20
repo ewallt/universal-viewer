@@ -1,0 +1,95 @@
+{
+  "pageStructure": {
+    "headerElements": [
+      {
+        "id": "main-title",
+        "class": "primary-title"
+      },
+      {
+        "id": "entry-info",
+        "class": "secondary-info"
+      },
+      {
+        "id": "meta-info",
+        "class": "tertiary-info"
+      },
+      {
+        "id": "nav-link",
+        "class": "navigation-link"
+      }
+    ]
+  },
+  "cssClassMap": {
+    "content-card": "content-card",
+    "highlight-card": "highlight-card",
+    "text-card": "text-card",
+    "list-card": "list-card",
+    "hierarchical-item": "content-card"
+  },
+  "defaultSections": [
+    "definition",
+    "characteristics",
+    "relationship_consciousness",
+    "evidence"
+  ],
+  "sectionLabels": {
+    "definition": "Definition",
+    "characteristics": "Characteristics",
+    "relationship_consciousness": "Relationship with Consciousness",
+    "evidence": "Evidence",
+    "key_examples": "Key Examples",
+    "function": "Function",
+    "identification": "Identification Warnings",
+    "process": "Process",
+    "symbolism": "Symbolism",
+    "ego": "Ego",
+    "relationship_unconscious": "Relationship with Unconscious",
+    "pathological_states": "Pathological States",
+    "psyche": "Psyche",
+    "complexes": "Complexes",
+    "libido": "Libido",
+    "personality_types": "Personality Types",
+    "analytical_psychology": "Analytical Psychology",
+    "proof_archetypes": "Proof of Archetypes",
+    "active_imagination": "Active Imagination",
+    "dream_analysis": "Dream Analysis"
+  },
+  "sectionRenderers": {
+    "definition": "renderer-hierarchical",
+    "characteristics": "renderer-hierarchical",
+    "relationship_consciousness": "renderer-hierarchical",
+    "evidence": "renderer-hierarchical",
+    "key_examples": "renderer-hierarchical",
+    "function": "renderer-hierarchical",
+    "identification": "renderer-hierarchical",
+    "process": "renderer-hierarchical",
+    "symbolism": "renderer-hierarchical",
+    "ego": "renderer-hierarchical",
+    "relationship_unconscious": "renderer-hierarchical",
+    "pathological_states": "renderer-hierarchical",
+    "psyche": "renderer-hierarchical",
+    "complexes": "renderer-hierarchical",
+    "libido": "renderer-hierarchical",
+    "personality_types": "renderer-hierarchical",
+    "analytical_psychology": "renderer-hierarchical",
+    "proof_archetypes": "renderer-hierarchical",
+    "active_imagination": "renderer-hierarchical",
+    "dream_analysis": "renderer-hierarchical"
+  },
+  "projectName": "Jungian Psychology",
+  "entryLabel": "Concept",
+  "interactionMode": "hierarchical-drill-down",
+  "defaultTheme": "cosmic",
+  "themes": [
+    "cosmic",
+    "stately",
+    "forest"
+  ],
+  "rendererConfig": {
+    "hierarchical": {
+      "itemClass": "hierarchical-item",
+      "detailCardId": "hierarchicalDetailCard",
+      "listId": "hierarchicalList"
+    }
+  }
+}

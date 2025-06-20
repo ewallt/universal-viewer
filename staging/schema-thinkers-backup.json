@@ -21,8 +21,8 @@
     "qa": "Questions & Answers"
   },
   "sectionRenderers": {
-    "examples": "renderer-universal",
-    "qa": "renderer-universal"
+    "examples": "renderer-points-list",
+    "qa": "renderer-qa"
   },
   "cssClassMap": {
     "qa-item": "content-card"
@@ -34,17 +34,5 @@
       "answerProperty": "answer",
       "detailCardId": "qaDetailCard"
     }
-  },
-  "cardConfiguration": [
-    {
-      "type": "normal",
-      "section": "examples",
-      "label": "Examples"
-    },
-    {
-      "type": "flippable",
-      "section": "qa",
-      "label": "Questions & Answers"
-    }
-  ]
+  }
 }
