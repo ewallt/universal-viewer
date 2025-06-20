@@ -10,22 +10,49 @@
   "defaultSections": [
     "thesis",
     "arguments",
-    "concepts",
+    "concepts", 
     "references",
     "conclusion"
   ],
   "sectionLabels": {
+    "thesis": "Central Thesis",
     "arguments": "Main Arguments",
-    "references": "References"
+    "concepts": "Key Concepts",
+    "references": "References",
+    "conclusion": "Conclusion"
   },
   "sectionRenderers": {
-    "references": "renderer-universal"
+    "thesis": "renderer-universal",
+    "arguments": "renderer-universal", 
+    "concepts": "renderer-universal",
+    "references": "renderer-universal",
+    "conclusion": "renderer-universal"
   },
   "cardConfiguration": [
+    {
+      "type": "normal",
+      "section": "thesis",
+      "label": "Central Thesis"
+    },
+    {
+      "type": "normal",
+      "section": "arguments", 
+      "label": "Main Arguments"
+    },
+    {
+      "type": "normal",
+      "section": "concepts",
+      "label": "Key Concepts"
+    },
     {
       "type": "flippable",
       "section": "references",
       "label": "References"
+    },
+    {
+      "type": "normal",
+      "section": "conclusion",
+      "label": "Conclusion"
     }
   ]
 }
