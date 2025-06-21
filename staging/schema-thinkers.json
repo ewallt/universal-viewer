@@ -21,11 +21,24 @@
     "qa": "Questions & Answers"
   },
   "sectionRenderers": {
+    "thesis": "renderer-universal",
+    "arguments": "renderer-universal",
+    "concepts": "renderer-universal",
     "examples": "renderer-universal",
-    "qa": "renderer-universal"
+    "qa": "renderer-universal",
+    "conclusion": "renderer-universal"
   },
   "cssClassMap": {
-    "qa-item": "content-card"
+    "qa-item": "content-card",
+    "central-thesis": "central-thesis",
+    "warning-highlight": "warning-highlight",
+    "concept-card": "concept-card",
+    "argument-point": "argument-point",
+    "content-card": "content-card",
+    "conclusion-box": "conclusion-box",
+    "scripture-ref": "scripture-ref",
+    "quote": "quote",
+    "ref-item": "ref-item"
   },
   "rendererConfig": {
     "qa": {
@@ -38,6 +51,21 @@
   "cardConfiguration": [
     {
       "type": "normal",
+      "section": "thesis",
+      "label": "Central Thesis"
+    },
+    {
+      "type": "normal",
+      "section": "arguments",
+      "label": "Supporting Arguments"
+    },
+    {
+      "type": "normal",
+      "section": "concepts",
+      "label": "Key Concepts"
+    },
+    {
+      "type": "normal",
       "section": "examples",
       "label": "Examples"
     },
@@ -45,6 +73,11 @@
       "type": "flippable",
       "section": "qa",
       "label": "Questions & Answers"
+    },
+    {
+      "type": "normal",
+      "section": "conclusion",
+      "label": "Conclusion"
     }
   ]
 }

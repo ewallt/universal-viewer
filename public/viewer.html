@@ -172,7 +172,75 @@
       if (hierarchicalList) hierarchicalList.style.display = 'block';
     };
 
-    /* ------------ render entry ------------ */
+    // +++ NEW ENCYCLOPEDIA RENDERER +++
+    /**
+     * Renders a page for a project type of "encyclopedia".
+     * Assumes every section is a flippable, hierarchical card list.
+     */
+    function renderEncyclopediaEntry(entry, schema, num) {
+      // 1. Set up header elements. NOTE: Encyclopedia has a simpler header.
+      document.title = `${schema.projectName} — ${entry.title || `Entry ${num}`}`;
+      document.querySelector('.primary-title').textContent = entry.title || schema.projectName;
+      document.querySelector('.secondary-info').textContent = entry.source || '';
+      document.querySelector('.tertiary-info').textContent = ''; // Encyclopedia doesn't use tertiary info
+
+      // 2. Build hierarchical data store for click interactions
+      hierarchicalData = {};
+      Object.keys(entry).forEach(sectionKey => {
+        const section = entry[sectionKey];
+        if (section && section.items && Array.isArray(section.items)) {
+          section.items.forEach(item => {
+            if (item.id && item.detail) {
+              hierarchicalData[item.id] = { title: item.title, detail: item.detail };
+            }
+          });
+        }
+      });
+      
+      // 3. Render Navigation Tabs
+      const sectionsToRender = Object.keys(entry).filter(sec => typeof entry[sec] === 'object' && entry[sec] !== null && !Array.isArray(entry[sec]));
+      document.getElementById('nav-tabs-container').innerHTML = sectionsToRender.map(sec =>
+          `<button class="tab-button" data-tab="${sec}">${entry[sec].title || sec}</button>`
+      ).join('');
+
+      // 4. Render Content Panels
+      document.getElementById('main-content-area').innerHTML = sectionsToRender.map(sec => {
+        const sectionData = entry[sec];
+        const itemClass = schema.cssClassMap?.['content-card'] || 'content-card';
+        
+        // Direct rendering logic for hierarchical content
+        const hierarchicalRows = (sectionData.items || []).map(item => {
+          return `<div class="${itemClass} clickable-hierarchical" data-hierarchical-id="${item.id}" data-section="${sec}">
+                    <h3>${item.title}</h3>
+                  </div>`;
+        }).join('');
+        
+        const renderedHtml = `
+          <div id="hierarchicalList-${sec}">${hierarchicalRows}</div>
+          <div id="hierarchicalDetailCard-${sec}" class="reference-detail-card" style="display:none;">
+            <button class="close-hierarchical-btn" data-section="${sec}" aria-label="Close">×</button>
+            <h3 id="hierarchicalDetailTitle-${sec}"></h3>
+            <div id="hierarchicalDetailContent-${sec}"></div>
+          </div>`;
+
+        return `<div class="content-panel" id="${sec}">
+                  <h2 class="section-title">${sectionData.title}</h2>
+                  ${renderedHtml}
+                </div>`;
+      }).join('');
+
+      // 5. Set hero image
+      const heroImg = document.getElementById('hero-img');
+      if (heroImg && entry.heroImage) {
+        heroImg.src = entry.heroImage;
+      }
+
+      // 6. Activate the first tab to show its content
+      const firstTab = document.querySelector('.tab-button');
+      if (firstTab) showTab(firstTab.dataset.tab, firstTab);
+    }
+    
+    /* ------------ render entry (UNCHANGED) ------------ */
     function renderEntry(entry,schema,num){
       const sections=[...schema.defaultSections];
       Object.keys(entry).forEach(sec=>{
@@ -287,7 +355,7 @@
           
           return `<div id="qaList">${qaRows}</div>
                   <div id="qaDetailCard" class="reference-detail-card" style="display:none;">
-                    <button class="close-qa-btn" aria-label="Close">&times;</button>
+                    <button class="close-qa-btn" aria-label="Close">×</button>
                     <h3 id="qaDetailTitle"></h3>
                     <div id="qaDetailContent"></div>
                   </div>`;
@@ -304,7 +372,7 @@
           
           return `<div id="hierarchicalList-${sectionName}">${hierarchicalRows}</div>
                   <div id="hierarchicalDetailCard-${sectionName}" class="reference-detail-card" style="display:none;">
-                    <button class="close-hierarchical-btn" data-section="${sectionName}" aria-label="Close">&times;</button>
+                    <button class="close-hierarchical-btn" data-section="${sectionName}" aria-label="Close">×</button>
                     <h3 id="hierarchicalDetailTitle-${sectionName}"></h3>
                     <div id="hierarchicalDetailContent-${sectionName}"></div>
                   </div>`;
@@ -317,7 +385,7 @@
           
           return `<div id="referenceList">${list}</div>
                   <div id="referenceDetailCard" class="reference-detail-card" style="display:none;">
-                    <button class="close-ref-btn" aria-label="Close">&times;</button>
+                    <button class="close-ref-btn" aria-label="Close">×</button>
                     <h3 id="refDetailTitle"></h3>
                     <div id="refDetailContent"></div>
                   </div>`;
@@ -390,7 +458,7 @@
       if(first)showTab(first.dataset.tab,first);
     }
 
-    /* ------------ init ------------ */
+    /* ------------ init (MODIFIED WITH ROUTER) ------------ */
     async function init(){
       const rawId=new URLSearchParams(location.search).get('id')||'content1';
       const num  =rawId.replace(/^content/,'');
@@ -402,7 +470,20 @@
         ]);
         if(!eRes.ok)throw new Error(`${rawId}.json missing`);
         if(!sRes.ok)throw new Error('schema.json missing');
-        renderEntry(await eRes.json(),await sRes.json(),num);
+        
+        const entry = await eRes.json();
+        const schema = await sRes.json();
+
+        // +++ ROUTER LOGIC +++
+        // This is the clean, safe branch point.
+        if (schema.projectType === 'encyclopedia') {
+          // Call the new renderer for encyclopedia projects
+          renderEncyclopediaEntry(entry, schema, num);
+        } else {
+          // Call the original, untouched renderer for all other projects
+          renderEntry(entry, schema, num);
+        }
+        
       }catch(e){
         console.error(e);
         main.innerHTML=`<div class="content-panel active" style="color:#ff8a80;">
