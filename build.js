@@ -1,164 +1,176 @@
-const fs = require('fs');
+const fs   = require('fs');
 const path = require('path');
 
-// --- Configuration ---
-const STAGING_DIR = 'staging';
-const PUBLIC_DIR = 'public';
-const PROJECTS_CONFIG = path.join(STAGING_DIR, 'projects.json');
-const BASE_SCHEMA = path.join(STAGING_DIR, 'base-schema.json');
-const THEMES_SOURCE = path.join(STAGING_DIR, 'themes.json');
-const DEST_SCHEMA = path.join(PUBLIC_DIR, 'data', 'schema.json');
-const DEST_THEMES = path.join(PUBLIC_DIR, 'data', 'themes.json');
+/* ------------------------------------------------------------------ */
+/* 0.  ENV FLAGS                                                      */
+/* ------------------------------------------------------------------ */
+const DEBUG = /^(true|1)$/i.test(process.env.DEBUG_BUILD || '');
+
+function log(...args)      { console.log(...args); }
+function dbg(...args)      { if (DEBUG) console.log('[debug]', ...args); }
+function yell(label, obj)  { if (DEBUG) console.log(`\n===== ${label} =====\n`,
+                                                    JSON.stringify(obj, null, 2), '\n'); }
+
+/* ------------------------------------------------------------------ */
+/* 1.  STATIC CONFIG PATHS                                            */
+/* ------------------------------------------------------------------ */
+const STAGING_DIR       = 'staging';
+const PUBLIC_DIR        = 'public';
+const PROJECTS_CONFIG   = path.join(STAGING_DIR, 'projects.json');
+const BASE_SCHEMA       = path.join(STAGING_DIR, 'base-schema.json');
+const THEMES_SOURCE     = path.join(STAGING_DIR, 'themes.json');
+const DEST_SCHEMA       = path.join(PUBLIC_DIR, 'data', 'schema.json');
+const DEST_THEMES       = path.join(PUBLIC_DIR, 'data', 'themes.json');
 const DEST_CONTENTS_DIR = path.join(PUBLIC_DIR, 'data', 'contents');
 
-// --- Helper Functions ---
-
+/* ------------------------------------------------------------------ */
+/* 2.  UTILS                                                          */
+/* ------------------------------------------------------------------ */
 function deepMerge(target, ...sources) {
-    for (const source of sources) {
-        if (!source) continue;
-        for (const key in source) {
-            if (source.hasOwnProperty(key)) {
-                const sourceVal = source[key];
-                const targetVal = target[key];
-                if (sourceVal instanceof Object && !Array.isArray(sourceVal)) {
-                    target[key] = targetVal instanceof Object ? targetVal : {};
-                    deepMerge(target[key], sourceVal);
-                } else {
-                    target[key] = sourceVal;
-                }
-            }
-        }
+  for (const src of sources) {
+    if (!src) continue;
+    for (const k in src) {
+      if (!Object.hasOwn(src, k)) continue;
+      const sv = src[k], tv = target[k];
+      target[k] = (sv && typeof sv === 'object' && !Array.isArray(sv))
+        ? deepMerge(tv && typeof tv === 'object' ? tv : {}, sv)
+        : sv;
     }
-    return target;
+  }
+  return target;
 }
 
-function loadJsonFile(filePath) {
-    if (!fs.existsSync(filePath)) {
-        throw new Error(`Required file not found: ${filePath}`);
-    }
-    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+function loadJson(file) {
+  if (!fs.existsSync(file)) throw new Error(`Missing file: ${file}`);
+  const data = JSON.parse(fs.readFileSync(file, 'utf8'));
+  dbg('loaded', file);
+  return data;
 }
 
-function buildLegacySchema(baseSchema, typeSchema, instanceSchema) {
-    console.log('Constructing schema using "legacy" build recipe...');
-    const legacySchema = {};
-    const legacyRenderersMap = {
-        thesis: "renderer-thesis",
-        arguments: "renderer-points-list",
-        concepts: "renderer-definitions-list",
-        conclusion: "renderer-conclusion-list",
-        references: "renderer-list-detail",
-        examples: "renderer-list-detail",
-        qa: "renderer-qa"
-    };
-    legacySchema.pageStructure = baseSchema.pageStructure;
-    legacySchema.cssClassMap = baseSchema.cssClassMap;
-    legacySchema.projectName = instanceSchema.projectName;
-    legacySchema.defaultTheme = instanceSchema.defaultTheme;
-    legacySchema.themes = instanceSchema.themes;
-    legacySchema.entryLabel = typeSchema.entryLabel;
-    legacySchema.defaultSections = typeSchema.defaultSections;
-    if (typeSchema.rendererConfig) {
-        legacySchema.rendererConfig = typeSchema.rendererConfig;
-    }
-    if (!typeSchema.cardConfiguration) throw new Error("Missing ingredient: 'cardConfiguration' in type schema to build 'sectionLabels'.");
-    legacySchema.sectionLabels = {};
-    typeSchema.cardConfiguration.forEach(card => {
-        legacySchema.sectionLabels[card.section] = card.label;
-    });
-    if (!typeSchema.defaultSections) throw new Error("Missing ingredient: 'defaultSections' in type schema to build 'sectionRenderers'.");
-    legacySchema.sectionRenderers = {};
-    typeSchema.defaultSections.forEach(section => {
-        const renderer = legacyRenderersMap[section];
-        if (!renderer) throw new Error(`Missing knowledge: No legacy renderer for section '${section}' in build script map.`);
-        legacySchema.sectionRenderers[section] = renderer;
-    });
-    return legacySchema;
+/* ------------------------------------------------------------------ */
+/* 3.  LEGACY SCHEMA BUILDER                                          */
+/* ------------------------------------------------------------------ */
+function buildLegacySchema(base, type, inst) {
+  log('Constructing schema via LEGACY recipe…');
+  const m = {
+    thesis:     'renderer-thesis',
+    arguments:  'renderer-points-list',
+    concepts:   'renderer-definitions-list',
+    conclusion: 'renderer-conclusion-list',
+    references: 'renderer-list-detail',
+    examples:   'renderer-list-detail',
+    qa:         'renderer-qa'
+  };
+
+  if (!type.cardConfiguration) throw new Error(
+    'legacy: typeSchema is missing cardConfiguration.');
+
+  const schema = {
+    pageStructure: base.pageStructure,
+    cssClassMap:   base.cssClassMap,
+    projectName:   inst.projectName,
+    defaultTheme:  inst.defaultTheme,
+    themes:        inst.themes,
+    entryLabel:    type.entryLabel,
+    defaultSections: type.defaultSections,
+    rendererConfig: type.rendererConfig || {}
+  };
+
+  /* Section labels ------------------------------------------ */
+  schema.sectionLabels = {};
+  type.cardConfiguration.forEach(c => schema.sectionLabels[c.section] = c.label);
+
+  /* Section renderers --------------------------------------- */
+  if (!type.defaultSections) throw new Error(
+    'legacy: typeSchema is missing defaultSections.');
+  schema.sectionRenderers = {};
+  type.defaultSections.forEach(sec => {
+    if (!m[sec]) throw new Error(`legacy: no renderer map for “${sec}”`);
+    schema.sectionRenderers[sec] = m[sec];
+  });
+
+  dbg('legacy schema built', schema);
+  return schema;
 }
 
-function filterAndConfigureThemes(allThemesData, instanceSchema) {
-    const projectThemeIds = instanceSchema.themes || [];
-    const defaultTheme = instanceSchema.defaultTheme || 'cosmic';
-    const filteredData = JSON.parse(JSON.stringify(allThemesData));
-    const availableThemes = {};
-    projectThemeIds.forEach(id => {
-        if (filteredData.themes[id]) { availableThemes[id] = filteredData.themes[id]; }
-    });
-    filteredData.themes = availableThemes;
-    filteredData.meta.themeList = filteredData.meta.themeList.filter(theme => projectThemeIds.includes(theme.id));
-    filteredData.meta.themeCount = filteredData.meta.themeList.length;
-    filteredData.meta.defaultTheme = defaultTheme;
-    return filteredData;
+/* ------------------------------------------------------------------ */
+/* 4.  THEME FILTER                                                   */
+/* ------------------------------------------------------------------ */
+function tweakThemes(all, inst) {
+  const ids = inst.themes || [];
+  const def = inst.defaultTheme || 'cosmic';
+
+  const result = JSON.parse(JSON.stringify(all));
+  result.themes = Object.fromEntries(ids.map(id => [id, all.themes[id]]).filter(([,v]) => v));
+  result.meta.themeList = result.meta.themeList.filter(t => ids.includes(t.id));
+  result.meta.themeCount = result.meta.themeList.length;
+  result.meta.defaultTheme = def;
+
+  dbg('themes after filtering', result.meta);
+  return result;
 }
 
-function copyContentFiles(contentConfig) {
-    fs.rmSync(DEST_CONTENTS_DIR, { recursive: true, force: true });
-    fs.mkdirSync(DEST_CONTENTS_DIR, { recursive: true });
-    const copiedFiles = [];
-    for (let i = 1; i <= contentConfig.count; i++) {
-        const sourceFileName = `content${i}-${contentConfig.instanceId}.json`;
-        const destFileName = `content${i}.json`;
-        const sourcePath = path.join(STAGING_DIR, sourceFileName);
-        const destPath = path.join(DEST_CONTENTS_DIR, destFileName);
-        if (!fs.existsSync(sourcePath)) { throw new Error(`Expected content file not found: ${sourcePath}`); }
-        fs.copyFileSync(sourcePath, destPath);
-        copiedFiles.push(destFileName);
-    }
-    return copiedFiles;
+/* ------------------------------------------------------------------ */
+/* 5.  CONTENT COPYING                                                */
+/* ------------------------------------------------------------------ */
+function copyContent({ count, instanceId }) {
+  fs.rmSync(DEST_CONTENTS_DIR, { recursive: true, force: true });
+  fs.mkdirSync(DEST_CONTENTS_DIR, { recursive: true });
+
+  const moved = [];
+  for (let i = 1; i <= count; i++) {
+    const src = path.join(STAGING_DIR, `content${i}-${instanceId}.json`);
+    const dst = path.join(DEST_CONTENTS_DIR, `content${i}.json`);
+    if (!fs.existsSync(src)) throw new Error(`Missing content file: ${src}`);
+    fs.copyFileSync(src, dst);
+    moved.push(`content${i}.json`);
+  }
+  dbg('content files copied', moved);
+  return moved;
 }
 
-// --- Main Logic ---
-function main() {
-    const buildKey = process.env.APP_CONFIG;
-    if (!buildKey) {
-        console.error('ERROR: APP_CONFIG environment variable not set.');
-        process.exit(1);
-    }
-    console.log(`--- Starting build for project key: ${buildKey} ---`);
+/* ------------------------------------------------------------------ */
+/* 6.  MAIN BUILD ---------------------------------------------------- */
+/* ------------------------------------------------------------------ */
+(function main () {
+  const key = process.env.APP_CONFIG;
+  if (!key) { console.error('ERROR: APP_CONFIG not set'); process.exit(1); }
 
-    try {
-        const projects = loadJsonFile(PROJECTS_CONFIG);
-        const projectConfig = projects[buildKey];
-        if (!projectConfig) { throw new Error(`Build key "${buildKey}" not found in ${PROJECTS_CONFIG}`); }
-        console.log(`Found configuration for project type: ${projectConfig.projectType}`);
+  log(`\n=== BUILD START for ${key} ===`);
+  if (DEBUG) log('(DEBUG_BUILD mode ON)');
 
-        const baseSchema = loadJsonFile(BASE_SCHEMA);
-        const typeSchemaPath = path.join(STAGING_DIR, `schema-type-${projectConfig.projectType}.json`);
-        const typeSchema = loadJsonFile(typeSchemaPath);
-        const instanceSchemaPath = path.join(STAGING_DIR, projectConfig.schemaInstanceFile);
-        const instanceSchema = loadJsonFile(instanceSchemaPath);
-        
-        let finalSchema;
+  try {
+    /* Load configs ----------------------------- */
+    const projects      = loadJson(PROJECTS_CONFIG);
+    const project       = projects[key];
+    if (!project) throw new Error(`No entry for “${key}” in projects.json`);
+    log(`Project type → ${project.projectType}`);
 
-        // --- VERIFICATION STEP ---
-        console.log(`Verifying buildMode from projects.json... Found: "${projectConfig.buildMode}"`);
+    const baseSchema    = loadJson(BASE_SCHEMA);
+    const typeSchema    = loadJson(path.join(STAGING_DIR, `schema-type-${project.projectType}.json`));
+    const instanceSchema= loadJson(path.join(STAGING_DIR, project.schemaInstanceFile));
 
-        if (projectConfig.buildMode === 'legacy') {
-            finalSchema = buildLegacySchema(baseSchema, typeSchema, instanceSchema);
-        } else {
-            console.log('Merging schemas using "modern" build recipe...');
-            finalSchema = deepMerge({}, baseSchema, typeSchema, instanceSchema);
-        }
+    yell('instanceSchema', instanceSchema);   // big dump only if DEBUG
 
-        const allThemesData = loadJsonFile(THEMES_SOURCE);
-        const filteredThemesData = filterAndConfigureThemes(allThemesData, instanceSchema);
+    /* Build final schema ----------------------- */
+    const finalSchema = project.buildMode === 'legacy'
+      ? buildLegacySchema(baseSchema, typeSchema, instanceSchema)
+      : deepMerge({}, baseSchema, typeSchema, instanceSchema);
 
-        console.log(`Writing final schema to ${DEST_SCHEMA}`);
-        fs.writeFileSync(DEST_SCHEMA, JSON.stringify(finalSchema, null, 2));
-        
-        console.log(`Writing final themes to ${DEST_THEMES}`);
-        fs.writeFileSync(DEST_THEMES, JSON.stringify(filteredThemesData, null, 2));
-        
-        const copiedFiles = copyContentFiles(projectConfig.content);
-        
-        console.log('\n--- Build successful! ---');
-        console.log(`Project '${finalSchema.projectName}' is now active in the 'public' directory.`);
-        
-    } catch (error) {
-        console.error('\n--- BUILD FAILED ---');
-        console.error(error.message);
-        process.exit(1);
-    }
-}
+    /* Themes ----------------------------------- */
+    const themes = tweakThemes(loadJson(THEMES_SOURCE), instanceSchema);
 
-main();
+    /* Write outputs ---------------------------- */
+    fs.writeFileSync(DEST_SCHEMA, JSON.stringify(finalSchema, null, 2));
+    fs.writeFileSync(DEST_THEMES, JSON.stringify(themes,      null, 2));
+    copyContent(project.content);
+
+    log('\n--- BUILD SUCCESSFUL ---');
+    log(`Active project → ${finalSchema.projectName}\n`);
+  } catch (err) {
+    console.error('\n--- BUILD FAILED ---');
+    console.error(err.message);
+    if (DEBUG) console.error(err.stack);
+    process.exit(1);
+  }
+})();
