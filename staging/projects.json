@@ -1,0 +1,20 @@
+{
+  "encyclopedia-jung": {
+    "projectType": "encyclopedia",
+    "buildMode": "modern",
+    "schemaInstanceFile": "schema-encyclopedia-jung.json",
+    "content": { "instanceId": "jung", "count": 6 }
+  },
+  "theorists-influentialThinkers": {
+    "projectType": "theorists",
+    "buildMode": "modern",
+    "schemaInstanceFile": "schema-theorists-influentialThinkers.json",
+    "content": { "instanceId": "influentialThinkers", "count": 5 }
+  },
+  "religiousBook-byg": {
+    "projectType": "religiousBook",
+    "buildMode": "legacy",
+    "schemaInstanceFile": "schema-religiousBook-byg.json",
+    "content": { "instanceId": "byg", "count": 3 }
+  }
+}

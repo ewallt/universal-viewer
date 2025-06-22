@@ -1,12 +1,36 @@
 {
-  "projectName": "Influential Thinkers",
-  "entryLabel": "Thinker",
-  "defaultTheme": "stately",
-  "themes": [
-    "cosmic",
-    "stately",
-    "forest"
-  ],
+  "pageStructure": {
+    "headerElements": [
+      {
+        "id": "main-title",
+        "class": "primary-title"
+      },
+      {
+        "id": "entry-info",
+        "class": "secondary-info"
+      },
+      {
+        "id": "meta-info",
+        "class": "tertiary-info"
+      },
+      {
+        "id": "nav-link",
+        "class": "navigation-link"
+      }
+    ]
+  },
+  "cssClassMap": {
+    "central-thesis": "central-thesis",
+    "warning-highlight": "warning-highlight",
+    "conclusion-box": "conclusion-box",
+    "scripture-ref": "scripture-ref",
+    "quote": "quote",
+    "concept-card": "concept-card",
+    "argument-point": "argument-point",
+    "ref-item": "ref-item",
+    "qa-item": "content-card",
+    "content-card": "content-card"
+  },
   "defaultSections": [
     "thesis",
     "arguments",
@@ -16,7 +40,10 @@
     "conclusion"
   ],
   "sectionLabels": {
+    "thesis": "Central Thesis",
     "arguments": "Supporting Arguments",
+    "concepts": "Key Concepts",
+    "conclusion": "Conclusion",
     "examples": "Examples",
     "qa": "Questions & Answers"
   },
@@ -24,22 +51,18 @@
     "thesis": "renderer-universal",
     "arguments": "renderer-universal",
     "concepts": "renderer-universal",
+    "conclusion": "renderer-universal",
     "examples": "renderer-universal",
-    "qa": "renderer-universal",
-    "conclusion": "renderer-universal"
+    "qa": "renderer-universal"
   },
-  "cssClassMap": {
-    "qa-item": "content-card",
-    "central-thesis": "central-thesis",
-    "warning-highlight": "warning-highlight",
-    "concept-card": "concept-card",
-    "argument-point": "argument-point",
-    "content-card": "content-card",
-    "conclusion-box": "conclusion-box",
-    "scripture-ref": "scripture-ref",
-    "quote": "quote",
-    "ref-item": "ref-item"
-  },
+  "projectName": "Influential Thinkers",
+  "entryLabel": "Thinker",
+  "defaultTheme": "stately",
+  "themes": [
+    "cosmic",
+    "stately",
+    "forest"
+  ],
   "rendererConfig": {
     "qa": {
       "itemClass": "qa-item",

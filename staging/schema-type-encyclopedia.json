@@ -1,32 +1,34 @@
 {
-  "projectName": "Behold Your God",
-  "entryLabel": "Chapter",
-  "defaultTheme": "cosmic",
-  "themes": [
-    "cosmic",
-    "stately",
-    "forest"
-  ],
+  "projectType": "encyclopedia",
+  "entryLabel": "Topic",
   "defaultSections": [
     "thesis",
     "arguments",
-    "concepts", 
-    "references",
+    "concepts",
     "conclusion"
   ],
+  "cssClassMap": {
+    "central-thesis": "content-card",
+    "warning-highlight": "highlight-card",
+    "conclusion-box": "content-card",
+    "scripture-ref": "highlight-card",
+    "quote": "text-card italic",
+    "concept-card": "list-card",
+    "argument-point": "content-card",
+    "ref-item": "text-card",
+    "content-card": "content-card"
+  },
   "sectionLabels": {
     "thesis": "Central Thesis",
     "arguments": "Main Arguments",
     "concepts": "Key Concepts",
-    "references": "References",
     "conclusion": "Conclusion"
   },
   "sectionRenderers": {
-    "thesis": "renderer-universal",
-    "arguments": "renderer-universal", 
-    "concepts": "renderer-universal",
-    "references": "renderer-universal",
-    "conclusion": "renderer-universal"
+    "thesis": "renderer-thesis",
+    "arguments": "renderer-points-list",
+    "concepts": "renderer-definitions-list",
+    "conclusion": "renderer-conclusion-list"
   },
   "cardConfiguration": [
     {
@@ -36,18 +38,13 @@
     },
     {
       "type": "normal",
-      "section": "arguments", 
+      "section": "arguments",
       "label": "Main Arguments"
     },
     {
       "type": "normal",
       "section": "concepts",
       "label": "Key Concepts"
-    },
-    {
-      "type": "flippable",
-      "section": "references",
-      "label": "References"
     },
     {
       "type": "normal",

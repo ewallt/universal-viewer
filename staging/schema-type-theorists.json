@@ -1,0 +1,55 @@
+{
+  "entryLabel": "Thinker",
+  "cssClassMap": {
+    "central-thesis": "central-thesis",
+    "warning-highlight": "warning-highlight",
+    "conclusion-box": "conclusion-box",
+    "scripture-ref": "scripture-ref",
+    "quote": "quote",
+    "concept-card": "concept-card",
+    "argument-point": "argument-point",
+    "ref-item": "ref-item",
+    "qa-item": "content-card",
+    "content-card": "content-card"
+  },
+  "defaultSections": [
+    "thesis",
+    "arguments",
+    "concepts",
+    "examples",
+    "qa",
+    "conclusion"
+  ],
+  "sectionLabels": {
+    "thesis": "Central Thesis",
+    "arguments": "Supporting Arguments",
+    "concepts": "Key Concepts",
+    "conclusion": "Conclusion",
+    "examples": "Examples",
+    "qa": "Questions & Answers"
+  },
+  "sectionRenderers": {
+    "thesis": "renderer-universal",
+    "arguments": "renderer-universal",
+    "concepts": "renderer-universal",
+    "conclusion": "renderer-universal",
+    "examples": "renderer-universal",
+    "qa": "renderer-universal"
+  },
+  "rendererConfig": {
+    "qa": {
+      "itemClass": "qa-item",
+      "questionProperty": "question",
+      "answerProperty": "answer",
+      "detailCardId": "qaDetailCard"
+    }
+  },
+  "cardConfiguration": [
+    { "type": "normal", "section": "thesis", "label": "Central Thesis" },
+    { "type": "normal", "section": "arguments", "label": "Supporting Arguments" },
+    { "type": "normal", "section": "concepts", "label": "Key Concepts" },
+    { "type": "normal", "section": "examples", "label": "Examples" },
+    { "type": "flippable", "section": "qa", "label": "Questions & Answers" },
+    { "type": "normal", "section": "conclusion", "label": "Conclusion" }
+  ]
+}

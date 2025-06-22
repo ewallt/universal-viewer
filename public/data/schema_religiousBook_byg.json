@@ -1,0 +1,88 @@
+{
+  "pageStructure": {
+    "headerElements": [
+      {
+        "id": "main-title",
+        "class": "primary-title"
+      },
+      {
+        "id": "entry-info",
+        "class": "secondary-info"
+      },
+      {
+        "id": "meta-info",
+        "class": "tertiary-info"
+      },
+      {
+        "id": "nav-link",
+        "class": "navigation-link"
+      }
+    ]
+  },
+  "cssClassMap": {
+    "central-thesis": "content-card",
+    "warning-highlight": "highlight-card",
+    "conclusion-box": "content-card",
+    "scripture-ref": "highlight-card",
+    "quote": "text-card italic",
+    "concept-card": "list-card",
+    "argument-point": "content-card",
+    "ref-item": "text-card"
+  },
+  "defaultSections": [
+    "thesis",
+    "arguments",
+    "concepts",
+    "references",
+    "conclusion"
+  ],
+  "sectionLabels": {
+    "thesis": "Central Thesis",
+    "arguments": "Main Arguments",
+    "concepts": "Key Concepts",
+    "conclusion": "Conclusion",
+    "references": "References"
+  },
+  "sectionRenderers": {
+    "thesis": "renderer-universal",
+    "arguments": "renderer-universal",
+    "concepts": "renderer-universal",
+    "conclusion": "renderer-universal",
+    "references": "renderer-universal"
+  },
+  "projectName": "Behold Your God",
+  "entryLabel": "Chapter",
+  "defaultTheme": "cosmic",
+  "themes": [
+    "cosmic",
+    "stately",
+    "forest"
+  ],
+  "cardConfiguration": [
+    {
+      "type": "normal",
+      "section": "thesis",
+      "label": "Central Thesis"
+    },
+    {
+      "type": "normal",
+      "section": "arguments",
+      "label": "Main Arguments"
+    },
+    {
+      "type": "normal",
+      "section": "concepts",
+      "label": "Key Concepts"
+    },
+    {
+      "type": "flippable",
+      "section": "references",
+      "label": "References"
+    },
+    {
+      "type": "normal",
+      "section": "conclusion",
+      "label": "Conclusion"
+    }
+  ]
+}

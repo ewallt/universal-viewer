@@ -4,161 +4,161 @@ const path = require('path');
 // --- Configuration ---
 const STAGING_DIR = 'staging';
 const PUBLIC_DIR = 'public';
+const PROJECTS_CONFIG = path.join(STAGING_DIR, 'projects.json');
 const BASE_SCHEMA = path.join(STAGING_DIR, 'base-schema.json');
 const THEMES_SOURCE = path.join(STAGING_DIR, 'themes.json');
 const DEST_SCHEMA = path.join(PUBLIC_DIR, 'data', 'schema.json');
 const DEST_THEMES = path.join(PUBLIC_DIR, 'data', 'themes.json');
 const DEST_CONTENTS_DIR = path.join(PUBLIC_DIR, 'data', 'contents');
 
-// --- Helper Function ---
-function mergeSchemas(baseSchema, projectSchema) {
-    const merged = JSON.parse(JSON.stringify(baseSchema)); // Deep clone base
-    
-    // Merge top-level properties
-    Object.keys(projectSchema).forEach(key => {
-        if (typeof projectSchema[key] === 'object' && !Array.isArray(projectSchema[key])) {
-            // Deep merge objects (like sectionLabels, sectionRenderers)
-            merged[key] = { ...merged[key], ...projectSchema[key] };
-        } else {
-            // Direct override for primitives and arrays
-            merged[key] = projectSchema[key];
+// --- Helper Functions ---
+
+function deepMerge(target, ...sources) {
+    for (const source of sources) {
+        if (!source) continue;
+        for (const key in source) {
+            if (source.hasOwnProperty(key)) {
+                const sourceVal = source[key];
+                const targetVal = target[key];
+                if (sourceVal instanceof Object && !Array.isArray(sourceVal)) {
+                    target[key] = targetVal instanceof Object ? targetVal : {};
+                    deepMerge(target[key], sourceVal);
+                } else {
+                    target[key] = sourceVal;
+                }
+            }
         }
-    });
-    
-    return merged;
+    }
+    return target;
 }
 
-// --- Clear and copy content files ---
-function copyContentFiles(project) {
-    // Clear existing content files
-    const existingFiles = fs.readdirSync(DEST_CONTENTS_DIR);
-    existingFiles.forEach(file => {
-        fs.unlinkSync(path.join(DEST_CONTENTS_DIR, file));
-    });
-    console.log(`Cleared ${existingFiles.length} existing content files`);
-    
-    const contentFiles = [];
-    
-    // Find all content files for this project
-    const stagingFiles = fs.readdirSync(STAGING_DIR);
-    const projectContentFiles = stagingFiles.filter(file => 
-        file.startsWith(`content`) && file.endsWith(`-${project}.json`)
-    );
-    
-    console.log(`Found ${projectContentFiles.length} content files for project: ${project}`);
-    
-    projectContentFiles.forEach(sourceFile => {
-        // Extract content number from filename (e.g., content1-byg.json -> content1.json)
-        const contentMatch = sourceFile.match(/^(content\d+)-.*\.json$/);
-        if (contentMatch) {
-            const destFileName = `${contentMatch[1]}.json`;
-            const sourcePath = path.join(STAGING_DIR, sourceFile);
-            const destPath = path.join(DEST_CONTENTS_DIR, destFileName);
-            
-            console.log(`Copying ${sourcePath} -> ${destPath}`);
-            fs.copyFileSync(sourcePath, destPath);
-            contentFiles.push(destFileName);
-        }
-    });
-    
-    return contentFiles;
+function loadJsonFile(filePath) {
+    if (!fs.existsSync(filePath)) {
+        throw new Error(`Required file not found: ${filePath}`);
+    }
+    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
 }
 
-// --- Filter themes based on project configuration ---
-function filterThemes(themesData, projectThemes) {
-    // Deep clone the themes data
-    const filteredThemesData = JSON.parse(JSON.stringify(themesData));
-    
-    // Filter the themes object to only include project-specified themes
-    const filteredThemes = {};
-    projectThemes.forEach(themeId => {
-        if (themesData.themes[themeId]) {
-            filteredThemes[themeId] = themesData.themes[themeId];
-        }
+function buildLegacySchema(baseSchema, typeSchema, instanceSchema) {
+    console.log('Constructing schema using "legacy" build recipe...');
+    const legacySchema = {};
+    const legacyRenderersMap = {
+        thesis: "renderer-thesis",
+        arguments: "renderer-points-list",
+        concepts: "renderer-definitions-list",
+        conclusion: "renderer-conclusion-list",
+        references: "renderer-list-detail",
+        examples: "renderer-list-detail",
+        qa: "renderer-qa"
+    };
+    legacySchema.pageStructure = baseSchema.pageStructure;
+    legacySchema.cssClassMap = baseSchema.cssClassMap;
+    legacySchema.projectName = instanceSchema.projectName;
+    legacySchema.defaultTheme = instanceSchema.defaultTheme;
+    legacySchema.themes = instanceSchema.themes;
+    legacySchema.entryLabel = typeSchema.entryLabel;
+    legacySchema.defaultSections = typeSchema.defaultSections;
+    if (typeSchema.rendererConfig) {
+        legacySchema.rendererConfig = typeSchema.rendererConfig;
+    }
+    if (!typeSchema.cardConfiguration) throw new Error("Missing ingredient: 'cardConfiguration' in type schema to build 'sectionLabels'.");
+    legacySchema.sectionLabels = {};
+    typeSchema.cardConfiguration.forEach(card => {
+        legacySchema.sectionLabels[card.section] = card.label;
     });
-    filteredThemesData.themes = filteredThemes;
-    
-    // Filter the themeList in meta to only include project-specified themes
-    filteredThemesData.meta.themeList = themesData.meta.themeList.filter(theme => 
-        projectThemes.includes(theme.id)
-    );
-    
-    // Update theme count
-    filteredThemesData.meta.themeCount = projectThemes.length;
-    
-    return filteredThemesData;
+    if (!typeSchema.defaultSections) throw new Error("Missing ingredient: 'defaultSections' in type schema to build 'sectionRenderers'.");
+    legacySchema.sectionRenderers = {};
+    typeSchema.defaultSections.forEach(section => {
+        const renderer = legacyRenderersMap[section];
+        if (!renderer) throw new Error(`Missing knowledge: No legacy renderer for section '${section}' in build script map.`);
+        legacySchema.sectionRenderers[section] = renderer;
+    });
+    return legacySchema;
+}
+
+function filterAndConfigureThemes(allThemesData, instanceSchema) {
+    const projectThemeIds = instanceSchema.themes || [];
+    const defaultTheme = instanceSchema.defaultTheme || 'cosmic';
+    const filteredData = JSON.parse(JSON.stringify(allThemesData));
+    const availableThemes = {};
+    projectThemeIds.forEach(id => {
+        if (filteredData.themes[id]) { availableThemes[id] = filteredData.themes[id]; }
+    });
+    filteredData.themes = availableThemes;
+    filteredData.meta.themeList = filteredData.meta.themeList.filter(theme => projectThemeIds.includes(theme.id));
+    filteredData.meta.themeCount = filteredData.meta.themeList.length;
+    filteredData.meta.defaultTheme = defaultTheme;
+    return filteredData;
+}
+
+function copyContentFiles(contentConfig) {
+    fs.rmSync(DEST_CONTENTS_DIR, { recursive: true, force: true });
+    fs.mkdirSync(DEST_CONTENTS_DIR, { recursive: true });
+    const copiedFiles = [];
+    for (let i = 1; i <= contentConfig.count; i++) {
+        const sourceFileName = `content${i}-${contentConfig.instanceId}.json`;
+        const destFileName = `content${i}.json`;
+        const sourcePath = path.join(STAGING_DIR, sourceFileName);
+        const destPath = path.join(DEST_CONTENTS_DIR, destFileName);
+        if (!fs.existsSync(sourcePath)) { throw new Error(`Expected content file not found: ${sourcePath}`); }
+        fs.copyFileSync(sourcePath, destPath);
+        copiedFiles.push(destFileName);
+    }
+    return copiedFiles;
 }
 
 // --- Main Logic ---
 function main() {
-    // 1. Read the environment variable
-    const project = process.env.APP_CONFIG;
-    console.log(`--- Starting build for project: ${project} ---`);
-    
-    // 2. Validate the input - FIXED: Added quotes around 'thinkers-test'
-    if (!project || !['thinkers', 'byg', 'jung', 'thinkers-test'].includes(project)) {
-        console.error('ERROR: APP_CONFIG environment variable not set or invalid.');
-        console.error('Set it to "thinkers", "byg", "jung", or "thinkers-test".');
+    const buildKey = process.env.APP_CONFIG;
+    if (!buildKey) {
+        console.error('ERROR: APP_CONFIG environment variable not set.');
         process.exit(1);
     }
-    
+    console.log(`--- Starting build for project key: ${buildKey} ---`);
+
     try {
-        // 3. Define source paths based on the project
-        const projectSchema = path.join(STAGING_DIR, `schema-${project}.json`);
+        const projects = loadJsonFile(PROJECTS_CONFIG);
+        const projectConfig = projects[buildKey];
+        if (!projectConfig) { throw new Error(`Build key "${buildKey}" not found in ${PROJECTS_CONFIG}`); }
+        console.log(`Found configuration for project type: ${projectConfig.projectType}`);
+
+        const baseSchema = loadJsonFile(BASE_SCHEMA);
+        const typeSchemaPath = path.join(STAGING_DIR, `schema-type-${projectConfig.projectType}.json`);
+        const typeSchema = loadJsonFile(typeSchemaPath);
+        const instanceSchemaPath = path.join(STAGING_DIR, projectConfig.schemaInstanceFile);
+        const instanceSchema = loadJsonFile(instanceSchemaPath);
         
-        // 4. Load and merge schemas
-        console.log(`Loading base schema from ${BASE_SCHEMA}`);
-        const baseSchemaData = JSON.parse(fs.readFileSync(BASE_SCHEMA, 'utf8'));
-        
-        console.log(`Loading project schema from ${projectSchema}`);
-        const projectSchemaData = JSON.parse(fs.readFileSync(projectSchema, 'utf8'));
-        
-        console.log('Merging schemas...');
-        const mergedSchema = mergeSchemas(baseSchemaData, projectSchemaData);
-        
-        // 5. Handle themes.json with project-specific filtering and default
-        console.log(`Loading themes from ${THEMES_SOURCE}`);
-        const themesData = JSON.parse(fs.readFileSync(THEMES_SOURCE, 'utf8'));
-        
-        // Filter themes based on project configuration
-        const projectThemes = projectSchemaData.themes || ['cosmic', 'stately', 'forest']; // Fallback to all themes
-        console.log(`Filtering themes to: ${projectThemes.join(', ')}`);
-        const filteredThemesData = filterThemes(themesData, projectThemes);
-        
-        // Update themes.json with project's default theme
-        if (projectSchemaData.defaultTheme) {
-            console.log(`Setting default theme to: ${projectSchemaData.defaultTheme}`);
-            filteredThemesData.meta.defaultTheme = projectSchemaData.defaultTheme;
+        let finalSchema;
+
+        // --- VERIFICATION STEP ---
+        console.log(`Verifying buildMode from projects.json... Found: "${projectConfig.buildMode}"`);
+
+        if (projectConfig.buildMode === 'legacy') {
+            finalSchema = buildLegacySchema(baseSchema, typeSchema, instanceSchema);
+        } else {
+            console.log('Merging schemas using "modern" build recipe...');
+            finalSchema = deepMerge({}, baseSchema, typeSchema, instanceSchema);
         }
+
+        const allThemesData = loadJsonFile(THEMES_SOURCE);
+        const filteredThemesData = filterAndConfigureThemes(allThemesData, instanceSchema);
+
+        console.log(`Writing final schema to ${DEST_SCHEMA}`);
+        fs.writeFileSync(DEST_SCHEMA, JSON.stringify(finalSchema, null, 2));
         
-        // 6. Ensure destination directories exist
-        fs.mkdirSync(DEST_CONTENTS_DIR, { recursive: true });
-        
-        // 7. Write schema and themes
-        console.log(`Writing merged schema to ${DEST_SCHEMA}`);
-        fs.writeFileSync(DEST_SCHEMA, JSON.stringify(mergedSchema, null, 2));
-        
-        console.log(`Writing filtered themes to ${DEST_THEMES}`);
+        console.log(`Writing final themes to ${DEST_THEMES}`);
         fs.writeFileSync(DEST_THEMES, JSON.stringify(filteredThemesData, null, 2));
         
-        // 8. Clear and copy all content files dynamically
-        const copiedFiles = copyContentFiles(project);
+        const copiedFiles = copyContentFiles(projectConfig.content);
         
         console.log('\n--- Build successful! ---');
-        console.log(`Project '${project}' is now active in the 'public' directory.`);
-        console.log('Generated files:');
-        console.log(`- Project: ${mergedSchema.projectName}`);
-        console.log(`- Default theme: ${filteredThemesData.meta.defaultTheme}`);
-        console.log(`- Available themes: ${filteredThemesData.meta.themeList.map(t => t.name).join(', ')}`);
-        console.log(`- Sections: ${mergedSchema.defaultSections.join(', ')}`);
-        console.log(`- Content files: ${copiedFiles.join(', ')}`);
+        console.log(`Project '${finalSchema.projectName}' is now active in the 'public' directory.`);
         
     } catch (error) {
         console.error('\n--- BUILD FAILED ---');
-        console.error(error);
+        console.error(error.message);
         process.exit(1);
     }
 }
 
-// Run the main function
 main();
