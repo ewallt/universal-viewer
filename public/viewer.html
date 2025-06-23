@@ -371,10 +371,18 @@
     document.addEventListener('DOMContentLoaded',()=>{
       init();
       document.body.addEventListener('click', async e=>{
-        const t=e.target.closest('.tab-button');    if(t)return showTab(t.dataset.tab,t);
-        const qa=e.target.closest('.clickable-qa'); if(qa)return showQA(qa.dataset.qaId);
-        const cqa=e.target.closest('.close-qa-btn'); if(cqa)return hideQA();
-        const th=e.target.closest('.theme-btn');    
+        const t   = e.target.closest('.tab-button');              if (t)  return showTab(t.dataset.tab, t);
+
+        const h   = e.target.closest('.clickable-hierarchical');  if (h)  return showHierarchical(h.dataset.hierarchicalId, h.dataset.section);
+        const ch  = e.target.closest('.close-hierarchical-btn');  if (ch) return hideHierarchical(ch.dataset.section);
+        
+        const r   = e.target.closest('.clickable-ref');           if (r)  return showReference(r.dataset.refId);
+        const cr  = e.target.closest('.close-ref-btn');           if (cr) return hideReference();
+
+        const qa  = e.target.closest('.clickable-qa');            if (qa) return showQA(qa.dataset.qaId);
+        const cqa = e.target.closest('.close-qa-btn');            if (cqa) return hideQA();
+        
+        const th  = e.target.closest('.theme-btn');    
         if(th){
           const selectedTheme = th.dataset.theme;
           await window.loadTheme(selectedTheme);
