@@ -160,10 +160,14 @@ function copyContent({ count, instanceId }) {
     /* Themes ----------------------------------- */
     const themes = tweakThemes(loadJson(THEMES_SOURCE), instanceSchema);
 
+
+
     /* Write outputs ---------------------------- */
     fs.writeFileSync(DEST_SCHEMA, JSON.stringify(finalSchema, null, 2));
     fs.writeFileSync(DEST_THEMES, JSON.stringify(themes,      null, 2));
     copyContent(project.content);
+    project.projectType === 'theorists' && require('./scripts/flatten-influentialThinkers');
+
 
     log('\n--- BUILD SUCCESSFUL ---');
     log(`Active project → ${finalSchema.projectName}\n`);
