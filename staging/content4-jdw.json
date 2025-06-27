@@ -1,0 +1,39 @@
+{
+  "title": "IV. Dialogue, Critique & Trajectories",
+  "heroImage": "https://cdn.midjourney.com/61a1b576-4736-4bce-ae03-59a9b062b1b8/0_1.png",
+  "convergences_with_other_nonviolent_voices": {
+    "title": "Convergences with Other Nonviolent Voices",
+    "items": [
+      {
+        "id": "greg_boyd_warfare_worldview",
+        "title": "Greg Boyd’s warfare worldview",
+        "detail": "\n<br/>\nBoyd’s “Trinitarian Warfare” model echoes Weaver by framing history as a cosmic conflict in which God battles malevolent powers nonviolently. Both theologians reject divine violence and emphasize Jesus’ cruciform victory as the decisive blow against Satanic structures. Boyd’s open-theism nuances add a dynamic element, suggesting God adapts strategy in real time, yet the shared conviction remains: love is the only force capable of defeating evil."
+      },
+      {
+        "id": "rene_girard_scapegoat_theory",
+        "title": "René Girard’s scapegoat theory",
+        "detail": "\n<br/>\nGirard’s anthropology illuminates Weaver’s reading of the cross as exposure of the scapegoat mechanism. By unveiling how societies forge unity through collective violence, Girard supplies a cultural lens for Weaver’s theological claim that Jesus disarms the powers by absorbing, then unmasking, their murderous logic. This convergence strengthens the argument that true atonement is revelatory and liberative rather than retributive."
+      }
+    ]
+  },
+  "points_of_tension_with_traditionalists": {
+    "title": "Points of Tension with Traditionalists",
+    "items": [
+      {
+        "id": "reconciling_divine_justice_biblical_wrath_motifs",
+        "title": "Reconciling divine justice & biblical wrath motifs",
+        "detail": "\n<br/>\nCritics argue that Weaver’s nonviolent paradigm underplays scriptural texts depicting God’s wrath and sacrificial system. They question whether liberation alone satisfies the Bible’s insistence on judgment and moral accountability. Weaver responds by interpreting wrath as the natural consequence of resisting shalom rather than an act of divine retribution, yet the dialogue remains lively and unresolved."
+      }
+    ]
+  },
+  "ongoing_research_frontiers": {
+    "title": "Ongoing Research Frontiers",
+    "items": [
+      {
+        "id": "trauma_theology_restorative_justice_applications",
+        "title": "Trauma theology & restorative-justice applications",
+        "detail": "\n<br/>\nEmerging scholarship explores how Weaver’s Narrative Christus Victor can inform trauma-sensitive pastoral care and legal systems bent toward restoration. Integrating insights from psychology, practitioners craft liturgies that honor survivors’ voices while rejecting punitive paradigms. In criminal justice, theologians experiment with victim-offender mediation rooted in the cross’s logic of reconciliation, testing whether a nonviolent atonement can reshape societal responses to harm."
+      }
+    ]
+  }
+}

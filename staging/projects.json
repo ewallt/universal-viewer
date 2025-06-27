@@ -1,20 +1,90 @@
 {
-  "encyclopedia-jung": {
-    "projectType": "encyclopedia",
-    "buildMode": "modern",
-    "schemaInstanceFile": "schema-encyclopedia-jung.json",
-    "content": { "instanceId": "jung", "count": 6 }
-  },
-  "theorists-influentialThinkers": {
-    "projectType": "theorists",
-    "buildMode": "modern",
-    "schemaInstanceFile": "schema-theorists-influentialThinkers.json",
-    "content": { "instanceId": "influentialThinkers", "count": 5 }
-  },
-  "religiousBook-byg": {
-    "projectType": "religiousBook",
-    "buildMode": "legacy",
-    "schemaInstanceFile": "schema-religiousBook-byg.json",
-    "content": { "instanceId": "byg", "count": 3 }
-  }
+    "encyclopedia-jung": {
+        "projectType": "encyclopedia",
+        "buildMode": "modern",
+        "schemaInstanceFile": "schema-encyclopedia-jung.json",
+        "content": {
+            "instanceId": "jung",
+            "count": 6
+        }
+    },
+    "encyclopedia-hays": {
+        "projectType": "encyclopedia",
+        "buildMode": "modern",
+        "schemaInstanceFile": "schema-encyclopedia-hays.json",
+        "content": {
+            "instanceId": "hays",
+            "count": 3
+        }
+    },
+    "encyclopedia-airWar": {
+        "projectType": "encyclopedia",
+        "buildMode": "modern",
+        "schemaInstanceFile": "schema-encyclopedia-airWar.json",
+        "content": {
+            "instanceId": "airWar",
+            "count": 4
+        }
+    },
+    "encyclopedia-jdw": {
+        "projectType": "encyclopedia",
+        "buildMode": "modern",
+        "schemaInstanceFile": "schema-encyclopedia-jdw.json",
+        "content": {
+            "instanceId": "jdw",
+            "count": 4
+        }
+    },
+    "encyclopedia-were": {
+
+        "projectType": "encyclopedia",
+
+        "buildMode": "modern",
+
+        "schemaInstanceFile": "schema-encyclopedia-were.json",
+
+        "content": {
+
+            "instanceId": "were",
+
+            "count": 5
+
+        }
+
+    },
+    "encyclopedia-agm": {
+
+        "projectType": "encyclopedia",
+
+        "buildMode": "modern",
+
+        "schemaInstanceFile": "schema-encyclopedia-agm.json",
+
+        "content": {
+
+            "instanceId": "agm",
+
+            "count": 4
+
+        }
+
+    },
+    "theorists-influentialThinkers": {
+        "projectType": "theorists",
+        "buildMode": "modern",
+        "schemaInstanceFile": "schema-theorists-influentialThinkers.json",
+        "content": {
+            "instanceId": "influentialThinkers",
+            "count": 5
+        }
+    },
+    "religiousBook-byg": {
+        "projectType": "religiousBook",
+        "buildMode": "legacy",
+        "schemaInstanceFile": "schema-religiousBook-byg.json",
+        "content": {
+            "instanceId": "byg",
+            "count": 3
+        }
+    }
 }
