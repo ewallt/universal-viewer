@@ -1,0 +1,37 @@
+/* ========================================
+   DESERT-DUNE THEME (themes/desert-dune.css)
+   ======================================== */
+
+:root {
+  /* ─── Typography & basic tone ───────────────────────────── */
+  --text-primary: #2f2c24;          /* deep umber */
+  --text-secondary: #b08a55;        /* warm ochre */
+
+  /* ─── Accent palette ────────────────────────────────────── */
+  --accent-primary: #c07b28;        /* sunset gold */
+  --accent-secondary: #d4984a;      /* dune highlight */
+
+  /* ─── Backgrounds & surfaces ────────────────────────────── */
+  --background-gradient: linear-gradient(
+    135deg,
+    #fdfaf3 0%,   /* sun-bleached sand */
+    #f4e4c5 50%,  /* soft dune top */
+    #e0c097 100%  /* warm sandstone */
+  );
+
+  --surface-color: rgba(255, 248, 230, 0.6);      /* glassy dune overlay */
+  --surface-color-secondary: rgba(250, 235, 210, 0.5);
+
+  /* ─── Borders & outlines ───────────────────────────────── */
+  --border-color: rgba(0, 0, 0, 0.15);
+  --border-color-accent: rgba(192, 123, 40, 0.4);
+
+  /* ─── UI flourishes ────────────────────────────────────── */
+  --progress-bar-gradient: linear-gradient(90deg, #c07b28, #d4984a);
+
+  --book-title-text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  --header-border-bottom: 1px solid var(--border-color);
+
+  --component-backdrop-filter: blur(12px);
+  --component-box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+}

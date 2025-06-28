@@ -69,6 +69,23 @@
         }
 
     },
+    "encyclopedia-moltmann": {
+
+        "projectType": "encyclopedia",
+
+        "buildMode": "modern",
+
+        "schemaInstanceFile": "schema-encyclopedia-moltmann.json",
+
+        "content": {
+
+            "instanceId": "moltmann",
+
+            "count": 2
+
+        }
+
+    },
     "theorists-influentialThinkers": {
         "projectType": "theorists",
         "buildMode": "modern",

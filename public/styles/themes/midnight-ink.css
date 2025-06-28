@@ -1,0 +1,37 @@
+/* ========================================
+   MIDNIGHT-INK THEME (themes/midnight-ink.css)
+   ======================================== */
+
+:root {
+  /* ─── Typography & basic tone ───────────────────────────── */
+  --text-primary: #e5e7eb;          /* light slate */
+  --text-secondary: #9fb3c8;        /* muted steel-blue */
+
+  /* ─── Accent palette ────────────────────────────────────── */
+  --accent-primary: #4dabf7;        /* electric blue */
+  --accent-secondary: #2490e6;      /* deep azure */
+
+  /* ─── Backgrounds & surfaces ────────────────────────────── */
+  --background-gradient: linear-gradient(
+    135deg,
+    #0e141d 0%,   /* near-black */
+    #16202e 50%,  /* deep navy */
+    #1f2b3f 100%  /* midnight slate */
+  );
+
+  --surface-color: rgba(30, 38, 50, 0.6);      /* translucent charcoal */
+  --surface-color-secondary: rgba(25, 32, 43, 0.5);
+
+  /* ─── Borders & outlines ───────────────────────────────── */
+  --border-color: rgba(255, 255, 255, 0.15);
+  --border-color-accent: rgba(77, 171, 247, 0.35);
+
+  /* ─── UI flourishes ────────────────────────────────────── */
+  --progress-bar-gradient: linear-gradient(90deg, #2490e6, #4dabf7);
+
+  --book-title-text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
+  --header-border-bottom: 1px solid var(--border-color);
+
+  --component-backdrop-filter: blur(18px);
+  --component-box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+}

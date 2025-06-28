@@ -31,23 +31,25 @@
             const themesData = await themesResponse.json();
             defaultTheme = savedTheme || themesData.meta?.defaultTheme || 'cosmic';
             
-            // Populate theme picker
+            // ── Populate theme picker (data-driven) ───────────────────────────────
             const picker = document.getElementById('theme-picker');
-            if (picker && themesData.meta.themeList) {
-              const themeStyles = {
-                cosmic: 'linear-gradient(135deg,#1a1a3a,#64b5f6)',
-                stately: '#ffffff',
-                forest: 'linear-gradient(135deg,#2a4c3a,#58cdaa)'
-              };
-              
-              themesData.meta.themeList.forEach(theme => {
-                const btn = document.createElement('button');
-                btn.className = 'theme-btn';
-                btn.dataset.theme = theme.id;
-                btn.title = theme.name;
-                btn.style.cssText = `width:40px;height:40px;background:${themeStyles[theme.id] || '#ccc'};`;
-                picker.appendChild(btn);
-              });
+            if (picker && themesData.meta?.themeList) {
+                themesData.meta.themeList.forEach(({ id, name }) => {
+                    const btn = document.createElement('button');
+                    btn.className       = 'theme-btn';
+                    btn.dataset.theme   = id;        // used later by your click handler
+                    btn.title           = name;
+
+                    // Choose a sample colour/gradient from the palette object.
+                    // Falls back to grey if neither value exists.
+                    const pal           = themesData.themes?.[id] || {};
+                    btn.style.cssText   = `
+                      width:40px;height:40px;border:none;border-radius:50%;
+                      background:${pal['--background-gradient'] || pal['--accent-primary'] || '#ccc'};
+                    `;
+
+                    picker.appendChild(btn);
+                });
             }
           }
         } catch (e) {

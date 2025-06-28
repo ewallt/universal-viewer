@@ -18,41 +18,43 @@
     }
 
     async function initializeThemes() {
-      try {
-        // Fetch themes.json for project configuration and dynamic theme picker
-        const r = await fetch('data/themes.json');
-        if (!r.ok) throw new Error('themes.json not found');
-        const j = await r.json();
+    try {
+      /* fetch merged themes.json written by build.js */
+      const r = await fetch('data/themes.json');
+      if (!r.ok) throw new Error('themes.json not found');
+      const j = await r.json();          // { meta:{…}, themes:{…} }
 
-        // Apply saved theme or project default
-        const savedTheme = localStorage.getItem('userPreferredTheme');
-        const defaultTheme = savedTheme || j.meta?.defaultTheme;
-        await loadTheme(defaultTheme);
+      /* apply saved theme or project default */
+      const savedTheme   = localStorage.getItem('userPreferredTheme');
+      const defaultTheme = savedTheme || j.meta?.defaultTheme || j.meta.themeList[0]?.id;
+      await loadTheme(defaultTheme);
 
-        // Populate theme picker dynamically
-        const picker = document.getElementById('theme-picker');
-        if (picker && j.meta.themeList) {
-          const themeStyles = {
-            cosmic: 'linear-gradient(135deg,#1a1a3a,#64b5f6)',
-            stately: '#ffffff',
-            forest: 'linear-gradient(135deg,#2a4c3a,#58cdaa)'
-          };
-          
-          j.meta.themeList.forEach(theme => {
-            const btn = document.createElement('button');
-            btn.className = 'theme-btn';
-            btn.dataset.theme = theme.id;
-            btn.title = theme.name;
-            btn.style.cssText = `width:40px;height:40px;background:${themeStyles[theme.id] || '#ccc'};`;
-            picker.appendChild(btn);
-          });
-        }
-      } catch (e) {
-        console.error('Theme initialization failed', e);
-        // Fallback to cosmic theme
-        await loadTheme('cosmic');
+      /* build the theme-picker buttons */
+      const picker = document.getElementById('theme-picker');
+      if (picker && j.meta?.themeList) {
+        j.meta.themeList.forEach(({ id, name }) => {
+          const pal = j.themes?.[id] || {};
+          /* pick a nice preview colour: gradient ▸ accent ▸ grey */
+          const swatch =
+              pal['--background-gradient'] ||
+              pal['--accent-primary']      ||
+              '#ccc';
+
+          const btn = document.createElement('button');
+          btn.className     = 'theme-btn';
+          btn.dataset.theme = id;
+          btn.title         = name;
+          btn.style.cssText =
+            'width:40px;height:40px;border:none;border-radius:50%;' +
+            `background:${swatch};`;
+          picker.appendChild(btn);
+        });
       }
+    } catch (e) {
+      console.error('Theme initialization failed', e);
+      await loadTheme('cosmic');   // safe fallback
     }
+  }
 
     // Initialize themes when DOM is ready
     if (document.readyState === 'loading') {
