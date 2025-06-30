@@ -123,29 +123,160 @@
     let referenceData={};
     let qaData={};
     let hierarchicalData={};
+    let projectName = '';
 
-    /* ------------ helpers ------------ */
-    const FAV_KEY = 'viewer_favorites';
+/* ------------ Enhanced favorites helpers ------------ */
+const FAV_KEY = 'viewer_favorites';
 
-    function getFavs() {
-      return JSON.parse(localStorage.getItem(FAV_KEY) || '[]');
+function getFavs() {
+  return JSON.parse(localStorage.getItem(FAV_KEY) || '[]');
+}
+
+function saveFavs(arr) {
+  localStorage.setItem(FAV_KEY, JSON.stringify(arr, null, 2));
+}
+
+function isFav(id) {
+  const favs = getFavs();
+  return favs.some(fav => fav.path && fav.path[fav.path.length - 1] === id);
+}
+
+function cleanText(htmlText) {
+  if (!htmlText) return '';
+  
+  // Remove HTML tags and normalize whitespace
+  return htmlText
+    .replace(/<br\s*\/?>/gi, ' ')  // Replace <br> tags with spaces
+    .replace(/<[^>]*>/g, '')       // Remove all HTML tags
+    .replace(/\s+/g, ' ')          // Collapse multiple whitespace to single space
+    .trim();                       // Remove leading/trailing whitespace
+}
+
+function extractContextFromDOM(favButton) {
+  // Get the active content panel to determine current section
+  const activePanel = document.querySelector('.content-panel.active');
+  const sectionKey = activePanel ? activePanel.id : '';
+  
+  // Get section title from the section title element
+  const sectionTitleEl = activePanel ? activePanel.querySelector('.section-title') : null;
+  const sectionTitle = sectionTitleEl ? sectionTitleEl.textContent.trim() : '';
+  
+  // Get project name from global variable
+  const project = projectName;
+  
+  // Get page title - for encyclopedia projects, it's the entry title
+  // For other projects, parse from secondary-info 
+  let pageTitle = '';
+  const entryInfoEl = document.querySelector('.secondary-info');
+  const primaryTitleEl = document.querySelector('.primary-title');
+  
+  if (primaryTitleEl) {
+    // For encyclopedia projects, the primary title contains the page title
+    pageTitle = primaryTitleEl.textContent.trim();
+  } else if (entryInfoEl) {
+    // For other projects, parse "Entry X: Title" format
+    const entryText = entryInfoEl.textContent.trim();
+    const match = entryText.match(/Entry \d+:\s*(.+)/);
+    pageTitle = match ? match[1] : entryText;
+  }
+  
+  // Get item title and text from the card containing the fav button
+  const card = favButton.closest('.content-card, .central-thesis, .warning-highlight, .concept-card, .argument-point, .conclusion-box, .qa-item');
+  
+  let title = '';
+  let text = '';
+  
+  if (card) {
+    // Try to find title in h3 element
+    const titleEl = card.querySelector('h3');
+    if (titleEl) {
+      title = titleEl.textContent.trim();
     }
-    function saveFavs(arr) {
-      localStorage.setItem(FAV_KEY, JSON.stringify(arr));
+    
+    // For different card types, extract text differently
+    if (card.classList.contains('qa-item')) {
+      // For Q&A items, the question is the title, answer needs to be found in qaData
+      title = titleEl ? titleEl.textContent.trim() : '';
+      // We'll need to get the answer from the global qaData
+      const qaId = card.dataset.qaId;
+      if (qaId && qaData && qaData[qaId]) {
+        text = cleanText(qaData[qaId].answer);
+      }
+    } else if (card.classList.contains('clickable-hierarchical')) {
+      // For hierarchical items, get detail from hierarchicalData
+      const hierarchicalId = card.dataset.hierarchicalId;
+      console.log('Hierarchical ID:', hierarchicalId);
+      console.log('hierarchicalData has this ID?', hierarchicalData && hierarchicalData[hierarchicalId]);
+      if (hierarchicalId && hierarchicalData && hierarchicalData[hierarchicalId]) {
+        console.log('Raw detail:', hierarchicalData[hierarchicalId].detail);
+        text = cleanText(hierarchicalData[hierarchicalId].detail);
+        console.log('Cleaned text:', text);
+      }
+    } else {
+      // For other card types, try to extract text from the card content
+      // Clone the card to avoid modifying the original
+      const cardClone = card.cloneNode(true);
+      // Remove the fav button from the clone
+      const favBtnClone = cardClone.querySelector('.fav-btn');
+      if (favBtnClone) favBtnClone.remove();
+      
+      // Get remaining text content
+      text = cleanText(cardClone.textContent || cardClone.innerHTML);
+      
+      // If no separate title was found, try to extract it from the beginning of the text
+      if (!title && text) {
+        const firstLine = text.split('\n')[0];
+        if (firstLine.length < 100) { // Assume short first lines are titles
+          title = firstLine;
+          text = text.substring(firstLine.length).trim();
+        }
+      }
     }
-    function isFav(id) {
-      return getFavs().some(f => f === id);
+  }
+  
+  return {
+    project,
+    page: pageTitle,
+    section: sectionKey,
+    sectionTitle,
+    title,
+    text
+  };
+}
+
+function toggleFav(itemId) {
+  const favs = getFavs();
+  const existingIndex = favs.findIndex(fav => 
+    fav.path && fav.path[fav.path.length - 1] === itemId
+  );
+  
+  if (existingIndex > -1) {
+    // Remove existing favorite
+    favs.splice(existingIndex, 1);
+  } else {
+    // Add new favorite with full context
+    const favButton = document.querySelector(`[data-fav-id="${itemId}"]`);
+    if (favButton) {
+      const context = extractContextFromDOM(favButton);
+      
+      const favoriteObj = {
+        path: [context.project, context.page, context.section, itemId],
+        title: context.title,
+        text: context.text,
+        reference: null, // Optional field for future use
+        timestamp: new Date().toISOString()
+      };
+      
+      favs.push(favoriteObj);
     }
-    function toggleFav(id) {
-      const favs = getFavs();
-      const i    = favs.indexOf(id);
-      if (i > -1) favs.splice(i, 1);
-      else        favs.push(id);
-      saveFavs(favs);
-    }
-    function makeKey(section, idx, id) {
-      return id || `${section}-${idx}`;  // e.g. "nature_of_wrath-3"
-    }
+  }
+  
+  saveFavs(favs);
+}
+
+function makeKey(section, idx, id) {
+  return id || `${section}-${idx}`;  // e.g. "nature_of_wrath-3"
+}
 
     const showTab=(id,btn)=>{
       document.querySelectorAll('.tab-button').forEach(b=>b.classList.remove('active'));
@@ -425,6 +556,7 @@
         
         const entry = await eRes.json();
         const schema = await sRes.json();
+        projectName = schema.projectName;
 
         // +++ ROUTER LOGIC +++
         // This is the clean, safe branch point.
