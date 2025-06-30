@@ -9,6 +9,31 @@
   <link rel="stylesheet" href="styles/main.css">
   <link rel="stylesheet" href="" id="theme-css">
 
+  <!-- Minimal CSS for favorites -->
+  <style>
+    /* Favourite star mirrors navigation-link colours */
+    .fav-btn {
+      background:none;
+      border:none;
+      cursor:pointer;
+      font-size:1.2em;
+      line-height:1;
+      float:right;
+
+      /* idle = muted like TOC */
+      color:var(--text-secondary);
+      transition:color .15s ease;
+    }
+    .fav-btn:hover {
+      /* brighten on hover like TOC */
+      color:var(--text-primary);
+    }
+    .fav-btn.faved {
+      /* filled in color looks like selected TOC */      
+      color: var(--text-primary);
+    }
+  </style>
+
   <!-- Simple theme loading -->
   <script>
     // Simple theme loading function
@@ -43,11 +68,9 @@
                     // Choose a sample colour/gradient from the palette object.
                     // Falls back to grey if neither value exists.
                     const pal           = themesData.themes?.[id] || {};
-                    btn.style.cssText   = `
-                      width:40px;height:40px;border:none;border-radius:50%;
-                      background:${pal['--background-gradient'] || pal['--accent-primary'] || '#ccc'};
-                    `;
-
+                    btn.style.cssText =
+                    'width:40px;height:40px;border:none;border-radius:50%;' +
+  'background:' + (pal['--background-gradient'] || pal['--accent-primary'] || '#ccc') + ';';
                     picker.appendChild(btn);
                 });
             }
@@ -102,6 +125,28 @@
     let hierarchicalData={};
 
     /* ------------ helpers ------------ */
+    const FAV_KEY = 'viewer_favorites';
+
+    function getFavs() {
+      return JSON.parse(localStorage.getItem(FAV_KEY) || '[]');
+    }
+    function saveFavs(arr) {
+      localStorage.setItem(FAV_KEY, JSON.stringify(arr));
+    }
+    function isFav(id) {
+      return getFavs().some(f => f === id);
+    }
+    function toggleFav(id) {
+      const favs = getFavs();
+      const i    = favs.indexOf(id);
+      if (i > -1) favs.splice(i, 1);
+      else        favs.push(id);
+      saveFavs(favs);
+    }
+    function makeKey(section, idx, id) {
+      return id || `${section}-${idx}`;  // e.g. "nature_of_wrath-3"
+    }
+
     const showTab=(id,btn)=>{
       document.querySelectorAll('.tab-button').forEach(b=>b.classList.remove('active'));
       document.querySelectorAll('.content-panel').forEach(p=>p.classList.remove('active'));
@@ -202,8 +247,16 @@
         const sectionData = entry[sec];
         const itemClass = schema.cssClassMap?.['content-card'] || 'content-card';
         
-        const hierarchicalRows = (sectionData.items || []).map(item => {
+        const hierarchicalRows = (sectionData.items || []).map((item, idx) => {
+          const key    = makeKey(sec, idx, item.id);
+          const isFavd = isFav(key);
+          const favBtn =
+            `<button class="fav-btn ${isFavd ? 'faved' : ''}"
+                    data-fav-id="${key}" title="Toggle favorite">
+              ${isFavd ? '★' : '☆'}
+            </button>`;
           return `<div class="${itemClass} clickable-hierarchical" data-hierarchical-id="${item.id}" data-section="${sec}">
+                    ${favBtn}
                     <h3>${item.title}</h3>
                   </div>`;
         }).join('');
@@ -237,36 +290,47 @@
       const css     = schema.cssClassMap;
       const typeMap = schema.itemTypeMap[cfg.section] || {};
 
-      return items.map(item => {
+      return items.map((item, idx) => {
+        const key    = makeKey(cfg.section, idx, item.id);
+        const isFavd = isFav(key);
+        const fav =
+          `<button class="fav-btn ${isFavd ? 'faved' : ''}"
+                  data-fav-id="${key}" title="Toggle favorite">
+            ${isFavd ? '★' : '☆'}
+          </button>`;
         switch (typeMap[item.type]) {
           case 'thesis-box':
-            return `<div class="${css['central-thesis']}">${item.text}</div>`;
+            return `<div class="${css['central-thesis']}">${fav}${item.text}</div>`;
 
           case 'highlight':
-            return `<div class="${css['warning-highlight']}">${item.text}</div>`;
+            return `<div class="${css['warning-highlight']}">${fav}${item.text}</div>`;
 
           case 'concept-list':
             return `<div class="${css['concept-card']}">
+                      ${fav}
                       <ul>${item.points.map(p => `<li>${p}</li>`).join('')}</ul>
                     </div>`;
 
           case 'argument-block':
             return `<div class="${css['argument-point']}">
+                      ${fav}
                       <h3>${item.title}</h3><p>${item.explanation}</p>
                     </div>`;
 
           case 'glossary-row':
             return `<div class="${css['concept-card']}">
+                      ${fav}
                       <span class="concept-title">${item.title}</span>: ${item.definition}
                     </div>`;
 
           case 'conclusion-box':
             return `<div class="${css['conclusion-box']}">
+                      ${fav}
                       <h3>${item.title}</h3><p>${item.content}</p>
                     </div>`;
 
           default:
-            return `<div class="${css['content-card']}">${item.text || item.title || ''}</div>`;
+            return `<div class="${css['content-card']}">${fav}${item.text || item.title || ''}</div>`;
         }
       }).join('');
     }
@@ -274,10 +338,20 @@
     function renderFlippable(items, cfg, schema) {
       const itemClass = schema.cssClassMap['qa-item'] || 'content-card';
 
-      const list = items.map(it => `
+      const list = items.map((it, idx) => {
+          const key    = makeKey(cfg.section, idx, it.id);
+          const isFavd = isFav(key);
+          const fav =
+            `<button class="fav-btn ${isFavd ? 'faved' : ''}"
+                    data-fav-id="${key}" title="Toggle favorite">
+              ${isFavd ? '★' : '☆'}
+            </button>`;
+          return `
           <div class="${itemClass} clickable-qa" data-qa-id="${it.id}">
+            ${fav}
             <h3>${it.question}</h3>
-          </div>`).join('');
+          </div>`
+      }).join('');
 
       return `
         <div id="qaList">${list}</div>
@@ -373,6 +447,15 @@
     document.addEventListener('DOMContentLoaded',()=>{
       init();
       document.body.addEventListener('click', async e=>{
+        const fav = e.target.closest('.fav-btn');
+        if (fav) {
+          const id = fav.dataset.favId;
+          toggleFav(id);
+          fav.classList.toggle('faved');
+          fav.textContent = fav.classList.contains('faved') ? '★' : '☆';
+          return;
+        }
+
         const t   = e.target.closest('.tab-button');              if (t)  return showTab(t.dataset.tab, t);
 
         const h   = e.target.closest('.clickable-hierarchical');  if (h)  return showHierarchical(h.dataset.hierarchicalId, h.dataset.section);
