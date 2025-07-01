@@ -85,7 +85,7 @@ function buildLegacySchema(base, type, inst) {
     'legacy: typeSchema is missing defaultSections.');
   schema.sectionRenderers = {};
   type.defaultSections.forEach(sec => {
-    if (!m[sec]) throw new Error(`legacy: no renderer map for “${sec}”`);
+    if (!m[sec]) throw new Error(`legacy: no renderer map for "${sec}"`);
     schema.sectionRenderers[sec] = m[sec];
   });
 
@@ -111,19 +111,35 @@ function tweakThemes(all, inst) {
 }
 
 /* ------------------------------------------------------------------ */
-/* 5.  CONTENT COPYING                                                */
+/* 5.  CONTENT COPYING – autodiscover                                 */
 /* ------------------------------------------------------------------ */
-function copyContent({ count, instanceId }) {
+function escapeRegExp(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function copyContent(instanceId) {
   fs.rmSync(DEST_CONTENTS_DIR, { recursive: true, force: true });
   fs.mkdirSync(DEST_CONTENTS_DIR, { recursive: true });
 
+  const pattern = new RegExp(`^content(\\d+)-${escapeRegExp(instanceId)}\\.json$`);
+  const matches = fs.readdirSync(STAGING_DIR)
+    .map(f => {
+      const m = f.match(pattern);
+      return m ? { file: f, num: Number(m[1]) } : null;
+    })
+    .filter(Boolean)
+    .sort((a, b) => a.num - b.num);
+
+  if (matches.length === 0) {
+    throw new Error(`No files like content{n}-${instanceId}.json found in ${STAGING_DIR}`);
+  }
+
   const moved = [];
-  for (let i = 1; i <= count; i++) {
-    const src = path.join(STAGING_DIR, `content${i}-${instanceId}.json`);
-    const dst = path.join(DEST_CONTENTS_DIR, `content${i}.json`);
-    if (!fs.existsSync(src)) throw new Error(`Missing content file: ${src}`);
+  for (const { file, num } of matches) {
+    const src = path.join(STAGING_DIR, file);
+    const dst = path.join(DEST_CONTENTS_DIR, `content${num}.json`);
     fs.copyFileSync(src, dst);
-    moved.push(`content${i}.json`);
+    moved.push(path.basename(dst));
   }
   dbg('content files copied', moved);
   return moved;
@@ -143,7 +159,7 @@ function copyContent({ count, instanceId }) {
     /* Load configs ----------------------------- */
     const projects      = loadJson(PROJECTS_CONFIG);
     const project       = projects[key];
-    if (!project) throw new Error(`No entry for “${key}” in projects.json`);
+    if (!project) throw new Error(`No entry for "${key}" in projects.json`);
     log(`Project type → ${project.projectType}`);
 
     const baseSchema    = loadJson(BASE_SCHEMA);
@@ -160,14 +176,11 @@ function copyContent({ count, instanceId }) {
     /* Themes ----------------------------------- */
     const themes = tweakThemes(loadJson(THEMES_SOURCE), instanceSchema);
 
-
-
     /* Write outputs ---------------------------- */
     fs.writeFileSync(DEST_SCHEMA, JSON.stringify(finalSchema, null, 2));
     fs.writeFileSync(DEST_THEMES, JSON.stringify(themes,      null, 2));
-    copyContent(project.content);
+    copyContent(project.content.instanceId); // new call
     project.projectType === 'theorists' && require('./scripts/flatten-influentialThinkers');
-
 
     log('\n--- BUILD SUCCESSFUL ---');
     log(`Active project → ${finalSchema.projectName}\n`);
