@@ -86,6 +86,24 @@
         }
 
     },
+    "encyclopedia-cslewis": {
+
+        "projectType": "encyclopedia",
+
+        "buildMode": "modern",
+
+        "schemaInstanceFile": "schema-encyclopedia-cslewis.json",
+
+        "content": {
+
+            "instanceId": "cslewis",
+
+            "count": 4
+
+        }
+
+    },
+
     "theorists-influentialThinkers": {
         "projectType": "theorists",
         "buildMode": "modern",
