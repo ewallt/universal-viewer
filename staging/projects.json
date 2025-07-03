@@ -103,6 +103,23 @@
         }
 
     },
+    "encyclopedia-boyd": {
+
+        "projectType": "encyclopedia",
+
+        "buildMode": "modern",
+
+        "schemaInstanceFile": "schema-encyclopedia-boyd.json",
+
+        "content": {
+
+            "instanceId": "boyd",
+
+            "count": 1
+
+        }
+
+    },
 
     "theorists-influentialThinkers": {
         "projectType": "theorists",
